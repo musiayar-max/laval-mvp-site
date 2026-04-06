@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAVAL — Request Pricing</title>
+  <meta name="description" content="Structured quote intake for Laval.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand-mark" href="index.html">
+        <div class="brand-name">LAVAL</div>
+        <div class="brand-script">Stone Maison</div>
+      </a>
+      <nav class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="configurator.html">Configurator</a>
+        <a class="nav-link" href="trade.html">Trade</a>
+        <a class="nav-link" href="portfolio.html">Portfolio</a>
+        <a class="btn btn-secondary" aria-current="page" href="contact.html">Request Pricing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container config-shell">
+        <div>
+          <div class="overline">Structured quote intake</div>
+          <h1 class="page-title">Request pricing with your current direction attached.</h1>
+          <p class="lead">Provide rough dimensions and project photos if available. Final scope, lead time, and pricing are confirmed after review.</p>
+
+          <div class="panel">
+            <form data-contact-form>
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="user_type">Who are you?</label>
+                  <select id="user_type" name="user_type" required>
+                    <option value="">Select one</option>
+                    <option>Homeowner</option>
+                    <option>Interior Designer</option>
+                    <option>Architect</option>
+                    <option>Builder</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="project_type">Project type</label>
+                  <select id="project_type" name="project_type" required>
+                    <option value="">Select one</option>
+                    <option>Renovation</option>
+                    <option>New Build</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="first_name">First name</label>
+                  <input id="first_name" name="first_name" type="text" required>
+                </div>
+                <div class="form-field">
+                  <label for="last_name">Last name</label>
+                  <input id="last_name" name="last_name" type="text" required>
+                </div>
+                <div class="form-field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" required>
+                </div>
+                <div class="form-field">
+                  <label for="phone">Phone</label>
+                  <input id="phone" name="phone" type="tel">
+                </div>
+                <div class="form-field">
+                  <label for="rough_width">Rough width (inches)</label>
+                  <input id="rough_width" name="rough_width" type="number" min="0" step="0.5">
+                </div>
+                <div class="form-field">
+                  <label for="rough_height">Rough height (inches)</label>
+                  <input id="rough_height" name="rough_height" type="number" min="0" step="0.5">
+                </div>
+                <div class="form-field">
+                  <label for="budget_band">Budget band</label>
+                  <select id="budget_band" name="budget_band" required>
+                    <option value="">Select one</option>
+                    <option>Under $8K</option>
+                    <option>$8K–$15K</option>
+                    <option>$15K–$25K</option>
+                    <option>$25K+</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label for="desired_timeline">Desired timeline</label>
+                  <select id="desired_timeline" name="desired_timeline">
+                    <option value="">Select one</option>
+                    <option>ASAP</option>
+                    <option>1–3 months</option>
+                    <option>3–6 months</option>
+                    <option>Flexible</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-field" style="margin-top:16px;">
+                <label for="project_notes">Project notes</label>
+                <textarea id="project_notes" name="project_notes" placeholder="Share anything helpful about the room, style direction, site conditions, or project timeline."></textarea>
+              </div>
+
+              <input type="hidden" name="family_name">
+              <input type="hidden" name="profile_name">
+              <input type="hidden" name="leg_name">
+              <input type="hidden" name="shelf_name">
+              <input type="hidden" name="finish_name">
+              <input type="hidden" name="family_code">
+              <input type="hidden" name="profile_code">
+              <input type="hidden" name="leg_code">
+              <input type="hidden" name="shelf_code">
+              <input type="hidden" name="finish_code">
+
+              <div class="config-actions" style="margin-top:18px;">
+                <button class="btn btn-primary" type="submit">Submit Request</button>
+                <a class="btn btn-ghost" href="configurator.html">Edit configuration</a>
+              </div>
+            </form>
+
+            <div class="success-box hide" data-form-success>
+              <strong>Submission captured.</strong>
+              <p style="margin:8px 0 0;">In this starter package the form stores the payload locally so the front-end flow can be tested without a live backend. Connect the form to Airtable, Formspree, or a Cloudflare Worker before launch.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel config-panel">
+          <div class="overline">Attached design summary</div>
+          <div class="preview-stage" data-contact-preview></div>
+          <div class="summary-list" data-contact-summary style="margin-top:18px;"></div>
+          <p class="subtle" style="margin-top:16px;">Custom natural stone mantels designed for luxury renovation and high-end new construction projects. Every project is reviewed individually for material selection, dimensional fit, and site conditions.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand-name">LAVAL</div>
+        <p class="footer-note">The live launch version should route submissions to your chosen lead destination. This packaged build keeps the front-end intact and backend-independent.</p>
+      </div>
+      <div class="footer-note">Lead fields already include family, profile, leg, shelf, finish, budget band, and timeline.</div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/contact.js"></script>
+</body>
+</html>

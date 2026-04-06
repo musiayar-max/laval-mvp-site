@@ -1,0 +1,45 @@
+
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const saved = window.LAVAL.getSavedConfig();
+  const config = {
+    familyCode: params.get('familyCode') || saved.familyCode,
+    profileCode: params.get('profileCode') || saved.profileCode,
+    legCode: params.get('legCode') || saved.legCode,
+    shelfCode: params.get('shelfCode') || saved.shelfCode,
+    finishCode: params.get('finishCode') || saved.finishCode
+  };
+  const summary = window.LAVAL.formatSelectionSummary(config);
+  const summaryWrap = document.querySelector('[data-contact-summary]');
+  if (summaryWrap) {
+    summaryWrap.innerHTML = Object.entries(summary).map(([key, value]) => `
+      <div class="detail-row"><span>${key[0].toUpperCase() + key.slice(1)}</span><strong>${value}</strong></div>
+    `).join('');
+  }
+
+  const preview = document.querySelector('[data-contact-preview]');
+  if (preview) preview.innerHTML = window.LAVAL.renderReferencePreview(config);
+
+  const form = document.querySelector('[data-contact-form]');
+  if (!form) return;
+
+  form.querySelector('[name="family_name"]').value = summary.family;
+  form.querySelector('[name="profile_name"]').value = summary.profile;
+  form.querySelector('[name="leg_name"]').value = summary.leg;
+  form.querySelector('[name="shelf_name"]').value = summary.shelf;
+  form.querySelector('[name="finish_name"]').value = summary.finish;
+  form.querySelector('[name="family_code"]').value = config.familyCode || '';
+  form.querySelector('[name="profile_code"]').value = config.profileCode || '';
+  form.querySelector('[name="leg_code"]').value = config.legCode || '';
+  form.querySelector('[name="shelf_code"]').value = config.shelfCode || '';
+  form.querySelector('[name="finish_code"]').value = config.finishCode || '';
+
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const payload = Object.fromEntries(new FormData(form).entries());
+    localStorage.setItem('laval-last-lead', JSON.stringify(payload));
+    const success = document.querySelector('[data-form-success]');
+    success.classList.remove('hide');
+    form.classList.add('hide');
+  });
+})();

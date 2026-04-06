@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAVAL — Configurator</title>
+  <meta name="description" content="Build a disciplined mantel direction with the LAVAL staged configurator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand-mark" href="index.html">
+        <div class="brand-name">LAVAL</div>
+        <div class="brand-script">Stone Maison</div>
+      </a>
+      <nav class="nav-links">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" aria-current="page" href="configurator.html">Configurator</a>
+        <a class="nav-link" href="trade.html">Trade</a>
+        <a class="nav-link" href="portfolio.html">Portfolio</a>
+        <a class="btn btn-secondary" href="contact.html">Request Pricing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <div class="overline">Staged configurator</div>
+        <h1 class="page-title">Choose a family. Then refine the language.</h1>
+        <p class="lead">The configurator is intentionally constrained at launch. It is designed to help users express taste, structure leads, and move toward a responsible quote. The launch build uses real reference imagery and honest representative previews rather than fake renders.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container config-shell">
+        <div>
+          <div class="stepper">
+            <span class="step-chip is-complete">1. Family</span>
+            <span class="step-chip">2. Profile</span>
+            <span class="step-chip">3. Leg</span>
+            <span class="step-chip">4. Shelf</span>
+            <span class="step-chip">5. Finish</span>
+          </div>
+
+          <section class="section" style="padding-top:0;">
+            <div class="section-head">
+              <div>
+                <div class="overline">Step 1</div>
+                <h2 class="section-title">Family</h2>
+              </div>
+              <p class="section-subtitle">Choose the overall language first. Everything else is constrained by this decision.</p>
+            </div>
+            <div class="grid grid-3" data-family-grid></div>
+          </section>
+
+          <section class="section" style="padding-top:0;">
+            <div class="section-head">
+              <div>
+                <div class="overline">Step 2</div>
+                <h2 class="section-title">Profile package</h2>
+              </div>
+              <p class="section-subtitle">Each profile package hides the opening and frieze relationship internally.</p>
+            </div>
+            <div class="grid grid-3" data-profile-grid></div>
+          </section>
+
+          <section class="section" style="padding-top:0;">
+            <div class="section-head">
+              <div>
+                <div class="overline">Step 3</div>
+                <h2 class="section-title">Leg system</h2>
+              </div>
+              <p class="section-subtitle">Leg paths stay restricted by family so the results remain coherent.</p>
+            </div>
+            <div class="grid grid-3" data-leg-grid></div>
+          </section>
+
+          <section class="section" style="padding-top:0;">
+            <div class="section-head">
+              <div>
+                <div class="overline">Step 4</div>
+                <h2 class="section-title">Shelf / crown</h2>
+              </div>
+              <p class="section-subtitle">Choose the top line that sets the mantel’s final character.</p>
+            </div>
+            <div class="grid grid-2" data-shelf-grid></div>
+          </section>
+
+          <section class="section" style="padding-top:0;">
+            <div class="section-head">
+              <div>
+                <div class="overline">Step 5</div>
+                <h2 class="section-title">Finish / material look</h2>
+              </div>
+              <p class="section-subtitle">Finish cards use real stone-reference crops. The launch preview stays representative rather than pretending to be a final render.</p>
+            </div>
+            <div class="grid grid-3" data-finish-grid></div>
+          </section>
+        </div>
+
+        <aside class="panel config-panel">
+          <div class="overline">Review</div>
+          <h2 class="section-title" style="font-size:2.5rem; margin-bottom:10px;">Current direction</h2>
+          <div class="preview-stage" data-preview-stage></div>
+          <div class="preview-meta">
+            <div class="summary-list" data-summary-list></div>
+          </div>
+          <div class="config-actions">
+            <a class="btn btn-primary" data-review-link href="contact.html">Request Pricing</a>
+            <a class="btn btn-ghost" href="trade.html">Trade Path</a>
+          </div>
+          <p class="subtle" style="margin-top:14px;">Selections carry into the pricing form as hidden fields so the quote conversation begins with a structured design summary.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand-name">LAVAL</div>
+        <p class="footer-note">Layered 2D first. Rough placeholders behind a premium shell. The structure is the product at this stage.</p>
+      </div>
+      <div class="footer-note">Family → Profile → Leg → Shelf → Finish · Charleston only</div>
+    </div>
+  </footer>
+
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/configurator.js"></script>
+</body>
+</html>
