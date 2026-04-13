@@ -15,28 +15,73 @@
 <body>
 
 <header class="site-header">
-  <div class="announcement-bar">
-    <div class="container announcement-inner">
-      <span>Charleston luxury renovation &amp; high-end new construction</span>
-      <a href="#pricing">Request a measured quote</a>
+  <div class="header-shell">
+
+    <div class="header-left">
+      <button class="menu-trigger" id="menuTrigger" type="button" aria-expanded="false" aria-controls="menuOverlay" aria-label="Open menu">
+        <span class="menu-icon">
+          <span></span>
+          <span></span>
+        </span>
+        <span class="menu-label">Menu</span>
+      </button>
     </div>
-  </div>
 
-  <div class="container header-inner">
-    <a class="brand" href="#top" aria-label="LAVAL home">
-      <span class="brand-name">LAVAL</span>
-      <span class="brand-sub">Stone Maison</span>
-    </a>
+    <div class="header-center">
+      <a class="brand" href="#top" aria-label="LAVAL home">LAVAL</a>
+    </div>
 
-    <nav class="nav" aria-label="Primary">
-      <a href="#top">Home</a>
-      <a href="#configurator">Configurator</a>
-      <a href="#trade">Trade</a>
-      <a href="#portfolio">Portfolio</a>
-      <a class="nav-cta" href="#pricing">Request Pricing</a>
-    </nav>
+    <div class="header-right">
+      <button class="icon-button" type="button" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+        </svg>
+      </button>
+
+      <button class="icon-button" type="button" aria-label="Favorites">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 20.5s-7-4.35-7-10a4 4 0 0 1 7-2.52A4 4 0 0 1 19 10.5c0 5.65-7 10-7 10Z"></path>
+        </svg>
+      </button>
+
+      <button class="icon-button" type="button" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.5"></circle>
+          <path d="M5 20c1.5-3 4.25-4.5 7-4.5S17.5 17 19 20"></path>
+        </svg>
+      </button>
+    </div>
+
   </div>
 </header>
+
+<div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+  <div class="menu-overlay-inner">
+    <div class="menu-top">
+      <div class="menu-title">Navigation</div>
+      <button class="menu-close" id="menuClose" type="button" aria-label="Close menu">Close</button>
+    </div>
+
+    <div class="menu-grid">
+      <nav class="menu-nav" aria-label="Overlay navigation">
+        <a href="#top">Home</a>
+        <a href="#configurator">Configurator</a>
+        <a href="#trade">Trade</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#pricing">Request Pricing</a>
+      </nav>
+
+      <div class="menu-notes">
+        <p class="menu-kicker">LAVAL</p>
+        <h2>Architectural luxury, disciplined early.</h2>
+        <p>
+          The shell is being built to feel like a finished house standard before the deeper configurator logic is layered in.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main id="top">
 
@@ -226,6 +271,48 @@
     </div>
   </div>
 </footer>
+
+<script>
+  const body = document.body;
+  const menuTrigger = document.getElementById('menuTrigger');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const menuClose = document.getElementById('menuClose');
+  const menuLinks = menuOverlay.querySelectorAll('a');
+
+  function openMenu() {
+    menuOverlay.classList.add('is-open');
+    body.classList.add('menu-open');
+    menuTrigger.setAttribute('aria-expanded', 'true');
+    menuOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMenu() {
+    menuOverlay.classList.remove('is-open');
+    body.classList.remove('menu-open');
+    menuTrigger.setAttribute('aria-expanded', 'false');
+    menuOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  menuTrigger.addEventListener('click', () => {
+    if (menuOverlay.classList.contains('is-open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  menuClose.addEventListener('click', closeMenu);
+
+  menuLinks.forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMenu();
+    }
+  });
+</script>
 
 </body>
 </html>
