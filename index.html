@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<header class="site-header">
+<header class="site-header is-light" id="siteHeader">
   <div class="header-shell">
 
     <div class="header-left">
@@ -85,24 +85,20 @@
 
 <main id="top">
 
-  <section class="hero">
-    <div class="container hero-grid">
+  <section class="hero" id="hero">
+    <div class="hero-media" aria-hidden="true"></div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+
+    <div class="container hero-inner">
       <div class="hero-copy">
-        <p class="kicker">Charleston, South Carolina</p>
-        <h1>Natural stone mantels with coastal restraint and architectural presence.</h1>
-        <p class="hero-lead">
-          LAVAL designs natural stone mantels for luxury renovation and high-end new construction—measured, composed, and built to hold a room without visual noise.
+        <p class="hero-location">Charleston, South Carolina</p>
+        <h1>Stone, Composed.</h1>
+        <p class="hero-subline">
+          Natural stone mantels for luxury renovation and high-end new construction.
         </p>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#pricing">Request Pricing</a>
-          <a class="btn btn-secondary" href="#trade">For Trade Professionals</a>
-        </div>
-      </div>
-
-      <div class="hero-visual" aria-hidden="true">
-        <div class="hero-image-frame">
-          <div class="hero-image"></div>
+        <div class="hero-actions hero-actions-minimal">
+          <a class="hero-cta" href="#pricing">Request Pricing</a>
+          <a class="hero-cta hero-cta-secondary" href="#trade">For Trade</a>
         </div>
       </div>
     </div>
@@ -270,6 +266,8 @@
 
 <script>
   const body = document.body;
+  const siteHeader = document.getElementById('siteHeader');
+  const hero = document.getElementById('hero');
   const menuTrigger = document.getElementById('menuTrigger');
   const menuOverlay = document.getElementById('menuOverlay');
   const menuClose = document.getElementById('menuClose');
@@ -280,6 +278,8 @@
     body.classList.add('menu-open');
     menuTrigger.setAttribute('aria-expanded', 'true');
     menuOverlay.setAttribute('aria-hidden', 'false');
+    siteHeader.classList.remove('is-light');
+    siteHeader.classList.add('is-solid');
   }
 
   function closeMenu() {
@@ -287,6 +287,25 @@
     body.classList.remove('menu-open');
     menuTrigger.setAttribute('aria-expanded', 'false');
     menuOverlay.setAttribute('aria-hidden', 'true');
+    updateHeaderState();
+  }
+
+  function updateHeaderState() {
+    const heroThreshold = hero.offsetHeight - 96;
+
+    if (menuOverlay.classList.contains('is-open')) {
+      siteHeader.classList.remove('is-light');
+      siteHeader.classList.add('is-solid');
+      return;
+    }
+
+    if (window.scrollY < heroThreshold) {
+      siteHeader.classList.add('is-light');
+      siteHeader.classList.remove('is-solid');
+    } else {
+      siteHeader.classList.remove('is-light');
+      siteHeader.classList.add('is-solid');
+    }
   }
 
   menuTrigger.addEventListener('click', () => {
@@ -308,6 +327,10 @@
       closeMenu();
     }
   });
+
+  window.addEventListener('scroll', updateHeaderState, { passive: true });
+  window.addEventListener('resize', updateHeaderState);
+  window.addEventListener('load', updateHeaderState);
 </script>
 
 </body>
