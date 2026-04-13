@@ -8,25 +8,32 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
 <header class="site-header">
-  <div class="container header-inner">
-    <div class="brand">
-      <div class="brand-name">LAVAL</div>
-      <div class="brand-sub">Stone Maison</div>
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <span>Charleston luxury renovation &amp; high-end new construction</span>
+      <a href="#pricing">Request a measured quote</a>
     </div>
+  </div>
+
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="LAVAL home">
+      <span class="brand-name">LAVAL</span>
+      <span class="brand-sub">Stone Maison</span>
+    </a>
 
     <nav class="nav" aria-label="Primary">
       <a href="#top">Home</a>
       <a href="#configurator">Configurator</a>
       <a href="#trade">Trade</a>
       <a href="#portfolio">Portfolio</a>
-      <a class="cta" href="#pricing">Request Pricing</a>
+      <a class="nav-cta" href="#pricing">Request Pricing</a>
     </nav>
   </div>
 </header>
@@ -34,95 +41,189 @@
 <main id="top">
 
   <section class="hero">
-    <div class="container">
-      <p class="kicker">Charleston, South Carolina</p>
-      <h1>Natural stone mantels with taste, certainty, and proportion.</h1>
-      <p class="lead">
-        LAVAL is a luxury mantel and architectural stone studio built for refined renovation and high-end new construction.
-      </p>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">Charleston, South Carolina</p>
+        <h1>Natural stone mantels shaped with restraint, certainty, and proportion.</h1>
+        <p class="hero-lead">
+          LAVAL is a luxury mantel and architectural stone studio for refined renovation and high-end new construction. The digital experience is designed to feel composed now, while the configurator remains intentionally disciplined behind the scenes.
+        </p>
 
-      <div class="hero-actions">
-        <a class="btn-primary" href="#configurator">Design Your Mantel</a>
-        <a class="btn-secondary" href="#trade">Trade Professionals</a>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#configurator">Design Your Mantel</a>
+          <a class="btn btn-secondary" href="#trade">For Trade Professionals</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-image-frame">
+          <div class="hero-image"></div>
+        </div>
+        <div class="hero-caption">
+          <span>Quiet luxury in stone</span>
+          <strong>Polished shell. Lean internals.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section intro-band">
+    <div class="container intro-grid">
+      <div>
+        <p class="eyebrow">Design language</p>
+        <h2>A controlled system, not visual noise.</h2>
+      </div>
+      <div>
+        <p>
+          The configurator launches with a narrow public vocabulary: three design families, disciplined profile logic, and a structured quote path. That keeps the experience elegant, useful, and believable from the first click.
+        </p>
       </div>
     </div>
   </section>
 
   <section id="configurator" class="section">
     <div class="container">
-      <h2 class="section-title">A controlled design language</h2>
-
-      <div class="grid-3">
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>Tailored Classical</h3>
-          <p>Quiet, rectilinear, disciplined, refined.</p>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Configurator</p>
+          <h2>Three curated families.</h2>
         </div>
+        <p class="section-copy">
+          Each family establishes proportion, ornament posture, and silhouette discipline before deeper customization begins.
+        </p>
+      </div>
 
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>Soft Sculptural</h3>
-          <p>Rounded, softened, architectural massing.</p>
-        </div>
+      <div class="family-grid">
+        <article class="family-card">
+          <div class="family-image"></div>
+          <div class="family-content">
+            <p class="card-label">Family I</p>
+            <h3>Tailored Classical</h3>
+            <p>Quiet, rectilinear, disciplined, and refined.</p>
+          </div>
+        </article>
 
-        <div class="card">
-          <div class="card-image"></div>
-          <h3>French Ornate</h3>
-          <p>Serpentine, cresting, decorative luxury.</p>
-        </div>
+        <article class="family-card">
+          <div class="family-image"></div>
+          <div class="family-content">
+            <p class="card-label">Family II</p>
+            <h3>Soft Sculptural</h3>
+            <p>Rounded, softened, and architectural in massing.</p>
+          </div>
+        </article>
+
+        <article class="family-card">
+          <div class="family-image"></div>
+          <div class="family-content">
+            <p class="card-label">Family III</p>
+            <h3>French Ornate</h3>
+            <p>Serpentine, cresting, and controlled decorative luxury.</p>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <section id="trade" class="section alt">
-    <div class="container grid-2">
-      <div>
-        <h2>Specify with clarity</h2>
+  <section id="trade" class="section section-contrast">
+    <div class="container trade-grid">
+      <div class="trade-copy">
+        <p class="eyebrow">Trade</p>
+        <h2>Specify with clarity.</h2>
         <p>
-          Architects and designers need a fast, elegant intake path. The system is designed to preserve aesthetics while capturing real project data.
+          Designers and architects need a composed intake path. LAVAL is being built to preserve aesthetic control while gathering the dimensional, timing, and material inputs needed to quote responsibly.
         </p>
+        <a class="text-link" href="#pricing">Begin a project inquiry</a>
       </div>
 
-      <div>
-        <h2>Structured from the first click</h2>
-        <p>
-          Every configuration feeds directly into a structured quote request—so conversations start with clarity.
-        </p>
+      <div class="trade-panel">
+        <div class="trade-row">
+          <span>Family</span>
+          <strong>Captured</strong>
+        </div>
+        <div class="trade-row">
+          <span>Profile / leg / shelf / finish</span>
+          <strong>Structured</strong>
+        </div>
+        <div class="trade-row">
+          <span>Budget band + timing</span>
+          <strong>Attached</strong>
+        </div>
+        <div class="trade-row">
+          <span>Project photos</span>
+          <strong>Ready for intake</strong>
+        </div>
       </div>
     </div>
   </section>
 
   <section id="portfolio" class="section">
     <div class="container">
-      <h2 class="section-title">A shell that already feels real</h2>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Portfolio direction</p>
+          <h2>A shell that already feels real.</h2>
+        </div>
+        <p class="section-copy">
+          The MVP is staged, but the public shell is not allowed to feel provisional. Typography, image framing, and negative space do the luxury work early.
+        </p>
+      </div>
 
-      <div class="grid-3">
-        <div class="card"><div class="card-image"></div></div>
-        <div class="card"><div class="card-image"></div></div>
-        <div class="card"><div class="card-image"></div></div>
+      <div class="editorial-grid">
+        <div class="editorial-large">
+          <div class="editorial-image tall"></div>
+          <div class="editorial-meta">
+            <h3>Editorial room-set restraint</h3>
+            <p>Quiet architecture, disciplined silhouette, and material-led presence.</p>
+          </div>
+        </div>
+
+        <div class="editorial-stack">
+          <article class="editorial-small">
+            <div class="editorial-image"></div>
+            <div class="editorial-meta">
+              <h3>Veined statement stone</h3>
+              <p>High-drama material under controlled framing.</p>
+            </div>
+          </article>
+
+          <article class="editorial-small">
+            <div class="editorial-image"></div>
+            <div class="editorial-meta">
+              <h3>French crest language</h3>
+              <p>Expressive crown lines with disciplined ornament posture.</p>
+            </div>
+          </article>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="pricing" class="section alt">
-    <div class="container">
-      <h2 class="section-title">Request Pricing</h2>
-      <p class="lead">
-        Start with taste. Move to scope. Confirm with a measured quote.
+  <section id="pricing" class="section final-cta">
+    <div class="container final-cta-inner">
+      <p class="eyebrow">Request pricing</p>
+      <h2>Start with taste. Move to scope. Confirm with a measured quote.</h2>
+      <p>
+        The goal of the shell is not to pretend the product is complete. It is to make the first interaction feel precise, premium, and worth continuing.
       </p>
 
       <div class="hero-actions">
-        <a class="btn-primary" href="mailto:hello@lavalstone.com">Contact Studio</a>
-        <a class="btn-secondary" href="#configurator">Back to Configurator</a>
+        <a class="btn btn-primary" href="mailto:hello@lavalstone.com">Contact Studio</a>
+        <a class="btn btn-secondary" href="#configurator">Return to Configurator</a>
       </div>
     </div>
   </section>
 
 </main>
 
-<footer class="footer">
-  <div class="container">
-    <p>LAVAL — Charleston, South Carolina</p>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-brand">LAVAL</p>
+      <p class="footer-note">Charleston, South Carolina · Natural stone first</p>
+    </div>
+    <div class="footer-note footer-right">
+      Luxury renovation and high-end new construction. Final scope, lead time, and pricing are confirmed through the quote process.
+    </div>
   </div>
 </footer>
 
