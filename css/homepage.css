@@ -1,18 +1,17 @@
 /* ========================================
    HOMEPAGE-ONLY REFINEMENTS
-   Safe layer on top of css/styles.css
 ======================================== */
 
 .homepage-intro-band {
-  background: #eceae6;
+  background: #f7f3ed;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
 .homepage-intro-grid {
   display: grid;
-  grid-template-columns: 0.82fr 1fr;
-  gap: 72px;
+  grid-template-columns: 0.92fr 0.88fr;
+  gap: clamp(48px, 7vw, 96px);
   align-items: start;
   padding-top: 26px;
   padding-bottom: 26px;
@@ -22,13 +21,14 @@
 .family-rail-head h2,
 .craft-wide-head h2,
 .configurator-bridge-head h2,
-.trade-flat-copy h2 {
+.trade-flat-copy h2,
+.final-cta-refined .final-cta-inner h2 {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  font-size: clamp(2.6rem, 5vw, 4.15rem);
+  letter-spacing: -0.035em;
+  line-height: 0.94;
+  font-size: clamp(2.7rem, 4.8vw, 4.6rem);
 }
 
 .homepage-intro-grid h2 {
@@ -40,8 +40,16 @@
 .configurator-step p,
 .trade-flat-copy p,
 .trade-flat-row span,
-.trade-flat-row strong {
+.trade-flat-row strong,
+.section-copy,
+.final-cta-refined .final-cta-inner p {
+  margin: 0;
+  color: var(--muted);
   line-height: 1.8;
+}
+
+.section-copy {
+  max-width: 38ch;
 }
 
 /* ========================================
@@ -49,28 +57,32 @@
 ======================================== */
 
 .family-rail-section {
-  background: #eceae6;
-  padding-top: 92px;
-  padding-bottom: 96px;
+  background: var(--bg);
+  padding-top: 110px;
+  padding-bottom: 104px;
 }
 
 .family-rail-head {
   display: grid;
   grid-template-columns: 0.95fr 0.85fr;
-  gap: 40px;
+  gap: 44px;
   align-items: end;
-  margin-bottom: 42px;
+  margin-bottom: 44px;
+}
+
+.family-rail-head h2 {
+  max-width: 10ch;
 }
 
 .family-rail-shell {
-  width: min(1720px, calc(100% - 68px));
+  width: min(1600px, calc(100% - 72px));
   margin: 0 auto;
 }
 
 .family-rail-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 34px;
+  gap: 30px;
   align-items: start;
 }
 
@@ -87,7 +99,7 @@
 
 .family-rail-media img {
   width: 100%;
-  aspect-ratio: 4 / 5.2;
+  aspect-ratio: 4 / 5.35;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
@@ -109,17 +121,15 @@
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   line-height: 1;
-  font-size: clamp(1.8rem, 2.5vw, 2.35rem);
+  font-size: clamp(1.9rem, 2.5vw, 2.4rem);
 }
 
 .family-rail-copy p:last-child {
-  margin: 0;
-  color: var(--muted);
-  max-width: 30ch;
+  max-width: 29ch;
 }
 
 .family-rail-footer {
-  margin-top: 28px;
+  margin-top: 30px;
 }
 
 /* ========================================
@@ -127,7 +137,7 @@
 ======================================== */
 
 .craft-wide-section {
-  background: var(--bg);
+  background: #faf7f2;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -135,17 +145,17 @@
 .craft-wide-head {
   display: grid;
   grid-template-columns: 0.95fr 0.85fr;
-  gap: 40px;
+  gap: 44px;
   align-items: end;
   margin-bottom: 34px;
 }
 
 .craft-wide-head h2 {
-  max-width: 10ch;
+  max-width: 9ch;
 }
 
 .craft-wide-shell {
-  width: min(1720px, calc(100% - 68px));
+  width: min(1600px, calc(100% - 72px));
   margin: 0 auto;
   overflow: hidden;
   background: #ddd6cb;
@@ -153,9 +163,8 @@
 
 .craft-wide-shell img {
   width: 100%;
-  aspect-ratio: 16 / 8.6;
+  aspect-ratio: 16 / 7.8;
   object-fit: cover;
-  display: block;
 }
 
 /* ========================================
@@ -163,15 +172,15 @@
 ======================================== */
 
 .configurator-bridge-section {
-  background: rgba(255, 255, 255, 0.54);
+  background: #fcfaf7;
 }
 
 .configurator-bridge-head {
   display: grid;
   grid-template-columns: 0.95fr 0.85fr;
-  gap: 40px;
+  gap: 44px;
   align-items: end;
-  margin-bottom: 40px;
+  margin-bottom: 42px;
 }
 
 .configurator-bridge-head h2 {
@@ -192,6 +201,7 @@
 .configurator-step-number {
   margin: 0 0 18px;
   font-size: 0.72rem;
+  font-weight: 500;
   letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--muted);
@@ -201,13 +211,11 @@
   margin: 0 0 12px;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
-  font-size: 2rem;
   line-height: 1;
+  font-size: 1.95rem;
 }
 
 .configurator-step p {
-  margin: 0;
-  color: var(--muted);
   max-width: 30ch;
 }
 
@@ -228,13 +236,21 @@
 
 .trade-flat-grid {
   display: grid;
-  grid-template-columns: 0.94fr 1.06fr;
-  gap: 46px;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 48px;
   align-items: start;
 }
 
 .trade-flat-copy h2 {
   max-width: 9ch;
+}
+
+.trade-flat-copy p {
+  max-width: 42ch;
+}
+
+.trade-flat-copy .text-link {
+  margin-top: 20px;
 }
 
 .trade-flat-list {
@@ -250,13 +266,10 @@
   border-bottom: 1px solid var(--line);
 }
 
-.trade-flat-row span {
-  color: var(--muted);
-}
-
 .trade-flat-row strong {
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
+  color: var(--text);
 }
 
 /* ========================================
@@ -264,15 +277,20 @@
 ======================================== */
 
 .final-cta-refined {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.52));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.48));
 }
 
 .final-cta-refined .final-cta-inner {
-  max-width: 920px;
+  max-width: 860px;
 }
 
 .final-cta-refined .final-cta-inner h2 {
-  max-width: 14ch;
+  max-width: 11ch;
+}
+
+.final-cta-refined .final-cta-inner p {
+  max-width: 44ch;
+  margin-top: 16px;
 }
 
 /* ========================================
@@ -294,7 +312,7 @@
 
   .family-rail-shell,
   .craft-wide-shell {
-    width: min(1720px, calc(100% - 40px));
+    width: min(1600px, calc(100% - 40px));
   }
 }
 
@@ -304,13 +322,13 @@
   }
 
   .family-rail-section {
-    padding-top: 64px;
-    padding-bottom: 68px;
+    padding-top: 68px;
+    padding-bottom: 70px;
   }
 
   .family-rail-shell,
   .craft-wide-shell {
-    width: min(1720px, calc(100% - 28px));
+    width: min(1600px, calc(100% - 28px));
   }
 
   .family-rail-grid {
@@ -319,11 +337,11 @@
   }
 
   .family-rail-media img {
-    aspect-ratio: 4 / 4.8;
+    aspect-ratio: 4 / 4.9;
   }
 
   .craft-wide-shell img {
-    aspect-ratio: 4 / 2.8;
+    aspect-ratio: 4 / 2.9;
   }
 
   .configurator-bridge-footer {
