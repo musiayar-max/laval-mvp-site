@@ -7,9 +7,9 @@
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.96;
-  font-size: clamp(2.7rem, 4.8vw, 4.8rem);
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  font-size: clamp(2.5rem, 4.8vw, 4.8rem);
 }
 
 .family-rail-copy p,
@@ -24,13 +24,9 @@
   max-width: 44ch;
 }
 
-/* ========================================
-   FAMILY RAIL
-======================================== */
-
 .family-rail-section {
-  background: var(--bg);
-  padding-top: 108px;
+  background: #0d0d0d;
+  padding-top: 114px;
   padding-bottom: 88px;
 }
 
@@ -45,13 +41,13 @@
 }
 
 .family-rail-head h2 {
-  max-width: 9.5ch;
+  max-width: 10ch;
   margin-bottom: 16px;
 }
 
 .family-rail-intro-copy {
-  max-width: 42ch;
-  font-size: 1rem;
+  max-width: 46ch;
+  font-size: 0.98rem;
   line-height: 1.75;
 }
 
@@ -70,23 +66,24 @@
 .family-rail-item {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .family-rail-media {
   overflow: hidden;
-  background: #ddd6cb;
+  background: #1a1a1a;
+  border: 1px solid var(--line);
 }
 
 .family-rail-media img {
   width: 100%;
   aspect-ratio: 4 / 5.35;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transition: transform 0.45s ease;
 }
 
 .family-rail-item:hover .family-rail-media img {
-  transform: scale(1.015);
+  transform: scale(1.03);
 }
 
 .family-rail-copy {
@@ -94,7 +91,7 @@
 }
 
 .family-rail-copy .card-label {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .family-rail-copy h3 {
@@ -102,7 +99,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   line-height: 1;
-  font-size: clamp(1.9rem, 2.5vw, 2.4rem);
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
 }
 
 .family-rail-copy p:last-child {
@@ -115,14 +112,10 @@
   margin-top: 30px;
 }
 
-/* ========================================
-   CONFIGURATOR FEATURE IMAGE
-======================================== */
-
 .configurator-feature-section {
-  background: var(--bg);
+  background: #0d0d0d;
   padding-top: 0;
-  padding-bottom: 110px;
+  padding-bottom: 114px;
 }
 
 .configurator-feature-shell {
@@ -133,7 +126,8 @@
 .configurator-feature-card {
   position: relative;
   overflow: hidden;
-  background: #d7cec1;
+  background: #151515;
+  border: 1px solid var(--line);
 }
 
 .configurator-feature-image {
@@ -146,8 +140,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.08) 44%, rgba(0, 0, 0, 0.42) 100%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.18) 28%, rgba(0, 0, 0, 0.05) 56%, rgba(0, 0, 0, 0) 76%);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.18) 46%, rgba(0, 0, 0, 0.72) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0.26) 40%, rgba(0, 0, 0, 0.1) 68%, rgba(0, 0, 0, 0.36) 100%);
 }
 
 .configurator-feature-content {
@@ -156,28 +150,28 @@
   right: 0;
   bottom: 0;
   z-index: 2;
-  max-width: 38rem;
+  max-width: 42rem;
   padding: clamp(28px, 4vw, 54px);
   color: #ffffff;
 }
 
 .configurator-feature-kicker {
   margin: 0 0 18px;
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
 }
 
 .configurator-feature-content h2 {
-  max-width: 10ch;
+  max-width: 13ch;
   color: #ffffff;
 }
 
 .configurator-feature-content p {
   margin-top: 16px;
-  max-width: 34ch;
+  max-width: 35ch;
   color: rgba(255, 255, 255, 0.88);
 }
 
@@ -191,9 +185,9 @@
   min-height: 32px;
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.84rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255, 255, 255, 0.82);
   padding-bottom: 3px;
@@ -205,12 +199,9 @@
   transform: translateY(-1px);
 }
 
-/* ========================================
-   CONTACT HUB
-======================================== */
-
 .contact-hub-section {
-  background: #e7e5e4;
+  background: #111111;
+  border-top: 1px solid var(--line);
   padding-top: 58px;
   padding-bottom: 58px;
 }
@@ -227,8 +218,9 @@
 .contact-hub-feature {
   position: relative;
   overflow: hidden;
-  background: #d8cec1;
+  background: #161616;
   min-height: 550px;
+  border: 1px solid var(--line);
 }
 
 .contact-hub-feature-image {
@@ -242,7 +234,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.06) 52%, rgba(0, 0, 0, 0.48) 100%);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.08) 52%, rgba(0, 0, 0, 0.58) 100%);
 }
 
 .contact-hub-feature-content {
@@ -270,9 +262,9 @@
   min-height: 28px;
   color: #ffffff;
   text-decoration: none;
-  font-size: 0.92rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   border-bottom: 1px solid rgba(255, 255, 255, 0.78);
   padding-bottom: 4px;
@@ -293,10 +285,11 @@
 .contact-hub-group h3 {
   margin: 0 0 24px;
   font-family: 'Inter', sans-serif;
-  font-size: clamp(1.7rem, 2.5vw, 2.25rem);
-  font-weight: 400;
+  font-size: clamp(1.4rem, 2.3vw, 1.9rem);
+  font-weight: 500;
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
   color: var(--text);
 }
 
@@ -307,21 +300,19 @@
 
 .contact-hub-links a {
   text-decoration: none;
-  color: var(--text);
-  font-size: 0.98rem;
+  color: var(--muted);
+  font-size: 0.86rem;
   font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   line-height: 1.45;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .contact-hub-links a:hover {
-  opacity: 0.62;
+  color: #ffffff;
   transform: translateX(3px);
 }
-
-/* ========================================
-   RESPONSIVE
-======================================== */
 
 @media (max-width: 1180px) {
   .family-rail-shell,
@@ -350,14 +341,14 @@
   }
 
   .family-rail-head h2 {
-    max-width: 8.5ch;
-    font-size: clamp(2.4rem, 10vw, 3.8rem);
+    max-width: 9ch;
+    font-size: clamp(2.3rem, 10vw, 3.8rem);
     line-height: 1;
   }
 
   .family-rail-intro-copy {
     max-width: 100%;
-    font-size: 0.98rem;
+    font-size: 0.95rem;
   }
 
   .configurator-feature-section {
@@ -389,11 +380,11 @@
   }
 
   .configurator-feature-content h2 {
-    max-width: 9ch;
+    max-width: 10ch;
   }
 
   .configurator-feature-content p {
-    max-width: 28ch;
+    max-width: 30ch;
   }
 
   .contact-hub-section {
@@ -417,7 +408,7 @@
 
   .contact-hub-group h3 {
     margin-bottom: 18px;
-    font-size: 1.9rem;
+    font-size: 1.45rem;
   }
 
   .contact-hub-links {
