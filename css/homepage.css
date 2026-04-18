@@ -1,426 +1,66 @@
-/* ========================================
-   HOMEPAGE-ONLY REFINEMENTS
-======================================== */
+/* ============================================================
+   LAVAL — HOMEPAGE ONLY
+   Narrow scope: everything reusable lives in styles.css.
+   This file only holds homepage-specific hero image and
+   any homepage-only section tuning.
+============================================================ */
 
-.family-rail-head h2,
-.configurator-feature-content h2 {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.96;
-  font-size: clamp(2.7rem, 4.8vw, 4.8rem);
-}
+/* -----------------------------------------------------------
+   HERO — homepage image source
+----------------------------------------------------------- */
 
-.family-rail-copy p,
-.section-copy,
-.configurator-feature-content p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-.section-copy {
-  max-width: 44ch;
-}
-
-/* ========================================
-   FAMILY RAIL
-======================================== */
-
-.family-rail-section {
-  background: var(--bg);
-  padding-top: 108px;
-  padding-bottom: 88px;
-}
-
-.family-rail-head {
-  display: block;
-  max-width: 60rem;
-  margin-bottom: 42px;
-}
-
-.family-rail-head .eyebrow {
-  margin-bottom: 18px;
-}
-
-.family-rail-head h2 {
-  max-width: 9.5ch;
-  margin-bottom: 16px;
-}
-
-.family-rail-intro-copy {
-  max-width: 42ch;
-  font-size: 1rem;
-  line-height: 1.75;
-}
-
-.family-rail-shell {
-  width: min(1600px, calc(100% - 72px));
-  margin: 0 auto;
-}
-
-.family-rail-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 30px;
-  align-items: start;
-}
-
-.family-rail-item {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.family-rail-media {
-  overflow: hidden;
-  background: #ddd6cb;
-}
-
-.family-rail-media img {
-  width: 100%;
-  aspect-ratio: 4 / 5.35;
-  object-fit: cover;
-  transition: transform 0.35s ease;
-}
-
-.family-rail-item:hover .family-rail-media img {
-  transform: scale(1.015);
-}
-
-.family-rail-copy {
-  padding-right: 10px;
-}
-
-.family-rail-copy .card-label {
-  margin-bottom: 12px;
-}
-
-.family-rail-copy h3 {
-  margin: 0 0 10px;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  line-height: 1;
-  font-size: clamp(1.9rem, 2.5vw, 2.4rem);
-}
-
-.family-rail-copy p:last-child {
-  max-width: 29ch;
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-.family-rail-footer {
-  margin-top: 30px;
-}
-
-/* ========================================
-   CONFIGURATOR FEATURE IMAGE
-======================================== */
-
-.configurator-feature-section {
-  background: var(--bg);
-  padding-top: 0;
-  padding-bottom: 110px;
-}
-
-.configurator-feature-shell {
-  width: min(1600px, calc(100% - 72px));
-  margin: 0 auto;
-}
-
-.configurator-feature-card {
-  position: relative;
-  overflow: hidden;
-  background: #d7cec1;
-}
-
-.configurator-feature-image {
-  width: 100%;
-  aspect-ratio: 16 / 8;
-  object-fit: cover;
-}
-
-.configurator-feature-scrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.08) 44%, rgba(0, 0, 0, 0.42) 100%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.18) 28%, rgba(0, 0, 0, 0.05) 56%, rgba(0, 0, 0, 0) 76%);
-}
-
-.configurator-feature-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  max-width: 38rem;
-  padding: clamp(28px, 4vw, 54px);
-  color: #ffffff;
-}
-
-.configurator-feature-kicker {
-  margin: 0 0 18px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.configurator-feature-content h2 {
-  max-width: 10ch;
-  color: #ffffff;
-}
-
-.configurator-feature-content p {
-  margin-top: 16px;
-  max-width: 34ch;
-  color: rgba(255, 255, 255, 0.88);
-}
-
-.configurator-feature-actions {
-  margin-top: 28px;
-}
-
-.configurator-feature-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.82);
-  padding-bottom: 3px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.configurator-feature-link:hover {
-  opacity: 0.72;
-  transform: translateY(-1px);
-}
-
-/* ========================================
-   CONTACT HUB
-======================================== */
-
-.contact-hub-section {
-  background: #e7e5e4;
-  padding-top: 58px;
-  padding-bottom: 58px;
-}
-
-.contact-hub-shell {
-  width: min(1720px, calc(100% - 72px));
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(320px, 550px) minmax(220px, 1fr) minmax(220px, 1fr);
-  gap: clamp(40px, 5vw, 96px);
-  align-items: start;
-}
-
-.contact-hub-feature {
-  position: relative;
-  overflow: hidden;
-  background: #d8cec1;
-  min-height: 550px;
-}
-
-.contact-hub-feature-image {
-  width: 100%;
-  height: 100%;
-  min-height: 550px;
-  object-fit: cover;
-}
-
-.contact-hub-feature-scrim {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.06) 52%, rgba(0, 0, 0, 0.48) 100%);
-}
-
-.contact-hub-feature-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  padding: 30px 30px 34px;
-  color: #ffffff;
-}
-
-.contact-hub-feature-content h3 {
-  margin: 0 0 18px;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 500;
-  font-size: clamp(2rem, 3vw, 2.8rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.contact-hub-feature-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.78);
-  padding-bottom: 4px;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.contact-hub-feature-link:hover {
-  opacity: 0.72;
-  transform: translateY(-1px);
-}
-
-.contact-hub-column {
-  display: grid;
-  gap: 42px;
-  align-content: start;
-}
-
-.contact-hub-group h3 {
-  margin: 0 0 24px;
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(1.7rem, 2.5vw, 2.25rem);
-  font-weight: 400;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-
-.contact-hub-links {
-  display: grid;
-  gap: 16px;
-}
-
-.contact-hub-links a {
-  text-decoration: none;
-  color: var(--text);
-  font-size: 0.98rem;
-  font-weight: 500;
-  line-height: 1.45;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.contact-hub-links a:hover {
-  opacity: 0.62;
-  transform: translateX(3px);
-}
-
-/* ========================================
-   RESPONSIVE
-======================================== */
-
-@media (max-width: 1180px) {
-  .family-rail-shell,
-  .configurator-feature-shell,
-  .contact-hub-shell {
-    width: min(1720px, calc(100% - 40px));
-  }
-
-  .contact-hub-shell {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .contact-hub-feature {
-    grid-column: 1 / -1;
-  }
+.hero--home .hero-media {
+  background-image: url('../images/laval-hero-desktop-v1.png');
 }
 
 @media (max-width: 760px) {
-  .family-rail-section {
-    padding-top: 68px;
-    padding-bottom: 54px;
+  .hero--home .hero-media {
+    background-image: url('../images/laval-hero-mobile-v1.png');
+    background-position: center top;
   }
 
-  .family-rail-head {
-    margin-bottom: 30px;
+  .hero--home .hero-scrim {
+    background:
+      linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.03) 32%, rgba(0,0,0,0.28) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.10) 100%);
   }
+}
 
-  .family-rail-head h2 {
-    max-width: 8.5ch;
-    font-size: clamp(2.4rem, 10vw, 3.8rem);
-    line-height: 1;
-  }
+/* -----------------------------------------------------------
+   FAMILIES SECTION — uses .rail pattern, kept at 3 columns
+----------------------------------------------------------- */
 
-  .family-rail-intro-copy {
-    max-width: 100%;
-    font-size: 0.98rem;
-  }
+.families-section {
+  background: var(--bg);
+  padding-top: clamp(88px, 10vw, 128px);
+  padding-bottom: clamp(72px, 8vw, 104px);
+}
 
-  .configurator-feature-section {
-    padding-bottom: 66px;
-  }
+.families-section .section-head h2 {
+  max-width: 11ch;
+}
 
-  .family-rail-shell,
-  .configurator-feature-shell,
-  .contact-hub-shell {
-    width: min(1720px, calc(100% - 28px));
-  }
+/* -----------------------------------------------------------
+   CONFIGURATOR FEATURE — flush top against families
+----------------------------------------------------------- */
 
-  .family-rail-grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
+.home-configurator-section {
+  background: var(--bg);
+  padding-top: 0;
+  padding-bottom: clamp(88px, 10vw, 128px);
+}
 
-  .family-rail-media img {
-    aspect-ratio: 4 / 4.9;
-  }
+/* -----------------------------------------------------------
+   SERVICES / PROJECT SUPPORT CARD
+   Bulgari "Exclusive Services"-like editorial preview
+----------------------------------------------------------- */
 
-  .configurator-feature-image {
-    aspect-ratio: 4 / 4.9;
-  }
+.home-services-section {
+  background: var(--bg);
+  padding-top: 0;
+  padding-bottom: clamp(88px, 10vw, 128px);
+}
 
-  .configurator-feature-content {
-    max-width: 100%;
-    padding: 24px;
-  }
-
-  .configurator-feature-content h2 {
-    max-width: 9ch;
-  }
-
-  .configurator-feature-content p {
-    max-width: 28ch;
-  }
-
-  .contact-hub-section {
-    padding-top: 30px;
-    padding-bottom: 34px;
-  }
-
-  .contact-hub-shell {
-    grid-template-columns: 1fr;
-    gap: 34px;
-  }
-
-  .contact-hub-feature,
-  .contact-hub-feature-image {
-    min-height: 420px;
-  }
-
-  .contact-hub-feature-content {
-    padding: 24px 24px 28px;
-  }
-
-  .contact-hub-group h3 {
-    margin-bottom: 18px;
-    font-size: 1.9rem;
-  }
-
-  .contact-hub-links {
-    gap: 14px;
-  }
+.home-services-section .feature-image {
+  aspect-ratio: 16 / 7.2;
 }
