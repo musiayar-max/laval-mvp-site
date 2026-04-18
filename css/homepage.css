@@ -17,13 +17,17 @@
   max-width: 9.5ch;
 }
 
-.family-editorial-section {
+/* ========================================
+   FAMILY COMPOSITION
+======================================== */
+
+.family-composition-section {
   background: #eceae6;
   padding-top: 90px;
   padding-bottom: 96px;
 }
 
-.family-editorial-head {
+.family-composition-head {
   display: grid;
   grid-template-columns: 0.92fr 0.88fr;
   gap: 40px;
@@ -31,7 +35,7 @@
   margin-bottom: 42px;
 }
 
-.family-editorial-head h2 {
+.family-composition-head h2 {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
@@ -40,54 +44,67 @@
   font-size: clamp(2.7rem, 5vw, 4.25rem);
 }
 
-.family-editorial-copy {
+.family-composition-copy {
   margin: 0;
   max-width: 48ch;
 }
 
-.family-editorial-shell {
+.family-composition-shell {
   width: min(1680px, calc(100% - 64px));
   margin: 0 auto;
 }
 
-.family-editorial-rail {
+.family-composition-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 34px;
   align-items: start;
 }
 
-.family-editorial-item {
+.family-tile {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-.family-editorial-media {
+.family-tile-media {
   overflow: hidden;
   background: #ddd6cb;
 }
 
-.family-editorial-media img {
+.family-tile-media img {
   width: 100%;
-  aspect-ratio: 4 / 5.15;
+  display: block;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
 
-.family-editorial-item:hover .family-editorial-media img {
+.family-tile-standard .family-tile-media img {
+  aspect-ratio: 4 / 5.15;
+}
+
+.family-tile-wide {
+  grid-column: 1 / -1;
+}
+
+.family-tile-media-wide img {
+  aspect-ratio: 16 / 8.7;
+  object-position: center center;
+}
+
+.family-tile:hover .family-tile-media img {
   transform: scale(1.015);
 }
 
-.family-editorial-body {
+.family-tile-body {
   padding-right: 14px;
 }
 
-.family-editorial-body .card-label {
+.family-tile-body .card-label {
   margin-bottom: 12px;
 }
 
-.family-editorial-body h3 {
+.family-tile-body h3 {
   margin: 0 0 10px;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
@@ -95,16 +112,24 @@
   font-size: clamp(1.8rem, 2.5vw, 2.35rem);
 }
 
-.family-editorial-body p:last-child {
+.family-tile-body p:last-child {
   margin: 0;
   color: var(--muted);
   line-height: 1.75;
   max-width: 30ch;
 }
 
-.family-editorial-footer {
+.family-tile-body-wide p:last-child {
+  max-width: 34ch;
+}
+
+.family-composition-footer {
   margin-top: 28px;
 }
+
+/* ========================================
+   CRAFT
+======================================== */
 
 .craft-home-section {
   background: var(--bg);
@@ -149,6 +174,10 @@
   margin-top: 20px;
   font-size: 0.95rem;
 }
+
+/* ========================================
+   CONFIGURATOR BRIDGE
+======================================== */
 
 .catalog-bridge-section {
   background: rgba(255, 255, 255, 0.54);
@@ -213,6 +242,10 @@
   margin-top: 34px;
 }
 
+/* ========================================
+   TRADE
+======================================== */
+
 .trade-home-section {
   background: var(--bg-soft);
 }
@@ -262,6 +295,10 @@
   white-space: nowrap;
 }
 
+/* ========================================
+   FINAL CTA
+======================================== */
+
 .final-cta-home {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.52));
 }
@@ -279,18 +316,14 @@
 ======================================== */
 
 @media (max-width: 1180px) {
-  .family-editorial-head,
+  .family-composition-head,
   .catalog-bridge-head,
   .craft-home-grid,
   .trade-home-grid {
     grid-template-columns: 1fr;
   }
 
-  .family-editorial-rail {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .family-editorial-shell {
+  .family-composition-shell {
     width: min(1680px, calc(100% - 40px));
   }
 
@@ -308,21 +341,26 @@
     gap: 28px;
   }
 
-  .family-editorial-section {
+  .family-composition-section {
     padding-top: 64px;
     padding-bottom: 68px;
   }
 
-  .family-editorial-shell {
+  .family-composition-shell {
     width: min(1680px, calc(100% - 28px));
   }
 
-  .family-editorial-rail {
+  .family-composition-grid {
     grid-template-columns: 1fr;
     gap: 28px;
   }
 
-  .family-editorial-media img {
+  .family-tile-wide {
+    grid-column: auto;
+  }
+
+  .family-tile-standard .family-tile-media img,
+  .family-tile-media-wide img {
     aspect-ratio: 4 / 4.8;
   }
 
