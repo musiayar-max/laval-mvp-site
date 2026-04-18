@@ -1,16 +1,169 @@
 /* ============================================================
    LAVAL — HOMEPAGE ONLY
-   Narrow scope: everything reusable lives in styles.css.
-   This file only holds homepage-specific hero image and
-   any homepage-only section tuning.
+   Bulgari-inspired homepage refinement:
+   stronger hero, cleaner family section, one full-bleed feature,
+   one quiet CTA strip.
 ============================================================ */
 
 /* -----------------------------------------------------------
-   HERO — homepage image source
+   HERO
 ----------------------------------------------------------- */
 
 .hero--home .hero-media {
   background-image: url('../images/laval-hero-desktop-v1.png');
+  background-position: center center;
+}
+
+.hero--home .hero-scrim {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.03) 32%, rgba(0,0,0,0.22) 100%),
+    linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.24) 26%, rgba(0,0,0,0.08) 54%, rgba(0,0,0,0) 74%);
+}
+
+.hero--home .hero-copy {
+  max-width: 34rem;
+}
+
+.hero--home .hero-subline {
+  max-width: 31ch;
+}
+
+/* -----------------------------------------------------------
+   FAMILIES
+----------------------------------------------------------- */
+
+.families-section {
+  background: var(--bg);
+  padding-top: clamp(88px, 10vw, 128px);
+  padding-bottom: clamp(84px, 9vw, 116px);
+}
+
+.families-section .section-head {
+  max-width: 58rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: clamp(36px, 4vw, 52px);
+  text-align: center;
+}
+
+.families-section .section-head h2 {
+  max-width: 10ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.families-section .section-head p {
+  max-width: 46ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.families-section .rail {
+  align-items: start;
+}
+
+.families-section .rail-item {
+  gap: 22px;
+}
+
+.families-section .rail-copy {
+  padding-right: 0;
+}
+
+.families-section .rail-copy h3 {
+  margin-bottom: 10px;
+}
+
+.families-section .rail-copy p {
+  max-width: 28ch;
+}
+
+.families-section .rail-footer {
+  margin-top: 34px;
+  text-align: center;
+}
+
+/* -----------------------------------------------------------
+   FULL-BLEED EDITORIAL FEATURE
+----------------------------------------------------------- */
+
+.home-editorial-section {
+  background: var(--bg);
+  padding-top: 0;
+  padding-bottom: clamp(88px, 10vw, 128px);
+}
+
+.home-editorial-section .feature-image {
+  aspect-ratio: 16 / 7.8;
+}
+
+.home-editorial-section .feature-content h2 {
+  max-width: 10ch;
+}
+
+.home-editorial-section .feature-content p {
+  max-width: 35ch;
+}
+
+/* -----------------------------------------------------------
+   QUIET CTA STRIP
+----------------------------------------------------------- */
+
+.home-cta-section {
+  background: var(--surface);
+  padding-top: clamp(72px, 8vw, 104px);
+  padding-bottom: clamp(72px, 8vw, 104px);
+}
+
+.home-cta-panel {
+  width: min(var(--container), calc(100% - var(--gutter)));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 40px 60px;
+  align-items: end;
+  border-top: 1px solid var(--line);
+  padding-top: 26px;
+}
+
+.home-cta-copy .eyebrow {
+  margin-bottom: 18px;
+}
+
+.home-cta-copy h2 {
+  margin: 0;
+  max-width: 13ch;
+  font-family: var(--display-serif);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+}
+
+.home-cta-copy p {
+  margin: 18px 0 0;
+  max-width: 46ch;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.home-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 6px;
+}
+
+/* -----------------------------------------------------------
+   MOBILE
+----------------------------------------------------------- */
+
+@media (max-width: 1180px) {
+  .home-cta-panel {
+    width: min(var(--container), calc(100% - var(--gutter-sm)));
+  }
 }
 
 @media (max-width: 760px) {
@@ -21,46 +174,47 @@
 
   .hero--home .hero-scrim {
     background:
-      linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.03) 32%, rgba(0,0,0,0.28) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.04) 34%, rgba(0,0,0,0.32) 100%),
       linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.10) 100%);
   }
-}
 
-/* -----------------------------------------------------------
-   FAMILIES SECTION — uses .rail pattern, kept at 3 columns
------------------------------------------------------------ */
+  .families-section {
+    padding-top: 72px;
+    padding-bottom: 72px;
+  }
 
-.families-section {
-  background: var(--bg);
-  padding-top: clamp(88px, 10vw, 128px);
-  padding-bottom: clamp(72px, 8vw, 104px);
-}
+  .families-section .section-head {
+    margin-bottom: 32px;
+  }
 
-.families-section .section-head h2 {
-  max-width: 11ch;
-}
+  .home-editorial-section {
+    padding-bottom: 72px;
+  }
 
-/* -----------------------------------------------------------
-   CONFIGURATOR FEATURE — flush top against families
------------------------------------------------------------ */
+  .home-editorial-section .feature-image {
+    aspect-ratio: 4 / 4.9;
+  }
 
-.home-configurator-section {
-  background: var(--bg);
-  padding-top: 0;
-  padding-bottom: clamp(88px, 10vw, 128px);
-}
+  .home-cta-section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
 
-/* -----------------------------------------------------------
-   SERVICES / PROJECT SUPPORT CARD
-   Bulgari "Exclusive Services"-like editorial preview
------------------------------------------------------------ */
+  .home-cta-panel {
+    width: min(var(--container-wide), calc(100% - var(--gutter-xs)));
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding-top: 22px;
+  }
 
-.home-services-section {
-  background: var(--bg);
-  padding-top: 0;
-  padding-bottom: clamp(88px, 10vw, 128px);
-}
+  .home-cta-copy h2 {
+    max-width: 11ch;
+  }
 
-.home-services-section .feature-image {
-  aspect-ratio: 16 / 7.2;
+  .home-cta-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 0;
+  }
 }
