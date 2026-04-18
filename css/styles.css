@@ -366,7 +366,7 @@ a {
 
 .hero {
   position: relative;
-  min-height: calc(100svh - var(--header-h));
+  min-height: calc(100vh - var(--header-h));
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -422,7 +422,6 @@ a {
   line-height: 0.96;
   font-size: clamp(3.2rem, 7vw, 6rem);
   max-width: 11ch;
-  text-wrap: balance;
 }
 
 .hero-subline {
@@ -574,7 +573,7 @@ a {
   }
 
   .hero {
-    min-height: calc(100svh - var(--header-h));
+    min-height: calc(100vh - var(--header-h));
   }
 
   .hero-media {
