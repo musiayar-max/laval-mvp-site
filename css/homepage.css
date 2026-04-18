@@ -1,8 +1,8 @@
 /* ============================================================
    LAVAL — HOMEPAGE ONLY
-   Reset hero to Bulgari-like composition:
-   transparent header, white controls, inward copy block,
-   sharper placement, one CTA.
+   Template-driven homepage rebuild:
+   transparent header, centered hero, simpler editorial rhythm,
+   cleaner family intro, quieter luxury spacing.
 ============================================================ */
 
 /* -----------------------------------------------------------
@@ -48,53 +48,49 @@
 
 .hero--home .hero-scrim {
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.04) 30%, rgba(0,0,0,0.16) 100%),
-    linear-gradient(90deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.30) 22%, rgba(0,0,0,0.10) 46%, rgba(0,0,0,0) 74%);
+    linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.10) 42%, rgba(0,0,0,0.44) 100%);
 }
 
 .hero--home .hero-inner {
-  padding-bottom: clamp(56px, 8vh, 92px);
+  padding-bottom: clamp(68px, 10vh, 110px);
 }
 
-.hero--home .hero-copy {
-  max-width: 34rem;
-  margin-left: clamp(18px, 2.6vw, 42px);
+.hero-copy--center {
+  max-width: 52rem;
+  margin: 0 auto;
+  text-align: center;
   color: #ffffff;
+}
+
+.hero--home .hero-location {
+  margin-bottom: 18px;
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .hero--home .hero-copy h1 {
   margin: 0;
-  max-width: 12ch;
-  font-family: var(--ui-sans);
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  font-size: clamp(2.5rem, 4.2vw, 3.95rem);
+  max-width: none;
+  font-family: var(--display-serif);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  font-size: clamp(4rem, 8vw, 6.8rem);
   color: #ffffff;
 }
 
 .hero--home .hero-subline {
-  margin: 18px 0 0;
+  margin: 20px auto 0;
   max-width: 34ch;
   font-family: var(--ui-sans);
   font-weight: 400;
-  font-size: clamp(1rem, 1.15vw, 1.08rem);
-  line-height: 1.4;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1rem, 1.2vw, 1.08rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
 }
 
-.hero--home .hero-actions {
+.hero-actions--center {
+  justify-content: center;
   margin-top: 30px;
-  gap: 0;
-}
-
-.hero--home .hero-actions .text-link {
-  font-size: 0.86rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  border-bottom-width: 2px;
-  padding-bottom: 6px;
 }
 
 /* -----------------------------------------------------------
@@ -120,24 +116,23 @@
 }
 
 .families-section .section-head h2 {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   max-width: none;
   font-family: var(--display-serif);
   font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 0.96;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
   font-size: clamp(2.7rem, 4.2vw, 4.4rem);
   color: var(--text);
-  text-wrap: balance;
 }
 
 .families-section .section-head p {
   margin: 0;
-  max-width: 62ch;
+  max-width: 52ch;
   font-family: var(--ui-sans);
   font-weight: 400;
-  font-size: clamp(1rem, 1.15vw, 1.08rem);
-  line-height: 1.6;
+  font-size: clamp(1rem, 1.12vw, 1.06rem);
+  line-height: 1.55;
   color: var(--muted);
 }
 
@@ -158,7 +153,7 @@
 }
 
 .families-section .rail-copy p {
-  max-width: 28ch;
+  max-width: 30ch;
 }
 
 .families-section .rail-footer {
@@ -167,7 +162,7 @@
 }
 
 /* -----------------------------------------------------------
-   FULL-BLEED EDITORIAL FEATURE
+   FEATURE
 ----------------------------------------------------------- */
 
 .home-editorial-section {
@@ -177,19 +172,19 @@
 }
 
 .home-editorial-section .feature-image {
-  aspect-ratio: 16 / 7.8;
+  aspect-ratio: 16 / 7.4;
 }
 
 .home-editorial-section .feature-content h2 {
-  max-width: 10ch;
+  max-width: 9ch;
 }
 
 .home-editorial-section .feature-content p {
-  max-width: 35ch;
+  max-width: 34ch;
 }
 
 /* -----------------------------------------------------------
-   QUIET CTA STRIP
+   QUIET CTA
 ----------------------------------------------------------- */
 
 .home-cta-section {
@@ -225,7 +220,7 @@
 
 .home-cta-copy p {
   margin: 18px 0 0;
-  max-width: 46ch;
+  max-width: 44ch;
   color: var(--muted);
   line-height: 1.8;
 }
@@ -257,33 +252,35 @@
 
   .hero--home .hero-scrim {
     background:
-      linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.05) 34%, rgba(0,0,0,0.32) 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.14) 100%);
+      linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.14) 44%, rgba(0,0,0,0.42) 100%);
   }
 
   .hero--home .hero-inner {
-    padding-bottom: 40px;
-  }
-
-  .hero--home .hero-copy {
-    margin-left: 0;
-    max-width: 100%;
+    padding-bottom: 44px;
   }
 
   .hero--home .hero-copy h1 {
-    max-width: 10ch;
-    font-size: clamp(2.15rem, 9vw, 3rem);
-    line-height: 1.06;
+    font-size: clamp(3rem, 13vw, 4.2rem);
+    line-height: 0.95;
   }
 
   .hero--home .hero-subline {
-    max-width: 28ch;
+    max-width: 26ch;
     font-size: 1rem;
-    line-height: 1.45;
+    line-height: 1.5;
   }
 
-  .hero--home .hero-actions {
-    margin-top: 26px;
+  .hero-actions--center {
+    justify-content: flex-start;
+  }
+
+  .hero-copy--center {
+    text-align: left;
+  }
+
+  .hero--home .hero-subline {
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .families-section {
