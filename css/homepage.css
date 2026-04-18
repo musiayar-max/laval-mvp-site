@@ -2,27 +2,10 @@
    HOMEPAGE-ONLY REFINEMENTS
 ======================================== */
 
-.homepage-intro-band {
-  background: #f7f3ed;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.homepage-intro-grid {
-  display: grid;
-  grid-template-columns: 0.92fr 0.88fr;
-  gap: clamp(48px, 7vw, 96px);
-  align-items: start;
-  padding-top: 26px;
-  padding-bottom: 26px;
-}
-
-.homepage-intro-grid h2,
 .family-rail-head h2,
-.craft-wide-head h2,
-.configurator-bridge-head h2,
 .trade-flat-copy h2,
-.final-cta-refined .final-cta-inner h2 {
+.final-cta-refined .final-cta-inner h2,
+.configurator-feature-content h2 {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
@@ -31,18 +14,13 @@
   font-size: clamp(2.7rem, 4.8vw, 4.6rem);
 }
 
-.homepage-intro-grid h2 {
-  max-width: 10ch;
-}
-
-.homepage-intro-grid p,
 .family-rail-copy p,
-.configurator-step p,
 .trade-flat-copy p,
 .trade-flat-row span,
 .trade-flat-row strong,
 .section-copy,
-.final-cta-refined .final-cta-inner p {
+.final-cta-refined .final-cta-inner p,
+.configurator-feature-content p {
   margin: 0;
   color: var(--muted);
   line-height: 1.8;
@@ -59,7 +37,7 @@
 .family-rail-section {
   background: var(--bg);
   padding-top: 110px;
-  padding-bottom: 104px;
+  padding-bottom: 88px;
 }
 
 .family-rail-head {
@@ -133,97 +111,84 @@
 }
 
 /* ========================================
-   CRAFT — 1 WIDE IMAGE
+   CONFIGURATOR FEATURE IMAGE
 ======================================== */
 
-.craft-wide-section {
-  background: #faf7f2;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+.configurator-feature-section {
+  background: var(--bg);
+  padding-top: 0;
+  padding-bottom: 110px;
 }
 
-.craft-wide-head {
-  display: grid;
-  grid-template-columns: 0.95fr 0.85fr;
-  gap: 44px;
-  align-items: end;
-  margin-bottom: 34px;
-}
-
-.craft-wide-head h2 {
-  max-width: 9ch;
-}
-
-.craft-wide-shell {
+.configurator-feature-shell {
   width: min(1600px, calc(100% - 72px));
   margin: 0 auto;
-  overflow: hidden;
-  background: #ddd6cb;
 }
 
-.craft-wide-shell img {
+.configurator-feature-card {
+  position: relative;
+  overflow: hidden;
+  background: #d7cec1;
+}
+
+.configurator-feature-image {
   width: 100%;
-  aspect-ratio: 16 / 7.8;
+  aspect-ratio: 16 / 8;
   object-fit: cover;
 }
 
-/* ========================================
-   CONFIGURATOR BRIDGE
-======================================== */
-
-.configurator-bridge-section {
-  background: #fcfaf7;
+.configurator-feature-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.08) 45%, rgba(0, 0, 0, 0.40) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.18) 28%, rgba(0, 0, 0, 0.05) 56%, rgba(0, 0, 0, 0) 76%);
 }
 
-.configurator-bridge-head {
-  display: grid;
-  grid-template-columns: 0.95fr 0.85fr;
-  gap: 44px;
-  align-items: end;
-  margin-bottom: 42px;
+.configurator-feature-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  max-width: 38rem;
+  padding: clamp(28px, 4vw, 54px);
+  color: #ffffff;
 }
 
-.configurator-bridge-head h2 {
-  max-width: 9.5ch;
-}
-
-.configurator-bridge-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 30px;
-}
-
-.configurator-step {
-  padding-top: 18px;
-  border-top: 1px solid var(--line-strong);
-}
-
-.configurator-step-number {
+.configurator-feature-kicker {
   margin: 0 0 18px;
   font-size: 0.72rem;
   font-weight: 500;
-  letter-spacing: 0.17em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
 }
 
-.configurator-step h3 {
-  margin: 0 0 12px;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  line-height: 1;
-  font-size: 1.95rem;
+.configurator-feature-content h2 {
+  max-width: 10ch;
+  color: #ffffff;
 }
 
-.configurator-step p {
-  max-width: 30ch;
+.configurator-feature-content p {
+  margin-top: 16px;
+  max-width: 34ch;
+  color: rgba(255, 255, 255, 0.88);
 }
 
-.configurator-bridge-footer {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 34px;
+.configurator-feature-actions {
+  margin-top: 28px;
+}
+
+.btn-overlay {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+}
+
+.btn-overlay:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 /* ========================================
@@ -298,36 +263,29 @@
 ======================================== */
 
 @media (max-width: 1180px) {
-  .homepage-intro-grid,
   .family-rail-head,
-  .craft-wide-head,
-  .configurator-bridge-head,
   .trade-flat-grid {
     grid-template-columns: 1fr;
   }
 
-  .configurator-bridge-grid {
-    grid-template-columns: 1fr;
-  }
-
   .family-rail-shell,
-  .craft-wide-shell {
+  .configurator-feature-shell {
     width: min(1600px, calc(100% - 40px));
   }
 }
 
 @media (max-width: 760px) {
-  .homepage-intro-grid {
-    gap: 28px;
-  }
-
   .family-rail-section {
     padding-top: 68px;
-    padding-bottom: 70px;
+    padding-bottom: 54px;
+  }
+
+  .configurator-feature-section {
+    padding-bottom: 66px;
   }
 
   .family-rail-shell,
-  .craft-wide-shell {
+  .configurator-feature-shell {
     width: min(1600px, calc(100% - 28px));
   }
 
@@ -340,11 +298,25 @@
     aspect-ratio: 4 / 4.9;
   }
 
-  .craft-wide-shell img {
-    aspect-ratio: 4 / 2.9;
+  .configurator-feature-image {
+    aspect-ratio: 4 / 4.9;
   }
 
-  .configurator-bridge-footer {
+  .configurator-feature-content {
+    max-width: 100%;
+    padding: 24px;
+  }
+
+  .configurator-feature-content h2 {
+    max-width: 9ch;
+  }
+
+  .configurator-feature-content p {
+    max-width: 28ch;
+  }
+
+  .configurator-feature-actions {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
   }
