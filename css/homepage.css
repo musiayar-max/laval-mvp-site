@@ -1,7 +1,7 @@
 /* ============================================================
    LAVAL — HOMEPAGE ONLY
    Bulgari-inspired homepage refinement:
-   stronger hero, cleaner family section, one full-bleed feature,
+   stronger hero, simpler family heading, one full-bleed feature,
    one quiet CTA strip.
 ============================================================ */
 
@@ -30,6 +30,8 @@
 
 /* -----------------------------------------------------------
    FAMILIES
+   Make heading behave like the Bulgari screenshot:
+   left-aligned, flatter, cleaner, less "editorial stack"
 ----------------------------------------------------------- */
 
 .families-section {
@@ -39,23 +41,37 @@
 }
 
 .families-section .section-head {
-  max-width: 58rem;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: clamp(36px, 4vw, 52px);
-  text-align: center;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: clamp(30px, 4vw, 42px);
+  text-align: left;
+}
+
+/* Hide the eyebrow so the section starts clean like the screenshot */
+.families-section .section-head .eyebrow {
+  display: none;
 }
 
 .families-section .section-head h2 {
-  max-width: 10ch;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 0 10px;
+  max-width: none;
+  font-family: var(--ui-sans);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  color: var(--text);
 }
 
 .families-section .section-head p {
-  max-width: 46ch;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0;
+  max-width: 68ch;
+  font-family: var(--ui-sans);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.25vw, 1.15rem);
+  line-height: 1.5;
+  color: var(--text);
 }
 
 .families-section .rail {
@@ -80,7 +96,7 @@
 
 .families-section .rail-footer {
   margin-top: 34px;
-  text-align: center;
+  text-align: left;
 }
 
 /* -----------------------------------------------------------
@@ -184,7 +200,19 @@
   }
 
   .families-section .section-head {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
+  }
+
+  .families-section .section-head h2 {
+    font-size: clamp(1.9rem, 8vw, 2.5rem);
+    line-height: 1.08;
+    margin-bottom: 8px;
+  }
+
+  .families-section .section-head p {
+    max-width: 100%;
+    font-size: 1rem;
+    line-height: 1.45;
   }
 
   .home-editorial-section {
