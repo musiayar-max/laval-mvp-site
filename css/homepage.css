@@ -1,8 +1,8 @@
 /* ============================================================
    LAVAL — HOMEPAGE ONLY
-   Hero refined to mirror Bulgari more closely:
-   transparent header over hero, lower-left copy block,
-   shorter marketing copy, single CTA.
+   Hero refinement:
+   luxury serif headline, cleaner copy block placement,
+   stronger left-side composition, Bulgari-like rhythm.
 ============================================================ */
 
 /* -----------------------------------------------------------
@@ -48,41 +48,43 @@
 
 .hero--home .hero-scrim {
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.04) 30%, rgba(0,0,0,0.18) 100%),
-    linear-gradient(90deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.28) 24%, rgba(0,0,0,0.10) 48%, rgba(0,0,0,0) 74%);
+    linear-gradient(180deg, rgba(0,0,0,0.07) 0%, rgba(0,0,0,0.04) 28%, rgba(0,0,0,0.18) 100%),
+    linear-gradient(90deg, rgba(0,0,0,0.56) 0%, rgba(0,0,0,0.34) 22%, rgba(0,0,0,0.12) 46%, rgba(0,0,0,0) 74%);
 }
 
 .hero--home .hero-inner {
-  padding-bottom: clamp(54px, 8vh, 90px);
+  padding-bottom: clamp(62px, 9vh, 96px);
 }
 
 .hero--home .hero-copy {
-  max-width: 43rem;
+  max-width: 39rem;
+  margin-left: clamp(14px, 2.2vw, 34px);
 }
 
 .hero--home .hero-copy h1 {
   margin: 0;
-  max-width: 13ch;
-  font-family: var(--ui-sans);
-  font-weight: 400;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-  font-size: clamp(2.4rem, 4.2vw, 3.9rem);
+  max-width: 12ch;
+  font-family: var(--display-serif);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  font-size: clamp(3rem, 4.5vw, 4.6rem);
   color: #ffffff;
+  text-wrap: balance;
 }
 
 .hero--home .hero-subline {
   margin: 18px 0 0;
-  max-width: 38ch;
+  max-width: 35ch;
   font-family: var(--ui-sans);
   font-weight: 400;
-  font-size: clamp(1rem, 1.2vw, 1.12rem);
-  line-height: 1.34;
+  font-size: clamp(1rem, 1.15vw, 1.08rem);
+  line-height: 1.42;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .hero--home .hero-actions {
-  margin-top: 32px;
+  margin-top: 30px;
   gap: 0;
 }
 
@@ -255,24 +257,29 @@
 
   .hero--home .hero-scrim {
     background:
-      linear-gradient(180deg, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0.05) 34%, rgba(0,0,0,0.34) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.05) 34%, rgba(0,0,0,0.34) 100%),
       linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.14) 100%);
   }
 
   .hero--home .hero-inner {
-    padding-bottom: 40px;
+    padding-bottom: 42px;
+  }
+
+  .hero--home .hero-copy {
+    margin-left: 0;
+    max-width: 100%;
   }
 
   .hero--home .hero-copy h1 {
     max-width: 11ch;
-    font-size: clamp(2rem, 9vw, 2.8rem);
-    line-height: 1.06;
+    font-size: clamp(2.35rem, 10vw, 3.15rem);
+    line-height: 0.94;
   }
 
   .hero--home .hero-subline {
     max-width: 28ch;
     font-size: 1rem;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   .hero--home .hero-actions {
