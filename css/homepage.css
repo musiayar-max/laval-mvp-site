@@ -1,0 +1,346 @@
+/* ========================================
+   HOMEPAGE-ONLY REFINEMENTS
+   Safe layer on top of css/styles.css
+======================================== */
+
+.homepage-intro {
+  background: #eceae6;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.homepage-intro .intro-grid {
+  gap: 72px;
+}
+
+.homepage-intro h2 {
+  max-width: 9.5ch;
+}
+
+.family-editorial-section {
+  background: #eceae6;
+  padding-top: 90px;
+  padding-bottom: 96px;
+}
+
+.family-editorial-head {
+  display: grid;
+  grid-template-columns: 0.92fr 0.88fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.family-editorial-head h2 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-size: clamp(2.7rem, 5vw, 4.25rem);
+}
+
+.family-editorial-copy {
+  margin: 0;
+  max-width: 48ch;
+}
+
+.family-editorial-shell {
+  width: min(1680px, calc(100% - 64px));
+  margin: 0 auto;
+}
+
+.family-editorial-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 34px;
+  align-items: start;
+}
+
+.family-editorial-item {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.family-editorial-media {
+  overflow: hidden;
+  background: #ddd6cb;
+}
+
+.family-editorial-media img {
+  width: 100%;
+  aspect-ratio: 4 / 5.15;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.family-editorial-item:hover .family-editorial-media img {
+  transform: scale(1.015);
+}
+
+.family-editorial-body {
+  padding-right: 14px;
+}
+
+.family-editorial-body .card-label {
+  margin-bottom: 12px;
+}
+
+.family-editorial-body h3 {
+  margin: 0 0 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  line-height: 1;
+  font-size: clamp(1.8rem, 2.5vw, 2.35rem);
+}
+
+.family-editorial-body p:last-child {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 30ch;
+}
+
+.family-editorial-footer {
+  margin-top: 28px;
+}
+
+.craft-home-section {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.craft-home-grid {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 46px;
+  align-items: center;
+}
+
+.craft-home-media {
+  overflow: hidden;
+  background: #ddd6cb;
+}
+
+.craft-home-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.craft-home-copy h2 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-size: clamp(2.6rem, 5vw, 4.1rem);
+  max-width: 10ch;
+}
+
+.craft-home-copy p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.craft-home-note {
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.catalog-bridge-section {
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.catalog-bridge-head {
+  display: grid;
+  grid-template-columns: 0.95fr 0.85fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 40px;
+}
+
+.catalog-bridge-head h2 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-size: clamp(2.6rem, 5vw, 4.1rem);
+  max-width: 9.5ch;
+}
+
+.catalog-bridge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+}
+
+.catalog-step {
+  padding-top: 18px;
+  border-top: 1px solid var(--line-strong);
+}
+
+.catalog-step-number {
+  margin: 0 0 18px;
+  font-size: 0.72rem;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.catalog-step h3 {
+  margin: 0 0 12px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.catalog-step p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 30ch;
+}
+
+.catalog-bridge-footer {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+}
+
+.trade-home-section {
+  background: var(--bg-soft);
+}
+
+.trade-home-grid {
+  display: grid;
+  grid-template-columns: 0.94fr 1.06fr;
+  gap: 44px;
+  align-items: start;
+}
+
+.trade-home-copy h2 {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-size: clamp(2.6rem, 5vw, 4.1rem);
+  max-width: 9ch;
+}
+
+.trade-home-copy p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.trade-home-panel {
+  border-top: 1px solid var(--line-strong);
+}
+
+.trade-home-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: start;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.trade-home-row span {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.trade-home-row strong {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.final-cta-home {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.52));
+}
+
+.final-cta-home .final-cta-inner {
+  max-width: 920px;
+}
+
+.final-cta-home .final-cta-inner h2 {
+  max-width: 14ch;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 1180px) {
+  .family-editorial-head,
+  .catalog-bridge-head,
+  .craft-home-grid,
+  .trade-home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .family-editorial-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .family-editorial-shell {
+    width: min(1680px, calc(100% - 40px));
+  }
+
+  .catalog-bridge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-step p {
+    max-width: 48ch;
+  }
+}
+
+@media (max-width: 760px) {
+  .homepage-intro .intro-grid {
+    gap: 28px;
+  }
+
+  .family-editorial-section {
+    padding-top: 64px;
+    padding-bottom: 68px;
+  }
+
+  .family-editorial-shell {
+    width: min(1680px, calc(100% - 28px));
+  }
+
+  .family-editorial-rail {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .family-editorial-media img {
+    aspect-ratio: 4 / 4.8;
+  }
+
+  .craft-home-media img {
+    aspect-ratio: 4 / 3.2;
+  }
+
+  .catalog-bridge-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .trade-home-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .trade-home-row strong {
+    white-space: normal;
+  }
+}
