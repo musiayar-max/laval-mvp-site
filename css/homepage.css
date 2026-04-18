@@ -156,11 +156,6 @@
   max-width: 30ch;
 }
 
-.families-section .rail-footer {
-  margin-top: 34px;
-  text-align: left;
-}
-
 /* -----------------------------------------------------------
    FEATURE
 ----------------------------------------------------------- */
@@ -184,54 +179,56 @@
 }
 
 /* -----------------------------------------------------------
-   QUIET CTA
+   QUIET CTA — Bulgari-style simple information block
 ----------------------------------------------------------- */
 
 .home-cta-section {
-  background: var(--surface);
-  padding-top: clamp(72px, 8vw, 104px);
-  padding-bottom: clamp(72px, 8vw, 104px);
+  background: #e9e7e3;
+  padding-top: clamp(78px, 9vw, 116px);
+  padding-bottom: clamp(78px, 9vw, 116px);
 }
 
-.home-cta-panel {
+.home-cta-wrap {
   width: min(var(--container), calc(100% - var(--gutter)));
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 40px 60px;
-  align-items: end;
-  border-top: 1px solid var(--line);
-  padding-top: 26px;
 }
 
-.home-cta-copy .eyebrow {
-  margin-bottom: 18px;
+.home-cta-block {
+  max-width: 48rem;
 }
 
-.home-cta-copy h2 {
+.home-cta-block h2 {
   margin: 0;
-  max-width: 13ch;
-  font-family: var(--display-serif);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.98;
-  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  font-family: var(--ui-sans);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  font-size: clamp(2.2rem, 4vw, 3.35rem);
+  color: var(--text);
 }
 
-.home-cta-copy p {
+.home-cta-lead {
   margin: 18px 0 0;
-  max-width: 44ch;
-  color: var(--muted);
-  line-height: 1.8;
+  max-width: 48ch;
+  font-family: var(--ui-sans);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.15vw, 1.08rem);
+  line-height: 1.55;
+  color: var(--text);
 }
 
-.home-cta-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-  align-items: center;
-  justify-content: flex-start;
-  padding-bottom: 6px;
+.home-cta-body {
+  margin: 26px 0 0;
+  max-width: 50ch;
+  font-family: var(--ui-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.home-cta-link-row {
+  margin-top: 30px;
 }
 
 /* -----------------------------------------------------------
@@ -239,7 +236,7 @@
 ----------------------------------------------------------- */
 
 @media (max-width: 1180px) {
-  .home-cta-panel {
+  .home-cta-wrap {
     width: min(var(--container), calc(100% - var(--gutter-sm)));
   }
 }
@@ -317,21 +314,17 @@
     padding-bottom: 64px;
   }
 
-  .home-cta-panel {
+  .home-cta-wrap {
     width: min(var(--container-wide), calc(100% - var(--gutter-xs)));
-    grid-template-columns: 1fr;
-    gap: 26px;
-    padding-top: 22px;
   }
 
-  .home-cta-copy h2 {
-    max-width: 11ch;
+  .home-cta-block h2 {
+    font-size: clamp(1.95rem, 9vw, 2.8rem);
+    line-height: 1.08;
   }
 
-  .home-cta-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    padding-bottom: 0;
+  .home-cta-lead,
+  .home-cta-body {
+    max-width: 100%;
   }
 }
