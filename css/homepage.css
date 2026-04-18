@@ -3,108 +3,108 @@
    Safe layer on top of css/styles.css
 ======================================== */
 
-.homepage-intro {
+.homepage-intro-band {
   background: #eceae6;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
-.homepage-intro .intro-grid {
-  gap: 72px;
-}
-
-.homepage-intro h2 {
-  max-width: 9.5ch;
-}
-
-/* ========================================
-   FAMILY COMPOSITION
-======================================== */
-
-.family-composition-section {
-  background: #eceae6;
-  padding-top: 90px;
-  padding-bottom: 96px;
-}
-
-.family-composition-head {
+.homepage-intro-grid {
   display: grid;
-  grid-template-columns: 0.92fr 0.88fr;
-  gap: 40px;
-  align-items: end;
-  margin-bottom: 42px;
+  grid-template-columns: 0.82fr 1fr;
+  gap: 72px;
+  align-items: start;
+  padding-top: 26px;
+  padding-bottom: 26px;
 }
 
-.family-composition-head h2 {
+.homepage-intro-grid h2,
+.family-rail-head h2,
+.craft-wide-head h2,
+.configurator-bridge-head h2,
+.trade-flat-copy h2 {
   margin: 0;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 0.95;
-  font-size: clamp(2.7rem, 5vw, 4.25rem);
+  font-size: clamp(2.6rem, 5vw, 4.15rem);
 }
 
-.family-composition-copy {
-  margin: 0;
-  max-width: 48ch;
+.homepage-intro-grid h2 {
+  max-width: 10ch;
 }
 
-.family-composition-shell {
-  width: min(1680px, calc(100% - 64px));
+.homepage-intro-grid p,
+.family-rail-copy p,
+.configurator-step p,
+.trade-flat-copy p,
+.trade-flat-row span,
+.trade-flat-row strong {
+  line-height: 1.8;
+}
+
+/* ========================================
+   FAMILY RAIL
+======================================== */
+
+.family-rail-section {
+  background: #eceae6;
+  padding-top: 92px;
+  padding-bottom: 96px;
+}
+
+.family-rail-head {
+  display: grid;
+  grid-template-columns: 0.95fr 0.85fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.family-rail-shell {
+  width: min(1720px, calc(100% - 68px));
   margin: 0 auto;
 }
 
-.family-composition-grid {
+.family-rail-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 34px;
   align-items: start;
 }
 
-.family-tile {
+.family-rail-item {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-.family-tile-media {
+.family-rail-media {
   overflow: hidden;
   background: #ddd6cb;
 }
 
-.family-tile-media img {
+.family-rail-media img {
   width: 100%;
-  display: block;
+  aspect-ratio: 4 / 5.2;
   object-fit: cover;
   transition: transform 0.35s ease;
 }
 
-.family-tile-standard .family-tile-media img {
-  aspect-ratio: 4 / 5.15;
-}
-
-.family-tile-wide {
-  grid-column: 1 / -1;
-}
-
-.family-tile-media-wide img {
-  aspect-ratio: 16 / 8.7;
-  object-position: center center;
-}
-
-.family-tile:hover .family-tile-media img {
+.family-rail-item:hover .family-rail-media img {
   transform: scale(1.015);
 }
 
-.family-tile-body {
-  padding-right: 14px;
+.family-rail-copy {
+  padding-right: 10px;
 }
 
-.family-tile-body .card-label {
+.family-rail-copy .card-label {
   margin-bottom: 12px;
 }
 
-.family-tile-body h3 {
+.family-rail-copy h3 {
   margin: 0 0 10px;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
@@ -112,78 +112,61 @@
   font-size: clamp(1.8rem, 2.5vw, 2.35rem);
 }
 
-.family-tile-body p:last-child {
+.family-rail-copy p:last-child {
   margin: 0;
   color: var(--muted);
-  line-height: 1.75;
   max-width: 30ch;
 }
 
-.family-tile-body-wide p:last-child {
-  max-width: 34ch;
-}
-
-.family-composition-footer {
+.family-rail-footer {
   margin-top: 28px;
 }
 
 /* ========================================
-   CRAFT
+   CRAFT — 1 WIDE IMAGE
 ======================================== */
 
-.craft-home-section {
+.craft-wide-section {
   background: var(--bg);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
-.craft-home-grid {
+.craft-wide-head {
   display: grid;
-  grid-template-columns: 1.08fr 0.92fr;
-  gap: 46px;
-  align-items: center;
+  grid-template-columns: 0.95fr 0.85fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 34px;
 }
 
-.craft-home-media {
+.craft-wide-head h2 {
+  max-width: 10ch;
+}
+
+.craft-wide-shell {
+  width: min(1720px, calc(100% - 68px));
+  margin: 0 auto;
   overflow: hidden;
   background: #ddd6cb;
 }
 
-.craft-home-media img {
+.craft-wide-shell img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 8.6;
   object-fit: cover;
-}
-
-.craft-home-copy h2 {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  font-size: clamp(2.6rem, 5vw, 4.1rem);
-  max-width: 10ch;
-}
-
-.craft-home-copy p {
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-.craft-home-note {
-  margin-top: 20px;
-  font-size: 0.95rem;
+  display: block;
 }
 
 /* ========================================
    CONFIGURATOR BRIDGE
 ======================================== */
 
-.catalog-bridge-section {
+.configurator-bridge-section {
   background: rgba(255, 255, 255, 0.54);
 }
 
-.catalog-bridge-head {
+.configurator-bridge-head {
   display: grid;
   grid-template-columns: 0.95fr 0.85fr;
   gap: 40px;
@@ -191,28 +174,22 @@
   margin-bottom: 40px;
 }
 
-.catalog-bridge-head h2 {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  font-size: clamp(2.6rem, 5vw, 4.1rem);
+.configurator-bridge-head h2 {
   max-width: 9.5ch;
 }
 
-.catalog-bridge-grid {
+.configurator-bridge-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 30px;
 }
 
-.catalog-step {
+.configurator-step {
   padding-top: 18px;
   border-top: 1px solid var(--line-strong);
 }
 
-.catalog-step-number {
+.configurator-step-number {
   margin: 0 0 18px;
   font-size: 0.72rem;
   letter-spacing: 0.17em;
@@ -220,7 +197,7 @@
   color: var(--muted);
 }
 
-.catalog-step h3 {
+.configurator-step h3 {
   margin: 0 0 12px;
   font-family: 'Cormorant Garamond', serif;
   font-weight: 600;
@@ -228,14 +205,13 @@
   line-height: 1;
 }
 
-.catalog-step p {
+.configurator-step p {
   margin: 0;
   color: var(--muted);
-  line-height: 1.8;
   max-width: 30ch;
 }
 
-.catalog-bridge-footer {
+.configurator-bridge-footer {
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
@@ -243,40 +219,29 @@
 }
 
 /* ========================================
-   TRADE
+   TRADE — FLATTER, CLEANER
 ======================================== */
 
-.trade-home-section {
+.trade-flat-section {
   background: var(--bg-soft);
 }
 
-.trade-home-grid {
+.trade-flat-grid {
   display: grid;
   grid-template-columns: 0.94fr 1.06fr;
-  gap: 44px;
+  gap: 46px;
   align-items: start;
 }
 
-.trade-home-copy h2 {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.95;
-  font-size: clamp(2.6rem, 5vw, 4.1rem);
+.trade-flat-copy h2 {
   max-width: 9ch;
 }
 
-.trade-home-copy p {
-  color: var(--muted);
-  line-height: 1.8;
-}
-
-.trade-home-panel {
+.trade-flat-list {
   border-top: 1px solid var(--line-strong);
 }
 
-.trade-home-row {
+.trade-flat-row {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 24px;
@@ -285,12 +250,11 @@
   border-bottom: 1px solid var(--line);
 }
 
-.trade-home-row span {
+.trade-flat-row span {
   color: var(--muted);
-  line-height: 1.7;
 }
 
-.trade-home-row strong {
+.trade-flat-row strong {
   font-weight: 500;
   white-space: nowrap;
 }
@@ -299,15 +263,15 @@
    FINAL CTA
 ======================================== */
 
-.final-cta-home {
+.final-cta-refined {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.52));
 }
 
-.final-cta-home .final-cta-inner {
+.final-cta-refined .final-cta-inner {
   max-width: 920px;
 }
 
-.final-cta-home .final-cta-inner h2 {
+.final-cta-refined .final-cta-inner h2 {
   max-width: 14ch;
 }
 
@@ -316,69 +280,63 @@
 ======================================== */
 
 @media (max-width: 1180px) {
-  .family-composition-head,
-  .catalog-bridge-head,
-  .craft-home-grid,
-  .trade-home-grid {
+  .homepage-intro-grid,
+  .family-rail-head,
+  .craft-wide-head,
+  .configurator-bridge-head,
+  .trade-flat-grid {
     grid-template-columns: 1fr;
   }
 
-  .family-composition-shell {
-    width: min(1680px, calc(100% - 40px));
-  }
-
-  .catalog-bridge-grid {
+  .configurator-bridge-grid {
     grid-template-columns: 1fr;
   }
 
-  .catalog-step p {
-    max-width: 48ch;
+  .family-rail-shell,
+  .craft-wide-shell {
+    width: min(1720px, calc(100% - 40px));
   }
 }
 
 @media (max-width: 760px) {
-  .homepage-intro .intro-grid {
+  .homepage-intro-grid {
     gap: 28px;
   }
 
-  .family-composition-section {
+  .family-rail-section {
     padding-top: 64px;
     padding-bottom: 68px;
   }
 
-  .family-composition-shell {
-    width: min(1680px, calc(100% - 28px));
+  .family-rail-shell,
+  .craft-wide-shell {
+    width: min(1720px, calc(100% - 28px));
   }
 
-  .family-composition-grid {
+  .family-rail-grid {
     grid-template-columns: 1fr;
     gap: 28px;
   }
 
-  .family-tile-wide {
-    grid-column: auto;
-  }
-
-  .family-tile-standard .family-tile-media img,
-  .family-tile-media-wide img {
+  .family-rail-media img {
     aspect-ratio: 4 / 4.8;
   }
 
-  .craft-home-media img {
-    aspect-ratio: 4 / 3.2;
+  .craft-wide-shell img {
+    aspect-ratio: 4 / 2.8;
   }
 
-  .catalog-bridge-footer {
+  .configurator-bridge-footer {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .trade-home-row {
+  .trade-flat-row {
     grid-template-columns: 1fr;
     gap: 6px;
   }
 
-  .trade-home-row strong {
+  .trade-flat-row strong {
     white-space: normal;
   }
 }
