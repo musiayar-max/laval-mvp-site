@@ -1,20 +1,40 @@
 /* ============================================================
    LAVAL — HOMEPAGE ONLY
-   Template-driven homepage rebuild:
-   transparent header, centered hero, simpler editorial rhythm,
-   cleaner family intro, quieter luxury spacing.
+   Bvlgari UI standard applied:
+   — font-weight 300 on all editorial headings
+   — positive letter-spacing on headings
+   — hero bleeds full 100svh behind transparent nav
+   — 0.5px borders
+   — no box-shadow on scrolled nav
 ============================================================ */
 
 /* -----------------------------------------------------------
+   HOMEPAGE HERO: bleed behind transparent nav
+   main on homepage has padding-top: 0 so the hero sits
+   directly behind the fixed nav (full-bleed, 100svh)
+----------------------------------------------------------- */
+
+.homepage main {
+  padding-top: 0;
+}
+
+.homepage .hero--home {
+  min-height: 100svh;           /* true full-screen — was calc(100svh - header-h) */
+  align-items: center;          /* center vertically like Bvlgari */
+}
+
+/* -----------------------------------------------------------
    HOMEPAGE HEADER OVER HERO
+   Transparent until scroll. White text/icons over hero image.
 ----------------------------------------------------------- */
 
 .homepage .site-header {
   background: transparent;
-  border-bottom: 0;
+  border-bottom-color: transparent;
   box-shadow: none;
   color: #ffffff;
   backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .homepage .site-header .brand,
@@ -23,12 +43,15 @@
   color: #ffffff;
 }
 
+/* Scrolled state: fills background, flips to dark text.
+   Bvlgari: no box-shadow, 0.5px border, 0.4s transition. */
 .homepage .site-header.is-scrolled {
   background: rgba(250, 247, 242, 0.96);
-  border-bottom: 1px solid rgba(21, 21, 21, 0.12);
+  border-bottom-color: rgba(21, 21, 21, 0.10);
   color: var(--text);
   backdrop-filter: blur(14px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
+  -webkit-backdrop-filter: blur(14px);
+  /* No box-shadow — Bvlgari never uses shadow on the nav */
 }
 
 .homepage .site-header.is-scrolled .brand,
@@ -46,51 +69,58 @@
   background-position: center center;
 }
 
+/* Gradient: lighter at top so logo reads clean, heavier at bottom */
 .hero--home .hero-scrim {
   background:
-    linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.10) 42%, rgba(0,0,0,0.44) 100%);
+    linear-gradient(180deg,
+      rgba(0,0,0,0.10) 0%,
+      rgba(0,0,0,0.06) 38%,
+      rgba(0,0,0,0.46) 100%
+    );
 }
 
 .hero--home .hero-inner {
-  padding-bottom: clamp(68px, 10vh, 110px);
+  padding-bottom: clamp(72px, 11vh, 120px);
 }
 
+/* Center-aligned hero copy (Bvlgari homepage is center-aligned) */
 .hero-copy--center {
-  max-width: 52rem;
+  max-width: 54rem;
   margin: 0 auto;
   text-align: center;
   color: #ffffff;
 }
 
 .hero--home .hero-location {
-  margin-bottom: 18px;
-  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.65);
 }
 
+/* Hero H1 — Bvlgari: weight 300, positive letter-spacing, line-height 1.05 */
 .hero--home .hero-copy h1 {
   margin: 0;
   max-width: none;
   font-family: var(--display-serif);
-  font-weight: 600;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-  font-size: clamp(4rem, 8vw, 6.8rem);
+  font-weight: 300;             /* was 600 — this single change is the biggest improvement */
+  letter-spacing: 0.01em;       /* was -0.045em — negative tracking reads tech, not luxury */
+  line-height: 1.05;            /* was 0.92 — too compressed */
+  font-size: clamp(3.8rem, 7.5vw, 7rem);
   color: #ffffff;
 }
 
 .hero--home .hero-subline {
-  margin: 20px auto 0;
-  max-width: 34ch;
+  margin: 24px auto 0;
+  max-width: 36ch;
   font-family: var(--ui-sans);
-  font-weight: 400;
-  font-size: clamp(1rem, 1.2vw, 1.08rem);
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.88);
+  font-weight: 300;             /* was 400 */
+  font-size: clamp(1rem, 1.15vw, 1.06rem);
+  line-height: 1.78;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .hero-actions--center {
   justify-content: center;
-  margin-top: 30px;
+  margin-top: 34px;
 }
 
 /* -----------------------------------------------------------
@@ -99,15 +129,15 @@
 
 .families-section {
   background: var(--bg);
-  padding-top: clamp(88px, 10vw, 128px);
-  padding-bottom: clamp(84px, 9vw, 116px);
+  padding-top: clamp(100px, 11vw, 140px);
+  padding-bottom: clamp(96px, 10vw, 130px);
 }
 
 .families-section .section-head {
   max-width: none;
   margin-left: 0;
   margin-right: 0;
-  margin-bottom: clamp(30px, 4vw, 42px);
+  margin-bottom: clamp(36px, 4vw, 52px);
   text-align: left;
 }
 
@@ -115,13 +145,14 @@
   display: none;
 }
 
+/* Families H2 — Bvlgari: weight 300, positive letter-spacing */
 .families-section .section-head h2 {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   max-width: none;
   font-family: var(--display-serif);
-  font-weight: 600;
-  letter-spacing: -0.03em;
-  line-height: 0.98;
+  font-weight: 300;             /* was 600 */
+  letter-spacing: 0.02em;       /* was -0.03em */
+  line-height: 1.1;             /* was 0.98 */
   font-size: clamp(2.7rem, 4.2vw, 4.4rem);
   color: var(--text);
 }
@@ -130,9 +161,9 @@
   margin: 0;
   max-width: 52ch;
   font-family: var(--ui-sans);
-  font-weight: 400;
-  font-size: clamp(1rem, 1.12vw, 1.06rem);
-  line-height: 1.55;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.12vw, 1.04rem);
+  line-height: 1.78;
   color: var(--muted);
 }
 
@@ -141,7 +172,7 @@
 }
 
 .families-section .rail-item {
-  gap: 22px;
+  gap: 20px;
 }
 
 .families-section .rail-copy {
@@ -157,22 +188,25 @@
 }
 
 /* -----------------------------------------------------------
-   FEATURE
+   FEATURE / EDITORIAL
 ----------------------------------------------------------- */
 
 .home-editorial-section {
   background: var(--bg);
   padding-top: 0;
-  padding-bottom: clamp(88px, 10vw, 128px);
+  padding-bottom: clamp(100px, 11vw, 140px);
 }
 
 .home-editorial-section .feature-image {
   aspect-ratio: 16 / 7.4;
 }
 
+/* Feature heading — weight 300, positive tracking */
 .home-editorial-section .feature-content h2 {
   max-width: none;
   white-space: nowrap;
+  font-weight: 300;             /* was 600 via cascade */
+  letter-spacing: 0.02em;
 }
 
 .home-editorial-section .feature-content p {
@@ -180,13 +214,13 @@
 }
 
 /* -----------------------------------------------------------
-   QUIET CTA — Bulgari-style simple information block
+   QUIET CTA
 ----------------------------------------------------------- */
 
 .home-cta-section {
   background: #e9e7e3;
-  padding-top: clamp(78px, 9vw, 116px);
-  padding-bottom: clamp(78px, 9vw, 116px);
+  padding-top: clamp(88px, 10vw, 128px);
+  padding-bottom: clamp(88px, 10vw, 128px);
 }
 
 .home-cta-wrap {
@@ -198,38 +232,39 @@
   max-width: 48rem;
 }
 
+/* CTA H2 — weight 300 */
 .home-cta-block h2 {
   margin: 0;
   font-family: var(--ui-sans);
-  font-weight: 400;
-  letter-spacing: -0.025em;
-  line-height: 1.08;
+  font-weight: 300;             /* was 400 */
+  letter-spacing: -0.01em;
+  line-height: 1.1;
   font-size: clamp(2.2rem, 4vw, 3.35rem);
   color: var(--text);
 }
 
 .home-cta-lead {
-  margin: 18px 0 0;
+  margin: 20px 0 0;
   max-width: 48ch;
   font-family: var(--ui-sans);
-  font-weight: 400;
-  font-size: clamp(1rem, 1.15vw, 1.08rem);
-  line-height: 1.55;
+  font-weight: 300;
+  font-size: clamp(1rem, 1.15vw, 1.06rem);
+  line-height: 1.78;
   color: var(--text);
 }
 
 .home-cta-body {
-  margin: 26px 0 0;
+  margin: 28px 0 0;
   max-width: 50ch;
   font-family: var(--ui-sans);
-  font-weight: 400;
+  font-weight: 300;
   font-size: 1rem;
-  line-height: 1.8;
+  line-height: 1.82;
   color: var(--muted);
 }
 
 .home-cta-link-row {
-  margin-top: 30px;
+  margin-top: 34px;
 }
 
 /* -----------------------------------------------------------
@@ -250,60 +285,61 @@
 
   .hero--home .hero-scrim {
     background:
-      linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.14) 44%, rgba(0,0,0,0.42) 100%);
+      linear-gradient(180deg,
+        rgba(0,0,0,0.12) 0%,
+        rgba(0,0,0,0.10) 40%,
+        rgba(0,0,0,0.46) 100%
+      );
   }
 
   .hero--home .hero-inner {
-    padding-bottom: 44px;
+    padding-bottom: 52px;
+  }
+
+  /* Mobile hero: left-aligned copy */
+  .hero-copy--center {
+    text-align: left;
   }
 
   .hero--home .hero-copy h1 {
-    font-size: clamp(3rem, 13vw, 4.2rem);
-    line-height: 0.95;
+    font-size: clamp(3rem, 13vw, 4.4rem);
+    line-height: 1.06;
   }
 
   .hero--home .hero-subline {
-    max-width: 26ch;
+    max-width: 28ch;
     font-size: 1rem;
-    line-height: 1.5;
+    line-height: 1.65;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .hero-actions--center {
     justify-content: flex-start;
   }
 
-  .hero-copy--center {
-    text-align: left;
-  }
-
-  .hero--home .hero-subline {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
   .families-section {
-    padding-top: 72px;
-    padding-bottom: 72px;
+    padding-top: 80px;
+    padding-bottom: 80px;
   }
 
   .families-section .section-head {
-    margin-bottom: 28px;
+    margin-bottom: 32px;
   }
 
   .families-section .section-head h2 {
     font-size: clamp(2.2rem, 10vw, 3rem);
-    line-height: 0.98;
-    margin-bottom: 10px;
+    line-height: 1.1;
+    margin-bottom: 12px;
   }
 
   .families-section .section-head p {
     max-width: 100%;
     font-size: 1rem;
-    line-height: 1.55;
   }
 
   .home-editorial-section {
-    padding-bottom: 72px;
+    padding-bottom: 80px;
   }
 
   .home-editorial-section .feature-image {
@@ -311,13 +347,13 @@
   }
 
   .home-editorial-section .feature-content h2 {
-    white-space: nowrap;
+    white-space: normal;
     font-size: clamp(2rem, 8vw, 3rem);
   }
 
   .home-cta-section {
-    padding-top: 64px;
-    padding-bottom: 64px;
+    padding-top: 72px;
+    padding-bottom: 72px;
   }
 
   .home-cta-wrap {
@@ -326,7 +362,7 @@
 
   .home-cta-block h2 {
     font-size: clamp(1.95rem, 9vw, 2.8rem);
-    line-height: 1.08;
+    line-height: 1.1;
   }
 
   .home-cta-lead,
