@@ -171,7 +171,8 @@
 }
 
 .home-editorial-section .feature-content h2 {
-  max-width: 9ch;
+  max-width: none;
+  white-space: nowrap;
 }
 
 .home-editorial-section .feature-content p {
@@ -307,6 +308,11 @@
 
   .home-editorial-section .feature-image {
     aspect-ratio: 4 / 4.9;
+  }
+
+  .home-editorial-section .feature-content h2 {
+    white-space: nowrap;
+    font-size: clamp(2rem, 8vw, 3rem);
   }
 
   .home-cta-section {
