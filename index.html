@@ -16,7 +16,7 @@
 <body class="homepage">
 
 <!-- =========================================================
-     HEADER
+     HEADER — full viewport width with small edge padding
 ========================================================= -->
 <header class="site-header" id="siteHeader">
   <div class="header-shell">
@@ -34,7 +34,6 @@
           <span></span>
           <span></span>
         </span>
-        <!-- menu-label hidden via CSS (Bvlgari: icon only) -->
         <span class="menu-label">Menu</span>
       </button>
     </div>
@@ -68,8 +67,6 @@
 
 <!-- =========================================================
      MENU OVERLAY
-     Full-screen dark overlay (Bvlgari standard).
-     padding-top on inner pushes content below nav height.
 ========================================================= -->
 <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
   <div class="menu-overlay-inner">
@@ -101,15 +98,10 @@
 
 <!-- =========================================================
      MAIN
-     homepage main has padding-top: 0 so hero bleeds
-     behind the transparent fixed nav (100svh hero).
 ========================================================= -->
 <main id="top">
 
-  <!-- ── HERO ─────────────────────────────────────────────
-       Full 100svh. Text centered. Nav is transparent over it.
-       No reveal class — hero animates via CSS on load.
-  ──────────────────────────────────────────────────────── -->
+  <!-- HERO — full 100svh, bleeds behind transparent nav -->
   <section class="hero hero--home" id="hero">
     <div class="hero-media" aria-hidden="true"></div>
     <div class="hero-scrim" aria-hidden="true"></div>
@@ -129,19 +121,14 @@
     </div>
   </section>
 
-  <!-- ── FAMILIES ─────────────────────────────────────────
-       Section head reveals on scroll.
-       Rail items stagger via reveal-group.
-  ──────────────────────────────────────────────────────── -->
+  <!-- FAMILIES -->
   <section id="families" class="section families-section">
-    <div class="container">
+    <div class="rail-shell">
       <div class="section-head reveal">
         <h2>The Families</h2>
         <p>Three distinct mantel signatures in natural stone.</p>
       </div>
-    </div>
 
-    <div class="rail-shell">
       <div class="rail reveal-group">
 
         <article class="rail-item">
@@ -193,10 +180,7 @@
     </div>
   </section>
 
-  <!-- ── FEATURE ───────────────────────────────────────────
-       Full-bleed editorial image card.
-       Reveals as a single block on scroll.
-  ──────────────────────────────────────────────────────── -->
+  <!-- FEATURE — full-bleed editorial image -->
   <section class="section home-editorial-section">
     <div class="feature reveal">
       <article class="feature-card">
@@ -222,9 +206,7 @@
     </div>
   </section>
 
-  <!-- ── QUIET CTA ─────────────────────────────────────────
-       Text block. Reveals on scroll.
-  ──────────────────────────────────────────────────────── -->
+  <!-- QUIET CTA -->
   <section class="section home-cta-section">
     <div class="home-cta-wrap">
       <div class="home-cta-block reveal">
@@ -244,7 +226,7 @@
 </main>
 
 <!-- =========================================================
-     FOOTER
+     FOOTER — full viewport width with edge padding
 ========================================================= -->
 <footer class="site-footer">
   <div class="footer-hub">
@@ -300,12 +282,8 @@
 
 <!-- =========================================================
      SCRIPT
-     1. Nav scroll fill (0.4s transition matches CSS)
-     2. Menu overlay open / close
-     3. Scroll reveal (IntersectionObserver — Bvlgari pattern)
 ========================================================= -->
 <script>
-  // ── 1. ELEMENTS ──────────────────────────────────────────
   const body        = document.body;
   const siteHeader  = document.getElementById('siteHeader');
   const menuTrigger = document.getElementById('menuTrigger');
@@ -313,8 +291,6 @@
   const menuClose   = document.getElementById('menuClose');
   const menuLinks   = menuOverlay.querySelectorAll('a');
 
-  // ── 2. NAV SCROLL FILL ───────────────────────────────────
-  // Adds .is-scrolled after 60px. The 0.4s transition is in CSS.
   function setScrolledState() {
     siteHeader.classList.toggle('is-scrolled', window.scrollY > 60);
   }
@@ -322,7 +298,6 @@
   window.addEventListener('scroll', setScrolledState, { passive: true });
   window.addEventListener('load', setScrolledState);
 
-  // ── 3. MENU OPEN / CLOSE ─────────────────────────────────
   function openMenu() {
     menuOverlay.classList.add('is-open');
     body.classList.add('menu-open');
@@ -347,32 +322,26 @@
     if (e.key === 'Escape') closeMenu();
   });
 
-  // ── 4. SCROLL REVEAL (IntersectionObserver) ──────────────
-  // Matches Bvlgari's fade-up on viewport entry.
-  // Elements with class="reveal" fade up individually.
-  // Elements with class="reveal-group" stagger their children.
+  // Scroll reveal — IntersectionObserver (fires once, no re-hide)
   (function () {
     if (!('IntersectionObserver' in window)) {
-      // Fallback: show everything immediately
       document.querySelectorAll('.reveal, .reveal-group').forEach(function (el) {
         el.classList.add('is-visible');
       });
       return;
     }
 
-    var revealOpts = {
-      threshold: 0.12,
-      rootMargin: '0px 0px -48px 0px'
-    };
-
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target); // fire once — Bvlgari doesn't re-hide on scroll
+          observer.unobserve(entry.target);
         }
       });
-    }, revealOpts);
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -48px 0px'
+    });
 
     document.querySelectorAll('.reveal, .reveal-group').forEach(function (el) {
       observer.observe(el);
