@@ -1,1325 +1,181 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LAVAL Configurator</title>
-<style>
-:root{
-  --bg-top:#a7aaa7;
-  --bg-bot:#d9d4cd;
-  --glass:rgba(255,255,255,.12);
-  --glass-2:rgba(255,255,255,.08);
-  --line:rgba(255,255,255,.14);
-  --text:#fff;
-  --muted:rgba(255,255,255,.68);
-  --soft:rgba(255,255,255,.42);
-  --ink:#15120f;
-  --accent:#e2cfbc;
-  --stone:linear-gradient(150deg,#dfd6ca 0%,#cfc4b6 45%,#b7aa9a 100%);
-  --open-w:42%;
-  --open-r:22px;
-  --leg-w:18%;
-  --crown-h:52px;
-  --crown-r:18px;
-  --crest:0;
-}
-*{box-sizing:border-box}
-html,body{
-  margin:0;
-  height:100%;
-  overflow:hidden;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;
-}
-body{
-  color:var(--text);
-  background:
-   radial-gradient(circle at 50% 20%,rgba(255,255,255,.16),transparent 24%),
-   radial-gradient(circle at 50% 84%,rgba(255,255,255,.18),transparent 25%),
-   linear-gradient(180deg,var(--bg-top),var(--bg-bot));
-}
-body[data-scene="dream"]{--bg-top:#9a97ad;--bg-bot:#f0c8ce}
-body[data-scene="gallery"]{--bg-top:#9fa49d;--bg-bot:#ece7df}
-body[data-scene="midnight"]{--bg-top:#5d6068;--bg-bot:#b9b2ab}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LAVAL — Mantel Configurator</title>
+  <meta name="description" content="Compose a LAVAL natural-stone mantel. Family, profile, leg, shelf, finish — a quiet editor for a permanent object." />
+  <meta name="theme-color" content="#171512" />
 
-.app,.bg{position:fixed;inset:0}
-.bg:before,.bg:after{
-  content:"";
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:50%;
-}
-.bg:before{
-  bottom:6%;
-  width:min(55vw,820px);
-  height:min(18vw,220px);
-  background:radial-gradient(circle,rgba(255,255,255,.18),rgba(255,255,255,.04) 36%,transparent 70%);
-  filter:blur(8px);
-}
-.bg:after{
-  bottom:10%;
-  width:min(30vw,420px);
-  height:56px;
-  background:radial-gradient(circle,rgba(20,18,16,.18),rgba(20,18,16,.06) 48%,transparent 74%);
-  filter:blur(10px);
-}
+  <!-- Typography: Cormorant Garamond (display) + Inter (UI). Non-negotiable. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-.topbar,.leftpane,.rightpane,.bottombar,.quickstack{position:absolute;z-index:4}
-.chip,.tooltray,.panel,.bottombar{
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-  background:var(--glass);
-  border:1px solid var(--line);
-  box-shadow:0 18px 38px rgba(20,16,12,.06);
-}
-
-.topbar{
-  top:14px;
-  left:14px;
-  right:14px;
-  height:54px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.chip{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 14px;
-  border-radius:20px;
-}
-.brand{
-  font-size:12px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  font-weight:700;
-}
-.sub{
-  font-size:11px;
-  color:var(--soft);
-}
-.back{
-  display:grid;
-  place-items:center;
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  background:rgba(255,255,255,.12);
-  color:#fff;
-  text-decoration:none;
-  font-size:18px;
-}
-.tooltray{
-  display:flex;
-  gap:6px;
-  padding:7px;
-  border-radius:22px;
-}
-.iconbtn{
-  width:34px;
-  height:34px;
-  border:0;
-  border-radius:50%;
-  cursor:pointer;
-  background:rgba(255,255,255,.08);
-  color:#fff;
-}
-.iconbtn:hover{background:rgba(255,255,255,.16)}
-.savebtn{
-  border:0;
-  border-radius:18px;
-  padding:10px 16px;
-  background:rgba(255,255,255,.92);
-  color:var(--ink);
-  font-weight:700;
-  cursor:pointer;
-}
-
-.leftpane{
-  left:0;
-  top:78px;
-  bottom:0;
-  width:min(26vw,390px);
-  padding:22px 22px 24px 24px;
-  overflow:auto;
-  background:linear-gradient(90deg,rgba(233,228,222,.18),rgba(233,228,222,.08) 72%,rgba(233,228,222,.02));
-}
-.rightpane{
-  right:0;
-  top:78px;
-  bottom:0;
-  width:min(25vw,360px);
-  padding:12px 18px 22px;
-  background:linear-gradient(90deg,rgba(233,228,222,.02),rgba(233,228,222,.08) 18%,rgba(233,228,222,.18));
-}
-
-.p-eyebrow{
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--soft);
-  margin-bottom:10px;
-}
-h1{
-  font:400 clamp(36px,4vw,54px)/.92 Georgia,serif;
-  margin:0 0 12px;
-  max-width:10ch;
-}
-.lead{
-  font-size:14px;
-  line-height:1.6;
-  color:var(--muted);
-  max-width:32ch;
-  margin:0 0 20px;
-}
-
-.panel{
-  border-radius:18px;
-  padding:14px 14px 12px;
-  margin-bottom:14px;
-  background:var(--glass-2);
-}
-.panel h3{
-  margin:0;
-  font-size:13px;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-}
-.panelhead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-}
-.rowpick{
-  display:grid;
-  grid-template-columns:16px 1fr 16px;
-  gap:12px;
-  padding:10px 0;
-  border-top:1px solid rgba(255,255,255,.08);
-  cursor:pointer;
-}
-.rowpick:first-of-type{border-top:0}
-.arrow{
-  color:var(--soft);
-  text-align:center;
-}
-.small{
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--soft);
-  margin-bottom:4px;
-}
-.big{
-  font:400 24px/1 Georgia,serif;
-}
-.metarow{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  padding-top:10px;
-  border-top:1px solid rgba(255,255,255,.08);
-  font-size:13px;
-  color:var(--muted);
-  cursor:pointer;
-}
-.metarow strong{
-  font:400 22px/1 Georgia,serif;
-  color:#fff;
-  text-align:right;
-}
-.minigrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.minibox{
-  border-radius:14px;
-  padding:12px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
-  min-height:72px;
-}
-.minibox span{
-  display:block;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:.14em;
-  color:var(--soft);
-  margin-bottom:6px;
-}
-.minibox strong{
-  font:400 24px/1 Georgia,serif;
-}
-
-.stage{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  z-index:2;
-}
-.stage-inner{
-  position:relative;
-  width:min(34vw,500px);
-  height:min(78vh,760px);
-  transform-origin:center;
-  transition:transform .35s ease;
-}
-body[data-focus="family"] .stage-inner{transform:scale(.92) translateY(6px)}
-body[data-focus="profile"] .stage-inner{transform:scale(1.03) translateY(-12px)}
-body[data-focus="legs"] .stage-inner{transform:scale(1.04) translateY(28px)}
-body[data-focus="shelf"] .stage-inner{transform:scale(1.03) translateY(-34px)}
-body[data-focus="stone"] .stage-inner{transform:scale(.98)}
-body[data-focus="scene"] .stage-inner{transform:scale(.92)}
-
-.shadow{
-  position:absolute;
-  left:50%;
-  bottom:8%;
-  width:64%;
-  height:8%;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(20,18,16,.18),rgba(20,18,16,.05) 48%,transparent 74%);
-  filter:blur(8px);
-}
-.mantel{
-  position:absolute;
-  left:50%;
-  top:5%;
-  width:76%;
-  height:82%;
-  transform:translateX(-50%);
-  filter:drop-shadow(0 28px 56px rgba(24,18,14,.08));
-}
-.mantel *{
-  position:absolute;
-  background:var(--stone);
-  transition:all .35s ease,background .35s ease;
-}
-.crest{
-  left:50%;
-  top:0;
-  width:90px;
-  height:52px;
-  transform:translateX(-50%);
-  border-radius:46px 46px 18px 18px;
-  opacity:var(--crest);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 18px rgba(0,0,0,.04);
-}
-.crown{
-  left:50%;
-  top:18px;
-  width:72%;
-  height:var(--crown-h);
-  transform:translateX(-50%);
-  border-radius:var(--crown-r);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 12px 22px rgba(20,16,12,.06);
-}
-.body{
-  left:50%;
-  top:62px;
-  width:100%;
-  height:70%;
-  transform:translateX(-50%);
-  background:transparent;
-}
-.leg{
-  top:0;
-  width:var(--leg-w);
-  height:100%;
-  border-radius:28px 28px 18px 18px;
-  overflow:hidden;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 14px 24px rgba(20,16,12,.05);
-}
-.leg.left{left:0}
-.leg.right{right:0}
-.leg:after{
-  content:"";
-  position:absolute;
-  left:18%;
-  right:18%;
-  top:18%;
-  bottom:14%;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.08);
-}
-.bridge{
-  left:calc(var(--leg-w) - 1px);
-  right:calc(var(--leg-w) - 1px);
-  top:0;
-  height:90px;
-  border-radius:32px 32px 18px 18px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
-}
-.openframe{
-  left:50%;
-  top:42px;
-  width:var(--open-w);
-  height:82%;
-  transform:translateX(-50%);
-  border-radius:var(--open-r);
-  padding:16px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 10px 18px rgba(20,16,12,.05);
-}
-.opening{
-  inset:16px;
-  border-radius:calc(var(--open-r) - 8px);
-  background:
-    linear-gradient(180deg,rgba(30,24,21,.10),rgba(30,24,21,.18)),
-    linear-gradient(180deg,#857b72,#584f48);
-  box-shadow:inset 0 20px 24px rgba(0,0,0,.18), inset 0 -14px 18px rgba(255,255,255,.04);
-}
-.plinth{
-  left:50%;
-  bottom:0;
-  width:82%;
-  height:30px;
-  transform:translateX(-50%);
-  border-radius:16px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
-}
-.ornament,.flute,.corner{
-  background:transparent;
-  pointer-events:none;
-}
-.ornament{
-  left:50%;
-  top:84px;
-  width:64%;
-  height:86px;
-  transform:translateX(-50%);
-  opacity:0;
-}
-.ornament:before,.ornament:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  border:1px solid rgba(255,255,255,.10);
-}
-.ornament:after{
-  inset:10px 12px;
-  border-color:rgba(70,58,49,.06);
-}
-.flute{
-  top:120px;
-  width:14px;
-  height:56%;
-  border-radius:999px;
-  background:rgba(255,255,255,.18);
-  opacity:0;
-  box-shadow:0 0 0 1px rgba(50,40,35,.06);
-}
-.flute.left{left:9%}
-.flute.right{right:9%}
-.corner{
-  left:50%;
-  top:76px;
-  width:86%;
-  height:130px;
-  transform:translateX(-50%);
-  opacity:0;
-}
-.corner:before,.corner:after{
-  content:"";
-  position:absolute;
-  top:24px;
-  width:20%;
-  height:90px;
-  border-radius:36px 18px 18px 18px;
-  border:1px solid rgba(255,255,255,.10);
-  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
-}
-.corner:before{left:0;transform:skewY(6deg)}
-.corner:after{right:0;transform:scaleX(-1) skewY(6deg)}
-.material{
-  inset:0;
-  opacity:0;
-  mix-blend-mode:multiply;
-  background:transparent;
-  pointer-events:none;
-}
-
-.caption{
-  position:absolute;
-  left:50%;
-  bottom:3%;
-  transform:translateX(-50%);
-  text-align:center;
-  z-index:3;
-}
-.caption .l{
-  font:italic 18px/1 Georgia,serif;
-  color:rgba(255,255,255,.48);
-}
-.caption .r{
-  margin-top:4px;
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--soft);
-}
-
-.quickstack{
-  left:calc(50% - min(18vw,280px));
-  top:23%;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.qchip{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 12px 26px rgba(16,14,12,.08);
-  position:relative;
-  cursor:pointer;
-}
-.qchip span{
-  font:400 15px/1 Georgia,serif;
-}
-.qchip:after{
-  content:attr(data-label);
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:7px;
-  font-size:7px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  text-align:center;
-  color:var(--soft);
-}
-
-.bottombar{
-  left:50%;
-  bottom:18px;
-  transform:translateX(-50%);
-  padding:6px;
-  border-radius:999px;
-  display:flex;
-  gap:6px;
-  align-items:center;
-}
-.stepbtn{
-  border:0;
-  border-radius:999px;
-  padding:10px 14px;
-  background:transparent;
-  color:var(--muted);
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.stepbtn.active{
-  background:var(--ink);
-  color:#fff;
-}
-.stepnum{
-  font:400 12px/1 Georgia,serif;
-}
-.steplab{
-  font-size:11px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-}
-
-.browserhead{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:10px;
-  padding:4px 0 14px;
-  border-bottom:1px solid rgba(255,255,255,.12);
-  margin-bottom:12px;
-}
-.browserhead small{
-  display:block;
-  font-size:11px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  color:var(--soft);
-  margin-bottom:4px;
-}
-.browserhead h2{
-  margin:0;
-  font:400 42px/.92 Georgia,serif;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:14px 10px;
-  height:calc(100% - 110px);
-  overflow:auto;
-  padding:4px 2px 30px;
-}
-.grid::-webkit-scrollbar,.leftpane::-webkit-scrollbar{width:6px}
-.grid::-webkit-scrollbar-thumb,.leftpane::-webkit-scrollbar-thumb{
-  background:rgba(255,255,255,.12);
-  border-radius:999px;
-}
-
-.opt{
-  border:0;
-  background:transparent;
-  color:#fff;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:7px;
-}
-.orb{
-  width:92px;
-  height:92px;
-  border-radius:50%;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 16px 26px rgba(15,12,10,.08);
-  position:relative;
-  overflow:hidden;
-  transition:transform .18s ease;
-}
-.opt:hover .orb{transform:translateY(-2px)}
-.opt.sel .orb{
-  box-shadow:0 0 0 4px rgba(255,255,255,.08),0 0 0 5px rgba(226,207,188,.95),0 16px 28px rgba(15,12,10,.12);
-}
-.lab{
-  max-width:86px;
-  text-align:center;
-  font-size:11px;
-  line-height:1.28;
-  color:var(--muted);
-}
-.opt.sel .lab{color:#fff}
-
-.mini{position:absolute;inset:0}
-.mini:before,.mini:after{
-  content:"";
-  position:absolute;
-}
-.family:before{
-  inset:14px;
-  border-radius:50%;
-  background:var(--fill);
-}
-.family:after{
-  inset:0;
-  display:grid;
-  place-items:center;
-  content:attr(data-i);
-  font:400 28px/1 Georgia,serif;
-  color:#fff;
-}
-.profile:before{
-  left:50%;
-  top:12px;
-  width:50px;
-  height:14px;
-  transform:translateX(-50%);
-  border-radius:10px;
-  background:rgba(255,255,255,.92);
-}
-.profile:after{
-  left:50%;
-  top:24px;
-  width:60px;
-  height:44px;
-  transform:translateX(-50%);
-  border-radius:var(--shape,16px 16px 10px 10px);
-  background:rgba(255,255,255,.92);
-  box-shadow:inset 0 0 0 8px rgba(255,255,255,.92), inset 0 -18px 0 0 rgba(255,255,255,.92);
-}
-.legs:before{
-  left:50%;
-  top:14px;
-  width:44px;
-  height:62px;
-  transform:translateX(-50%);
-  border-radius:var(--shape,18px);
-  background:rgba(255,255,255,.92);
-}
-.legs.fluted:after{
-  left:50%;
-  top:24px;
-  width:10px;
-  height:40px;
-  transform:translateX(-50%);
-  border-radius:999px;
-  background:rgba(180,167,151,.68);
-}
-.shelf:before{
-  left:50%;
-  top:34px;
-  width:64px;
-  height:var(--h,18px);
-  transform:translateX(-50%);
-  border-radius:var(--shape,10px);
-  background:rgba(255,255,255,.92);
-}
-.stone:before{
-  inset:14px;
-  border-radius:50%;
-  background:var(--fill);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);
-}
-.stone.veined:after{
-  inset:14px;
-  border-radius:50%;
-  background:repeating-linear-gradient(122deg,rgba(255,255,255,.24) 0 6px,rgba(78,74,70,.12) 6px 10px);
-  mix-blend-mode:multiply;
-}
-.scene:before{
-  inset:12px;
-  border-radius:50%;
-  background:var(--fill);
-}
-.scene:after{
-  left:50%;
-  bottom:18px;
-  width:42px;
-  height:10px;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:rgba(255,255,255,.24);
-  filter:blur(2px);
-}
-
-.note{
-  position:absolute;
-  right:20px;
-  bottom:16px;
-  padding:8px 12px;
-  border-radius:16px;
-  background:var(--glass);
-  border:1px solid var(--line);
-  font-size:10px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--soft);
-  z-index:4;
-}
-
-@media (max-width:1180px){
-  .leftpane{width:min(30vw,360px)}
-  .rightpane{width:320px}
-}
-@media (max-width:1024px){
-  html,body{overflow:auto;height:auto}
-  .app{position:relative;min-height:100vh}
-  .topbar,.leftpane,.rightpane,.quickstack,.bottombar,.note{position:relative}
-  .leftpane,.rightpane{
-    top:auto;left:auto;right:auto;bottom:auto;width:auto
-  }
-  .topbar{
-    padding:12px;
-    gap:8px;
-    flex-wrap:wrap
-  }
-  .stage{
-    position:relative;
-    min-height:680px
-  }
-  .quickstack{
-    left:auto;
-    top:auto;
-    flex-direction:row;
-    justify-content:center;
-    margin:0 auto 12px
-  }
-  .bottombar{
-    left:auto;
-    bottom:auto;
-    transform:none;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin:14px auto 0;
-    width:calc(100% - 24px)
-  }
-  .note{
-    right:auto;
-    bottom:auto;
-    margin:16px 12px 20px auto;
-    display:inline-block
-  }
-}
-</style>
+  <!-- Stylesheet order matters: tokens first, then shell, then internal zones -->
+  <link rel="stylesheet" href="./assets/css/tokens.css" />
+  <link rel="stylesheet" href="./assets/css/shell.css" />
+  <link rel="stylesheet" href="./assets/css/stage.css" />
+  <link rel="stylesheet" href="./assets/css/browser.css" />
 </head>
-<body data-family="forma" data-profile="rounded-cove" data-legs="sculpted" data-shelf="sculpted" data-stone="limestone" data-scene="studio" data-focus="family">
-<div class="app">
-  <div class="bg"></div>
+<body class="is-configurator">
 
-  <div class="topbar">
-    <div class="chip">
-      <a class="back" href="index.html">‹</a>
-      <div>
-        <div class="brand">LAVAL DESIGN STUDIO</div>
-        <div class="sub">Direct-render configurator rebuild</div>
+  <!--
+    LAVAL Creator Shell
+    ---------------------------------------------------------------------
+    This is not a page with sections. It is a persistent editor shell.
+    Zones (forensic spec):
+      .top       — top chrome (left nav / center utility capsule / right accent pill)
+      .pane      — left semantic pane (eyebrow, title, prose, live summary)
+      .stage     — protected subject zone (mantel + connectors)
+      .rail      — near-subject category rail (orbs, one per step)
+      .browser   — right browser (circle-first option rows)
+      .sheet     — nested browser sheet (Request Pricing form lives here, not a modal)
+      .hud       — bottom floating dock (state / tiles / nav)
+    State lives in /assets/js/state.js. Render is driven by /assets/js/configurator.js.
+  -->
+  <main class="shell" aria-label="LAVAL mantel configurator">
+
+    <!-- ===== TOP CHROME ===== -->
+    <header class="top" role="banner">
+      <div class="top__left">
+        <a class="wordmark" href="./index.html" aria-label="LAVAL home">LAVAL</a>
+        <span class="crumb" data-top="crumb">Configurator</span>
       </div>
-    </div>
 
-    <div class="tooltray">
-      <button class="iconbtn" id="randomBtn" title="Randomize">✦</button>
-      <button class="iconbtn" id="zoomInBtn" title="Zoom in">＋</button>
-      <button class="iconbtn" id="zoomOutBtn" title="Zoom out">－</button>
-      <button class="iconbtn" id="resetBtn" title="Reset view">↺</button>
-      <button class="iconbtn" id="sceneBtn" title="Cycle scene">☼</button>
-    </div>
-
-    <button class="savebtn" id="saveBtn">Request Pricing</button>
-  </div>
-
-  <aside class="leftpane">
-    <div class="p-eyebrow">Mantel Creator</div>
-    <h1>Creator-style clone, now actually rendering.</h1>
-    <p class="lead">This is a direct HTML/CSS/JS rebuild. No bootloader. No encoded handoff. Just a working static configurator shell you can refine.</p>
-
-    <section class="panel">
-      <div class="panelhead">
-        <h3>Design</h3>
-        <button class="iconbtn" data-jump="family">↗</button>
+      <div class="top__center" aria-live="polite">
+        <span class="cap-label">Step</span>
+        <span class="cap-divider"></span>
+        <span class="cap-step" data-top="step">1 &nbsp;&middot;&nbsp; Family</span>
       </div>
-      <div class="rowpick" data-jump="family">
-        <div class="arrow">‹</div>
-        <div>
-          <div class="small">Family</div>
-          <div class="big" id="familyValue"></div>
+
+      <div class="top__right">
+        <button type="button" class="pill-ghost" data-action="reset" title="Start over">Reset</button>
+        <span class="pill-accent" data-top="pill">Charleston, SC</span>
+      </div>
+    </header>
+
+    <!-- ===== LEFT SEMANTIC PANE ===== -->
+    <aside class="pane" aria-label="Step context">
+      <div class="pane__eyebrow" data-pane="eyebrow">Composition</div>
+      <h1 class="pane__title" data-pane="title">Choose a family.</h1>
+      <div class="pane__rule" aria-hidden="true"></div>
+      <div class="pane__body" data-pane="body">
+        <!-- Populated by configurator.js. Plain prose, editorial voice. -->
+      </div>
+
+      <div class="pane__summary" aria-label="Current selections">
+        <ul data-pane="summary">
+          <!-- Live summary rows injected here as each step is committed. -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- ===== PROTECTED STAGE ===== -->
+    <section class="stage" data-framing="wide" aria-label="Mantel preview">
+      <div class="stage__world" aria-hidden="true"></div>
+      <div class="stage__floor-glow" aria-hidden="true"></div>
+      <div class="stage__fog" aria-hidden="true"></div>
+      <div class="stage__vignette" aria-hidden="true"></div>
+
+      <!-- The subject is the only thing that reframes. Camera work = transform on this node. -->
+      <div class="stage__subject">
+        <div class="mantel" role="img" aria-label="Mantel preview">
+          <!-- mantel-svg.js mounts the procedural SVG here and morphs it live. -->
         </div>
-        <div class="arrow">›</div>
       </div>
-      <div class="rowpick" data-jump="profile">
-        <div class="arrow">‹</div>
-        <div>
-          <div class="small">Profile</div>
-          <div class="big" id="profileValue"></div>
-        </div>
-        <div class="arrow">›</div>
-      </div>
+
+      <!-- Connector overlay (fine ivory lines from selected option to mantel locus) -->
+      <svg class="connectors" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+
+      <div class="stage__hint" aria-hidden="true">Your stone, composed.</div>
     </section>
 
-    <section class="panel">
-      <div class="panelhead">
-        <h3>Structure</h3>
-        <button class="iconbtn" data-jump="legs">↗</button>
-      </div>
-      <div class="metarow" data-jump="legs">
-        <span>Leg style</span>
-        <strong id="legsValue"></strong>
-      </div>
-      <div class="metarow" data-jump="shelf">
-        <span>Shelf style</span>
-        <strong id="shelfValue"></strong>
-      </div>
-      <div class="metarow">
-        <span>Internal mapping</span>
-        <strong id="mappingValue"></strong>
-      </div>
-    </section>
+    <!-- ===== NEAR-SUBJECT CATEGORY RAIL ===== -->
+    <nav class="rail" aria-label="Configuration steps">
+      <button class="orb" type="button" data-step="family">
+        <span class="orb__inner">1</span>
+        <span class="orb__label">Family</span>
+      </button>
+      <button class="orb" type="button" data-step="profile">
+        <span class="orb__inner">2</span>
+        <span class="orb__label">Profile</span>
+      </button>
+      <button class="orb" type="button" data-step="leg">
+        <span class="orb__inner">3</span>
+        <span class="orb__label">Leg</span>
+      </button>
+      <button class="orb" type="button" data-step="shelf">
+        <span class="orb__inner">4</span>
+        <span class="orb__label">Shelf</span>
+      </button>
+      <button class="orb" type="button" data-step="finish">
+        <span class="orb__inner">5</span>
+        <span class="orb__label">Finish</span>
+      </button>
+      <button class="orb" type="button" data-step="review">
+        <span class="orb__inner">6</span>
+        <span class="orb__label">Review</span>
+      </button>
+    </nav>
 
-    <section class="panel">
-      <div class="panelhead">
-        <h3>Material</h3>
-        <button class="iconbtn" data-jump="stone">↗</button>
-      </div>
-      <div class="rowpick" data-jump="stone">
-        <div class="arrow">‹</div>
-        <div>
-          <div class="small">Stone finish</div>
-          <div class="big" id="stoneValue"></div>
+    <!-- ===== RIGHT BROWSER ===== -->
+    <aside class="browser" aria-label="Option browser">
+      <header class="browser__header">
+        <div class="browser__eyebrow" data-browser="eyebrow">Family</div>
+        <div class="browser__titleRow">
+          <h2 class="browser__title" data-browser="title">Choose a family</h2>
+          <span class="browser__count" data-browser="count">3 options</span>
         </div>
-        <div class="arrow">›</div>
-      </div>
-      <div class="rowpick" data-jump="scene">
-        <div class="arrow">‹</div>
-        <div>
-          <div class="small">Scene mood</div>
-          <div class="big" id="sceneValue"></div>
-        </div>
-        <div class="arrow">›</div>
-      </div>
-    </section>
+      </header>
 
-    <section class="panel">
-      <div class="panelhead">
-        <h3>Session</h3>
-        <button class="iconbtn" id="inlineBtn">↗</button>
+      <div class="browser__body" data-browser="body">
+        <!-- Option rows injected by configurator.js. Circle-first, not rectangular cards. -->
       </div>
-      <div class="minigrid">
-        <div class="minibox">
-          <span>Family code</span>
-          <strong id="familyCode"></strong>
+
+      <!-- Nested sheet (Request Pricing, Review detail). Opens inside the browser. Never a modal. -->
+      <div class="sheet" aria-hidden="true">
+        <div class="sheet__body">
+          <!-- Form or review content injected here when sheet.isOpen === true -->
         </div>
-        <div class="minibox">
-          <span>Profile map</span>
-          <strong id="bundleCode"></strong>
-        </div>
-        <div class="minibox">
-          <span>Focus</span>
-          <strong id="focusValue"></strong>
-        </div>
-        <div class="minibox">
-          <span>Status</span>
-          <strong>Live</strong>
+        <div class="sheet__footer">
+          <!-- Submit / Close actions injected by configurator.js -->
         </div>
       </div>
-    </section>
-  </aside>
+    </aside>
 
-  <div class="stage">
-    <div class="quickstack" id="quick"></div>
-
-    <div class="stage-inner" id="stageInner">
-      <div class="shadow"></div>
-
-      <div class="mantel">
-        <div class="material"></div>
-        <div class="crest"></div>
-        <div class="crown"></div>
-
-        <div class="body">
-          <div class="leg left"></div>
-          <div class="leg right"></div>
-          <div class="bridge"></div>
-
-          <div class="openframe">
-            <div class="opening"></div>
-          </div>
-
-          <div class="ornament"></div>
-          <div class="flute left"></div>
-          <div class="flute right"></div>
-          <div class="corner"></div>
+    <!-- ===== BOTTOM HUD (floating dock) ===== -->
+    <footer class="hud" role="contentinfo" aria-label="Step navigation">
+      <div class="hud__strip">
+        <!-- Group A: state -->
+        <div class="hud__state" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="hud__state-text" data-hud="state">Draft · Step 1 of 6</span>
         </div>
 
-        <div class="plinth"></div>
+        <!-- Group B: individually-bounded step tiles (never fused into a pill) -->
+        <div class="hud__dock" data-hud="dock">
+          <!-- configurator.js injects six <button class="hud-tile"> nodes here -->
+        </div>
+
+        <!-- Group C: nav -->
+        <div class="hud__nav">
+          <button class="hud-nav-btn is-back" type="button" data-hud="back" disabled>
+            <span class="arrow" aria-hidden="true"></span>
+            <span class="label">Back</span>
+          </button>
+          <button class="hud-nav-btn" type="button" data-hud="next">
+            <span class="label">Continue</span>
+            <span class="arrow" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
-    </div>
+    </footer>
 
-    <div class="caption">
-      <div class="l">Mantel Preview</div>
-      <div class="r" id="readout"></div>
-    </div>
-  </div>
+  </main>
 
-  <aside class="rightpane">
-    <div class="browserhead">
-      <div>
-        <small id="stepLabel"></small>
-        <h2 id="stepTitle"></h2>
-      </div>
-      <div class="sub">LAVAL</div>
-    </div>
-    <div class="grid" id="grid"></div>
-  </aside>
+  <!-- Controller. Imports state, data, svg, camera, connectors as ES modules. -->
+  <script type="module" src="./assets/js/configurator.js"></script>
 
-  <div class="bottombar" id="steps"></div>
-  <div class="note" id="note">Direct static render</div>
-</div>
-
-<script>
-const DB = {
-  family: {
-    label: 'Family',
-    options: [
-      { id: 'forma', label: 'Forma', short: 'F', code: 'FM-02', fill: 'linear-gradient(145deg,#cbb8a8,#9e8771)' },
-      { id: 'aurelia', label: 'Aurelia', short: 'A', code: 'FM-01', fill: 'linear-gradient(145deg,#beb5aa,#8f867c)' },
-      { id: 'seraphine', label: 'Seraphine', short: 'S', code: 'FM-03', fill: 'linear-gradient(145deg,#ccb39d,#9e7f69)' }
-    ]
-  },
-  profile: {
-    label: 'Profile',
-    options: [
-      { id: 'framed', label: 'Framed Rectilinear', family: 'aurelia', op: 'OP-01', fr: 'FR-02', shape: '16px 16px 10px 10px' },
-      { id: 'fluted', label: 'Fluted Lintel', family: 'aurelia', op: 'OP-01', fr: 'FR-03', shape: '16px 16px 10px 10px' },
-      { id: 'soft-arch', label: 'Soft Arch Frame', family: 'aurelia', op: 'OP-02', fr: 'FR-03', shape: '34px 34px 10px 10px' },
-      { id: 'rounded-cove', label: 'Rounded Cove', family: 'forma', op: 'OP-02', fr: 'FR-04', shape: '42px 42px 12px 12px' },
-      { id: 'wave-frieze', label: 'Wave Frieze', family: 'forma', op: 'OP-03', fr: 'FR-05', shape: '34px 34px 12px 12px' },
-      { id: 'niche-arch', label: 'Niche Arch', family: 'forma', op: 'OP-05', fr: 'FR-04', shape: '48px 48px 12px 12px' },
-      { id: 'crest-arch', label: 'Crest Arch', family: 'seraphine', op: 'OP-03', fr: 'FR-05', shape: '46px 46px 12px 12px' },
-      { id: 'baroque-relief', label: 'Baroque Relief', family: 'seraphine', op: 'OP-03', fr: 'FR-06', shape: '52px 52px 12px 12px' },
-      { id: 'columned-arch', label: 'Columned Arch', family: 'seraphine', op: 'OP-04', fr: 'FR-05', shape: '44px 44px 10px 10px' }
-    ]
-  },
-  legs: {
-    label: 'Legs',
-    options: [
-      { id: 'plain', label: 'Plain Jamb', families: ['aurelia'], shape: '8px' },
-      { id: 'fluted', label: 'Fluted Pilaster', families: ['aurelia'], shape: '16px' },
-      { id: 'sculpted', label: 'Rounded Sculpted', families: ['forma'], shape: '22px' },
-      { id: 'tapered', label: 'Tapered Curve', families: ['forma','aurelia','seraphine'], shape: '24px 10px 10px 10px' },
-      { id: 'scroll', label: 'French Scroll', families: ['seraphine'], shape: '24px 12px 14px 14px' }
-    ]
-  },
-  shelf: {
-    label: 'Shelf',
-    options: [
-      { id: 'classical', label: 'Classical Shelf', families: ['aurelia'], h: '14px', shape: '8px' },
-      { id: 'mitered', label: 'Mitered Frame Shelf', families: ['aurelia'], h: '18px', shape: '6px' },
-      { id: 'sculpted', label: 'Sculpted Crown', families: ['forma','seraphine'], h: '22px', shape: '12px' },
-      { id: 'serpentine', label: 'French Serpentine Shelf', families: ['forma','seraphine'], h: '20px', shape: '18px' }
-    ]
-  },
-  stone: {
-    label: 'Stone',
-    options: [
-      { id: 'limestone', label: 'Pale Limestone', fill: 'linear-gradient(145deg,#ddd7cc,#c7bdae)' },
-      { id: 'ivory', label: 'Soft Ivory Stone', fill: 'linear-gradient(145deg,#ece1d4,#d5cabd)' },
-      { id: 'marble', label: 'White Marble', fill: 'linear-gradient(145deg,#f1efeb,#d8d1ca)', veined: true },
-      { id: 'dramatic', label: 'Dramatic Veined Marble', fill: 'linear-gradient(145deg,#dad7d1,#928c85 54%,#6b6660)', veined: true },
-      { id: 'taupe', label: 'Warm Taupe Stone', fill: 'linear-gradient(145deg,#cfbea7,#b49d87)' }
-    ]
-  },
-  scene: {
-    label: 'Scene',
-    options: [
-      { id: 'studio', label: 'Studio Gray', fill: 'linear-gradient(180deg,#8f918f,#d3d0cb)' },
-      { id: 'dream', label: 'Pink Dream', fill: 'linear-gradient(180deg,#9c94ad,#f1c7cf)' },
-      { id: 'gallery', label: 'Gallery Light', fill: 'linear-gradient(180deg,#9aa09b,#ede8de)' },
-      { id: 'midnight', label: 'Midnight Haze', fill: 'linear-gradient(180deg,#595b64,#b6b0aa)' }
-    ]
-  }
-};
-
-const order = ['family','profile','legs','shelf','stone','scene'];
-
-const state = {
-  active: 'family',
-  picks: {
-    family: 'forma',
-    profile: 'rounded-cove',
-    legs: 'sculpted',
-    shelf: 'sculpted',
-    stone: 'limestone',
-    scene: 'studio'
-  },
-  zoom: 1
-};
-
-const el = (id) => document.getElementById(id);
-const getOpt = (cat, id = state.picks[cat]) => DB[cat].options.find(x => x.id === id);
-
-function available(cat) {
-  const fam = state.picks.family;
-  if (cat === 'profile') return DB.profile.options.filter(o => o.family === fam);
-  if (cat === 'legs') return DB.legs.options.filter(o => o.families.includes(fam));
-  if (cat === 'shelf') return DB.shelf.options.filter(o => o.families.includes(fam));
-  return DB[cat].options;
-}
-
-function enforce() {
-  ['profile','legs','shelf'].forEach(cat => {
-    const ids = available(cat).map(x => x.id);
-    if (!ids.includes(state.picks[cat])) state.picks[cat] = ids[0];
-  });
-}
-
-function setData() {
-  enforce();
-
-  document.body.dataset.family = state.picks.family;
-  document.body.dataset.profile = state.picks.profile;
-  document.body.dataset.legs = state.picks.legs;
-  document.body.dataset.shelf = state.picks.shelf;
-  document.body.dataset.stone = state.picks.stone;
-  document.body.dataset.scene = state.picks.scene;
-  document.body.dataset.focus = state.active;
-
-  el('stageInner').style.scale = state.zoom;
-
-  const p = getOpt('profile');
-  const s = getOpt('stone');
-
-  document.documentElement.style.setProperty('--stone', s.fill);
-
-  const veil = document.querySelector('.material');
-  veil.style.opacity = '0';
-  veil.style.background = 'transparent';
-
-  if (s.id === 'marble') {
-    veil.style.opacity = '.52';
-    veil.style.background = 'repeating-linear-gradient(130deg,rgba(255,255,255,.18) 0 8px, rgba(195,190,185,.10) 8px 12px)';
-  }
-  if (s.id === 'dramatic') {
-    veil.style.opacity = '.66';
-    veil.style.background = 'repeating-linear-gradient(122deg,rgba(255,255,255,.22) 0 7px, rgba(49,47,45,.12) 7px 12px)';
-  }
-  if (s.id === 'taupe') {
-    veil.style.opacity = '.22';
-    veil.style.background = 'linear-gradient(180deg,rgba(124,93,69,.08),rgba(124,93,69,.18))';
-  }
-
-  const root = document.documentElement.style;
-  const family = state.picks.family;
-
-  if (family === 'forma') {
-    root.setProperty('--leg-w','20%');
-    root.setProperty('--crown-h','60px');
-    root.setProperty('--crown-r','28px');
-    root.setProperty('--crest','0');
-  }
-  if (family === 'aurelia') {
-    root.setProperty('--leg-w','18%');
-    root.setProperty('--crown-h','52px');
-    root.setProperty('--crown-r','12px');
-    root.setProperty('--crest','0');
-  }
-  if (family === 'seraphine') {
-    root.setProperty('--leg-w','19%');
-    root.setProperty('--crown-h','58px');
-    root.setProperty('--crown-r','34px');
-    root.setProperty('--crest','1');
-  }
-
-  const map = {
-    'framed': ['42%','18px'],
-    'fluted': ['42%','18px'],
-    'soft-arch': ['44%','92px 92px 18px 18px'],
-    'rounded-cove': ['46%','110px 110px 22px 22px'],
-    'wave-frieze': ['50%','88px 88px 24px 24px'],
-    'niche-arch': ['40%','126px 126px 24px 24px'],
-    'crest-arch': ['48%','134px 134px 24px 24px'],
-    'baroque-relief': ['53%','162px 162px 26px 26px'],
-    'columned-arch': ['42%','134px 134px 18px 18px']
-  };
-
-  root.setProperty('--open-w', map[p.id][0]);
-  root.setProperty('--open-r', map[p.id][1]);
-
-  document.querySelector('.ornament').style.opacity = '.75';
-  document.querySelector('.corner').style.opacity = ['crest-arch','baroque-relief','columned-arch'].includes(p.id) ? '.8' : '0';
-
-  document.querySelectorAll('.flute').forEach(f => f.style.opacity = '0');
-
-  const L = document.querySelector('.leg.left');
-  const R = document.querySelector('.leg.right');
-
-  L.style.borderRadius = '28px 28px 18px 18px';
-  R.style.borderRadius = '28px 28px 18px 18px';
-
-  if (state.picks.legs === 'plain') {
-    L.style.borderRadius = '14px';
-    R.style.borderRadius = '14px';
-  }
-  if (state.picks.legs === 'fluted') {
-    document.querySelectorAll('.flute').forEach(f => f.style.opacity = '.96');
-  }
-  if (state.picks.legs === 'sculpted') {
-    L.style.borderRadius = '38px 38px 18px 18px';
-    R.style.borderRadius = '38px 38px 18px 18px';
-  }
-  if (state.picks.legs === 'tapered') {
-    L.style.borderRadius = '46px 18px 18px 18px';
-    R.style.borderRadius = '18px 46px 18px 18px';
-  }
-  if (state.picks.legs === 'scroll') {
-    L.style.borderRadius = '42px 20px 24px 24px';
-    R.style.borderRadius = '20px 42px 24px 24px';
-  }
-
-  if (state.picks.shelf === 'classical') {
-    root.setProperty('--crown-h','40px');
-    root.setProperty('--crown-r','10px');
-  }
-  if (state.picks.shelf === 'mitered') {
-    root.setProperty('--crown-h','48px');
-    root.setProperty('--crown-r','8px');
-  }
-  if (state.picks.shelf === 'sculpted') {
-    root.setProperty('--crown-h','60px');
-    root.setProperty('--crown-r','26px');
-  }
-  if (state.picks.shelf === 'serpentine') {
-    root.setProperty('--crown-h','58px');
-    root.setProperty('--crown-r','34px');
-  }
-}
-
-function renderSummary() {
-  el('familyValue').textContent = getOpt('family').label;
-  el('profileValue').textContent = getOpt('profile').label;
-  el('legsValue').textContent = getOpt('legs').label;
-  el('shelfValue').textContent = getOpt('shelf').label;
-  el('stoneValue').textContent = getOpt('stone').label;
-  el('sceneValue').textContent = getOpt('scene').label;
-  el('familyCode').textContent = getOpt('family').code;
-  el('bundleCode').textContent = `${getOpt('profile').op} / ${getOpt('profile').fr}`;
-  el('mappingValue').textContent = `${getOpt('profile').op} / ${getOpt('profile').fr}`;
-  el('focusValue').textContent = DB[state.active].label;
-  el('readout').textContent = [
-    getOpt('family').label,
-    getOpt('profile').label,
-    getOpt('stone').label,
-    getOpt('scene').label
-  ].join(' · ');
-  el('note').textContent = `Direct static render · ${DB[state.active].label}`;
-}
-
-function renderQuick() {
-  const q = el('quick');
-  q.innerHTML = '';
-
-  [
-    ['family', getOpt('family').short],
-    ['profile', getOpt('profile').label.split(' ').map(x => x[0]).join('').slice(0,2)],
-    ['legs', getOpt('legs').label.split(' ').map(x => x[0]).join('').slice(0,2)],
-    ['shelf', getOpt('shelf').label.split(' ').map(x => x[0]).join('').slice(0,2)],
-    ['stone', getOpt('stone').label.split(' ').map(x => x[0]).join('').slice(0,2)],
-    ['scene', getOpt('scene').label.split(' ').map(x => x[0]).join('').slice(0,2)]
-  ].forEach(([cat, val]) => {
-    const d = document.createElement('div');
-    d.className = 'qchip';
-    d.dataset.label = cat;
-    d.innerHTML = `<span>${val}</span>`;
-    d.onclick = () => {
-      state.active = cat;
-      render();
-    };
-    q.appendChild(d);
-  });
-}
-
-function mini(cat, opt) {
-  if (cat === 'family') return `<div class="mini family" data-i="${opt.short}" style="--fill:${opt.fill}"></div>`;
-  if (cat === 'profile') return `<div class="mini profile" style="--shape:${opt.shape}"></div>`;
-  if (cat === 'legs') return `<div class="mini legs ${opt.id === 'fluted' ? 'fluted' : ''}" style="--shape:${opt.shape}"></div>`;
-  if (cat === 'shelf') return `<div class="mini shelf" style="--h:${opt.h};--shape:${opt.shape}"></div>`;
-  if (cat === 'stone') return `<div class="mini stone ${opt.veined ? 'veined' : ''}" style="--fill:${opt.fill}"></div>`;
-  return `<div class="mini scene" style="--fill:${opt.fill}"></div>`;
-}
-
-function renderGrid() {
-  const cat = state.active;
-  el('stepLabel').textContent = `Category 0${order.indexOf(cat) + 1}`;
-  el('stepTitle').textContent = DB[cat].label;
-
-  const g = el('grid');
-  g.innerHTML = '';
-
-  available(cat).forEach(opt => {
-    const b = document.createElement('button');
-    b.className = 'opt' + (state.picks[cat] === opt.id ? ' sel' : '');
-    b.innerHTML = `<div class="orb">${mini(cat,opt)}</div><div class="lab">${opt.label}</div>`;
-    b.onclick = () => {
-      state.picks[cat] = opt.id;
-      if (cat === 'family') enforce();
-      render();
-    };
-    g.appendChild(b);
-  });
-}
-
-function renderSteps() {
-  const s = el('steps');
-  s.innerHTML = '';
-
-  order.forEach((cat, i) => {
-    const b = document.createElement('button');
-    b.className = 'stepbtn' + (state.active === cat ? ' active' : '');
-    b.innerHTML = `<span class="stepnum">0${i + 1}</span><span class="steplab">${DB[cat].label}</span>`;
-    b.onclick = () => {
-      state.active = cat;
-      render();
-    };
-    s.appendChild(b);
-  });
-}
-
-function render() {
-  setData();
-  renderSummary();
-  renderQuick();
-  renderGrid();
-  renderSteps();
-}
-
-function rand(a) {
-  return a[Math.floor(Math.random() * a.length)];
-}
-
-function randomize() {
-  state.picks.family = rand(DB.family.options).id;
-  enforce();
-  state.picks.profile = rand(available('profile')).id;
-  state.picks.legs = rand(available('legs')).id;
-  state.picks.shelf = rand(available('shelf')).id;
-  state.picks.stone = rand(DB.stone.options).id;
-  state.picks.scene = rand(DB.scene.options).id;
-  render();
-}
-
-function cycleScene() {
-  const ids = DB.scene.options.map(x => x.id);
-  const i = ids.indexOf(state.picks.scene);
-  state.picks.scene = ids[(i + 1) % ids.length];
-  render();
-}
-
-function payload() {
-  const fam = getOpt('family');
-  const pro = getOpt('profile');
-
-  const p = {
-    family_name: fam.label,
-    family_slug: fam.id,
-    family_internal: fam.code,
-    profile_name: pro.label,
-    profile_slug: pro.id,
-    op_code: pro.op,
-    fr_code: pro.fr,
-    leg_name: getOpt('legs').label,
-    leg_slug: getOpt('legs').id,
-    shelf_name: getOpt('shelf').label,
-    shelf_slug: getOpt('shelf').id,
-    finish_name: getOpt('stone').label,
-    finish_slug: getOpt('stone').id,
-    scene_name: getOpt('scene').label,
-    scene_slug: getOpt('scene').id
-  };
-
-  console.log('[LAVAL CONFIGURATOR PAYLOAD]\\n' + JSON.stringify(p, null, 2));
-
-  const btn = el('saveBtn');
-  const old = btn.textContent;
-  btn.textContent = 'Logged to Console';
-  setTimeout(() => btn.textContent = old, 1600);
-}
-
-document.querySelectorAll('[data-jump]').forEach(n => {
-  n.onclick = () => {
-    state.active = n.dataset.jump;
-    render();
-  };
-});
-
-el('randomBtn').onclick = randomize;
-el('sceneBtn').onclick = cycleScene;
-el('zoomInBtn').onclick = () => {
-  state.zoom = Math.min(1.22, state.zoom + .06);
-  el('stageInner').style.scale = state.zoom;
-};
-el('zoomOutBtn').onclick = () => {
-  state.zoom = Math.max(.84, state.zoom - .06);
-  el('stageInner').style.scale = state.zoom;
-};
-el('resetBtn').onclick = () => {
-  state.zoom = 1;
-  el('stageInner').style.scale = 1;
-};
-el('saveBtn').onclick = payload;
-el('inlineBtn').onclick = payload;
-
-render();
-</script>
 </body>
 </html>
