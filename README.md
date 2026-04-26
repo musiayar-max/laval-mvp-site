@@ -362,3 +362,4 @@ export function renderMantel({ family, profile, leg, shelf, finish }) {
 export function mount(el, selection) {
   el.innerHTML = renderMantel(selection);
 }
+Cloudflare rebuild trigger.
