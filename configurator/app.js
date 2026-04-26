@@ -226,7 +226,14 @@ export function selectOption(stepId, optionId, sourceEl = null) {
   if (stepId === 'finish' && state.activeStepId === 'finish') {
     syncEditorChipState(optionId);
   }
-  if (sourceEl) showConnector(sourceEl);  // refined build
+
+  // Connector precision fix:
+  // renderOptionTiles() replaces browser tile DOM. Measuring sourceEl after
+  // that render can point at a stale/disconnected element, which makes the
+  // connector appear detached or random. Resolve the live selected control
+  // after rendering, then draw from that actual element.
+  const connectorSource = resolveConnectorSource(stepId, optionId, sourceEl);
+  if (connectorSource) showConnector(connectorSource);
 }
 
 // ---------------------------------------------------------------------------
@@ -949,6 +956,40 @@ export function getStageTargetPoint(stepId) {
   };
 }
 
+// ---------------------------------------------------------------------------
+// resolveConnectorSource(stepId, optionId, fallbackEl)
+// Returns the live DOM element the connector should originate from. Browser
+// tiles are re-rendered during selection, so this must run after render work.
+// ---------------------------------------------------------------------------
+function resolveConnectorSource(stepId, optionId, fallbackEl = null) {
+  const isUsable = (node) => {
+    if (!node || !node.isConnected) return false;
+    const rect = node.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  };
+
+  // Finish chips are not destroyed by renderOptionTiles(); keep the clicked
+  // chip if it remains connected and measurable.
+  if (isUsable(fallbackEl)) return fallbackEl;
+
+  const candidates = document.querySelectorAll('.laval-tile, .laval-finish-chip');
+  for (const node of candidates) {
+    const isTileMatch =
+      node.classList.contains('laval-tile') &&
+      node.dataset.stepId === stepId &&
+      node.dataset.optionId === optionId;
+
+    const isChipMatch =
+      node.classList.contains('laval-finish-chip') &&
+      node.dataset.chipStepId === stepId &&
+      node.dataset.chipOptionId === optionId;
+
+    if ((isTileMatch || isChipMatch) && isUsable(node)) return node;
+  }
+
+  return null;
+}
+
 // showConnector(sourceEl)
 // Draws a fine warm-ivory connector line + terminal orb from the selected
 // tile or chip toward the step-relevant mantel anchor.
@@ -956,7 +997,7 @@ export function getStageTargetPoint(stepId) {
 // the line reads as originating from the selection, not the browser edge.
 // Auto-hides after ~2000 ms; repeat calls replace the previous connector.
 export function showConnector(sourceEl) {
-  if (!el.connectorLayer || !el.shell) return;
+  if (!el.connectorLayer || !el.shell || !sourceEl || !sourceEl.isConnected) return;
 
   // Cancel any pending auto-hide timer
   if (state.connectorTimer !== null) {
@@ -966,6 +1007,7 @@ export function showConnector(sourceEl) {
 
   const sRect   = el.shell.getBoundingClientRect();
   const srcRect = sourceEl.getBoundingClientRect();
+  if (srcRect.width <= 0 || srcRect.height <= 0) return;
 
   // Map viewport coords to SVG viewBox (0–100 scale)
   const toSVG = (cx, cy) => ({
@@ -973,52 +1015,96 @@ export function showConnector(sourceEl) {
     y: (cy - sRect.top)  / sRect.height * 100
   });
 
-  // Source: left edge of the clicked tile or chip, vertically centred.
-  // Using srcRect.left (not the abstract browser-panel edge) ties the
-  // connector visually to the specific selected item.
-  const src = toSVG(srcRect.left, srcRect.top + srcRect.height * 0.5);
-
-  // Target: step-relevant anchor on the mantel stage
+  // Target: step-relevant anchor on the mantel stage.
   const tgt = getStageTargetPoint(state.activeStepId);
 
-  // Elbow: short horizontal run left from source, then angle to target.
-  // 0.35 keeps the horizontal segment brief so the line reads as leaving
-  // the tile, not as floating across the full browser width.
-  const elbX = src.x - (src.x - tgt.x) * 0.35;
-  const elbY = src.y;
+  // Source: the selected control edge closest to the target. In the current
+  // shell this is usually the left edge of the right-browser tile, but this
+  // edge-aware logic keeps the connector stable if a future source appears
+  // elsewhere in the shell.
+  const sourceCenter = toSVG(
+    srcRect.left + srcRect.width * 0.5,
+    srcRect.top  + srcRect.height * 0.5
+  );
+  const sourceEdgeX = tgt.x < sourceCenter.x ? srcRect.left : srcRect.right;
+  const src = toSVG(sourceEdgeX, srcRect.top + srcRect.height * 0.5);
 
-  // Tuned for quiet premium feel — not neon, not game chrome.
-  const lineStroke = 'rgba(255,247,235,0.26)';   // reduced from 0.38
-  const orbFill    = 'rgba(255,247,235,0.46)';   // reduced from 0.60
+  // Orthogonal connector geometry:
+  // selected source → horizontal run → sharp 90° turn → vertical run →
+  // sharp 90° turn → terminal target. No diagonal segment.
+  const minElbowGap = 4.0;
+  const rawBendX = src.x + (tgt.x - src.x) * 0.52;
+  let bendX = rawBendX;
+  if (tgt.x < src.x) {
+    bendX = Math.max(tgt.x + minElbowGap, Math.min(src.x - minElbowGap, rawBendX));
+  } else {
+    bendX = Math.min(tgt.x - minElbowGap, Math.max(src.x + minElbowGap, rawBendX));
+  }
+
+  const elbowA = { x: bendX, y: src.y };
+  const elbowB = { x: bendX, y: tgt.y };
+  const points = [src, elbowA, elbowB, tgt]
+    .map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`)
+    .join(' ');
+
+  // Tuned for quiet premium feel — crisp architectural line, not neon/game.
+  const lineStroke = 'rgba(255,247,235,0.34)';
+  const nodeFill   = 'rgba(255,247,235,0.58)';
+  const nodeStroke = 'rgba(255,247,235,0.24)';
 
   el.connectorLayer.innerHTML = `<defs>
     <filter id="laval-conn-glow" x="-100%" y="-100%" width="300%" height="300%">
-      <feGaussianBlur stdDeviation="0.40" result="b"/>
+      <feGaussianBlur stdDeviation="0.34" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
   <polyline
-    points="${src.x.toFixed(2)},${src.y.toFixed(2)}
-            ${elbX.toFixed(2)},${elbY.toFixed(2)}
-            ${tgt.x.toFixed(2)},${tgt.y.toFixed(2)}"
+    points="${points}"
     fill="none"
     stroke="${lineStroke}"
-    stroke-width="0.26"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    stroke-width="1.35px"
+    stroke-linecap="butt"
+    stroke-linejoin="miter"
+    vector-effect="non-scaling-stroke"
+    shape-rendering="geometricPrecision"
+    filter="url(#laval-conn-glow)"/>
+  <circle
+    cx="${src.x.toFixed(2)}"
+    cy="${src.y.toFixed(2)}"
+    r="0.30"
+    fill="${nodeFill}"
+    stroke="${nodeStroke}"
+    stroke-width="1px"
+    vector-effect="non-scaling-stroke"
+    filter="url(#laval-conn-glow)"/>
+  <circle
+    cx="${elbowA.x.toFixed(2)}"
+    cy="${elbowA.y.toFixed(2)}"
+    r="0.22"
+    fill="${nodeFill}"
+    filter="url(#laval-conn-glow)"/>
+  <circle
+    cx="${elbowB.x.toFixed(2)}"
+    cy="${elbowB.y.toFixed(2)}"
+    r="0.22"
+    fill="${nodeFill}"
     filter="url(#laval-conn-glow)"/>
   <circle
     cx="${tgt.x.toFixed(2)}"
     cy="${tgt.y.toFixed(2)}"
-    r="0.62"
-    fill="${orbFill}"
+    r="0.42"
+    fill="${nodeFill}"
+    stroke="${nodeStroke}"
+    stroke-width="1px"
+    vector-effect="non-scaling-stroke"
     filter="url(#laval-conn-glow)"/>`;
 
   el.connectorLayer.removeAttribute('hidden');
 
-  // Auto-hide after ~2000 ms
-  state.connectorTimer = setTimeout(hideConnector, 2000);
+  // Persist briefly through the visual confirmation hold, then clear.
+  state.connectorTimer = setTimeout(hideConnector, 2400);
 }
+
 
 // hideConnector()
 // Immediately removes the connector and cancels any pending auto-hide timer.
