@@ -863,7 +863,7 @@ export function buildLeadPayload() {
       message: msgEl   ? msgEl.value.trim()   : ''
     },
     meta: {
-      version:         'refined build
+      version:         'refined build',
       currentViewport: `${window.innerWidth}x${window.innerHeight}`,
       stage:           'MVP static prototype — no backend'
     },
