@@ -1,222 +1,353 @@
-/* =========================================================================
-   LAVAL — Data model
-   Public-facing option set + hidden internal mappings + allowed-logic.
-   Source of truth: brief <public_option_set> + <allowed_logic>, cross-checked
-   against LAVAL_Webflow_CMS_Seed_Map_v1 Section 3 and LAVAL_Visual_Option_Matrix.
-   ========================================================================= */
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAVAL — Architectural Stone Mantels</title>
+  <meta name="description" content="Luxury natural stone mantels for Charleston renovation and high-end new construction.">
 
-export const FAMILIES = [
-  {
-    id: 'tailored-classical',
-    code: 'FM-01',
-    name: 'Tailored Classical',
-    tagline: 'Quiet · Rectilinear · Disciplined',
-    description:
-      'A restrained classical language built on straight lines and refined proportion. The surface carries meaning through geometry rather than ornament.',
-  },
-  {
-    id: 'soft-sculptural',
-    code: 'FM-02',
-    name: 'Soft Sculptural',
-    tagline: 'Rounded · Arched · Warm',
-    description:
-      'Rounded shoulders, softened arches, and quiet massing. Architectural without being formal — low-to-medium ornament carries the read.',
-  },
-  {
-    id: 'french-ornate',
-    code: 'FM-03',
-    name: 'French Ornate',
-    tagline: 'Serpentine · Crested · Old-World',
-    description:
-      'Serpentine friezes, cresting, and shell or cartouche motifs. An expressive old-world language reserved for rooms that invite it.',
-  },
-];
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-export const PROFILES = [
-  // Tailored Classical
-  { id: 'TC-P1', family: 'tailored-classical', name: 'Framed Rectilinear', slug: 'tc-p1-framed-rectilinear',
-    description: 'A clean rectangular opening inside a restrained framed lintel. Quiet classical read.',
-    hiddenOP: 'OP-01', hiddenFR: 'FR-02' },
-  { id: 'TC-P2', family: 'tailored-classical', name: 'Fluted Lintel', slug: 'tc-p2-fluted-lintel',
-    description: 'Rectangular opening with stronger classical molding and fluted logic across the frieze.',
-    hiddenOP: 'OP-01', hiddenFR: 'FR-03' },
-  { id: 'TC-P3', family: 'tailored-classical', name: 'Soft Arch Frame', slug: 'tc-p3-soft-arch-frame',
-    description: 'Rectilinear body with a softened inner shoulder — a quiet bridge to sculptural language.',
-    hiddenOP: 'OP-02', hiddenFR: 'FR-03' },
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/homepage.css">
+</head>
+<body class="homepage">
 
-  // Soft Sculptural
-  { id: 'SS-P1', family: 'soft-sculptural', name: 'Rounded Cove', slug: 'ss-p1-rounded-cove',
-    description: 'A soft cove arch with thick quiet shoulders and low ornament.',
-    hiddenOP: 'OP-02', hiddenFR: 'FR-04' },
-  { id: 'SS-P2', family: 'soft-sculptural', name: 'Wave Frieze', slug: 'ss-p2-wave-frieze',
-    description: 'Softly animated frieze paired with rounded opening logic.',
-    hiddenOP: 'OP-03', hiddenFR: 'FR-05' },
-  { id: 'SS-P3', family: 'soft-sculptural', name: 'Niche Arch', slug: 'ss-p3-niche-arch',
-    description: 'An architectural niche / chimney-piece feeling with integrated soft-arch language.',
-    hiddenOP: 'OP-05', hiddenFR: 'FR-04', hiddenOM: 'OM-01' },
+<!-- =========================================================
+     HEADER — full viewport width with small edge padding
+========================================================= -->
+<header class="site-header" id="siteHeader">
+  <div class="header-shell">
 
-  // French Ornate
-  { id: 'FO-P1', family: 'french-ornate', name: 'Crest Arch', slug: 'fo-p1-crest-arch',
-    description: 'Serpentine French opening with a centered crest motif.',
-    hiddenOP: 'OP-03', hiddenFR: 'FR-05' },
-  { id: 'FO-P2', family: 'french-ornate', name: 'Baroque Relief', slug: 'fo-p2-baroque-relief',
-    description: 'Richer relief across the frieze with a more decorated body language.',
-    hiddenOP: 'OP-03', hiddenFR: 'FR-06' },
-  { id: 'FO-P3', family: 'french-ornate', name: 'Columned Arch', slug: 'fo-p3-columned-arch',
-    description: 'A formal French arch supported by stronger columnar or ornamental side logic.',
-    hiddenOP: 'OP-04', hiddenFR: 'FR-05' },
-];
+    <div class="header-left">
+      <button
+        class="menu-trigger"
+        id="menuTrigger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="menuOverlay"
+        aria-label="Open menu"
+      >
+        <span class="menu-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+        <span class="menu-label">Menu</span>
+      </button>
+    </div>
 
-export const LEGS = [
-  { id: 'LG-1', name: 'Plain Jamb', slug: 'lg-1-plain-jamb',
-    description: 'Straight, restrained, quietly architectural.' },
-  { id: 'LG-2', name: 'Fluted Pilaster', slug: 'lg-2-fluted-pilaster',
-    description: 'Classic tailored architectural read with vertical flutes.' },
-  { id: 'LG-3', name: 'Rounded Sculpted', slug: 'lg-3-rounded-sculpted',
-    description: 'Softer, fuller jamb with rounded shoulders.' },
-  { id: 'LG-4', name: 'Tapered Curve', slug: 'lg-4-tapered-curve',
-    description: 'A bridge leg — works across families when the composition allows.' },
-  { id: 'LG-5', name: 'French Scroll', slug: 'lg-5-french-scroll',
-    description: 'Decorative and expressive — scrolled support logic.' },
-];
+    <div class="header-center">
+      <a class="brand" href="index.html" aria-label="LAVAL home">LAVAL</a>
+    </div>
 
-export const SHELVES = [
-  { id: 'SH-1', name: 'Classical Shelf', slug: 'sh-1-classical-shelf',
-    description: 'Stepped and traditional — the quiet default.' },
-  { id: 'SH-2', name: 'Mitered Frame Shelf', slug: 'sh-2-mitered-frame-shelf',
-    description: 'Sharper picture-frame read for restrained compositions.' },
-  { id: 'SH-3', name: 'Sculpted Crown', slug: 'sh-3-sculpted-crown',
-    description: 'Thicker, softer massing — a warmer architectural crown.' },
-  { id: 'SH-4', name: 'French Serpentine Shelf', slug: 'sh-4-french-serpentine-shelf',
-    description: 'A curved, old-world shelf line for expressive profiles.' },
-];
+    <div class="header-right">
+      <button class="icon-button" type="button" aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+        </svg>
+      </button>
+      <button class="icon-button" type="button" aria-label="Favorites">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 20.5s-7-4.35-7-10a4 4 0 0 1 7-2.52A4 4 0 0 1 19 10.5c0 5.65-7 10-7 10Z"></path>
+        </svg>
+      </button>
+      <button class="icon-button" type="button" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.5"></circle>
+          <path d="M5 20c1.5-3 4.25-4.5 7-4.5S17.5 17 19 20"></path>
+        </svg>
+      </button>
+    </div>
 
-export const FINISHES = [
-  { id: 'FN-1', name: 'Pale Limestone', slug: 'fn-1-pale-limestone',
-    description: 'Light, chalky, quiet stone with a soft grain.',
-    swatch: { base: '#e8e3d8', hi: '#f2eee5', lo: '#c6beb0', vein: null } },
-  { id: 'FN-2', name: 'Soft Ivory Stone', slug: 'fn-2-soft-ivory-stone',
-    description: 'Warm ivory, travertine-adjacent, with subtle warmth.',
-    swatch: { base: '#ece3d2', hi: '#f7efdd', lo: '#cdbfa4', vein: 'rgba(180,158,124,0.22)' } },
-  { id: 'FN-3', name: 'White Marble', slug: 'fn-3-white-marble',
-    description: 'Bright, classic, clean — a timeless neutral.',
-    swatch: { base: '#f2efe9', hi: '#ffffff', lo: '#d4d0c8', vein: 'rgba(120,112,100,0.28)' } },
-  { id: 'FN-4', name: 'Dramatic Veined Marble', slug: 'fn-4-dramatic-veined-marble',
-    description: 'A high-drama statement stone — use where the room invites it.',
-    swatch: { base: '#e8e1d3', hi: '#f6f0e2', lo: '#958b78', vein: 'rgba(40,34,28,0.44)' } },
-  { id: 'FN-5', name: 'Warm Taupe Stone', slug: 'fn-5-warm-taupe-stone',
-    description: 'A muted warm-neutral stone read — deeply grounding.',
-    swatch: { base: '#ccbfa9', hi: '#dcd0bb', lo: '#9f927a', vein: 'rgba(80,68,52,0.24)' } },
-];
+  </div>
+</header>
 
-/* -------------------------------------------------------------------------
-   Allowed logic (from brief <allowed_logic>, cross-checked against
-   LAVAL_Configurator_Asset_Production_Map_v1 Section 5).
-   "caution" is treated as allowed-but-marked in the UI.
-   ------------------------------------------------------------------------- */
-export const ALLOWED = {
-  'tailored-classical': {
-    profiles: ['TC-P1', 'TC-P2', 'TC-P3'],
-    legs:     ['LG-1', 'LG-2', 'LG-4'],
-    shelves:  ['SH-1', 'SH-2'],
-    finishes: ['FN-1', 'FN-2', 'FN-3', 'FN-4', 'FN-5'],
-    caution:  { shelves: [], legs: [], finishes: [] },
-  },
-  'soft-sculptural': {
-    profiles: ['SS-P1', 'SS-P2', 'SS-P3'],
-    legs:     ['LG-3', 'LG-4'],
-    shelves:  ['SH-3', 'SH-4', 'SH-1'],
-    finishes: ['FN-1', 'FN-2', 'FN-3', 'FN-5'],
-    caution:  { shelves: ['SH-1'], legs: [], finishes: [] },
-  },
-  'french-ornate': {
-    profiles: ['FO-P1', 'FO-P2', 'FO-P3'],
-    legs:     ['LG-4', 'LG-5'],
-    shelves:  ['SH-4', 'SH-3'],
-    finishes: ['FN-2', 'FN-3', 'FN-4'],
-    caution:  { shelves: ['SH-3'], legs: [], finishes: [] },
-  },
-};
+<!-- =========================================================
+     MENU OVERLAY
+========================================================= -->
+<div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+  <div class="menu-overlay-inner">
+    <div class="menu-top">
+      <div class="menu-title">Navigation</div>
+      <button class="menu-close" id="menuClose" type="button" aria-label="Close menu">Close</button>
+    </div>
 
-/* -------------------------------------------------------------------------
-   Step metadata: used to label the shell, drive camera framing, and render
-   the correct browser list per step.
-   ------------------------------------------------------------------------- */
-export const STEPS = [
-  { id: 'family',  index: 1, label: 'Family',
-    title: 'Choose a Family',
-    eyebrow: 'Step 01 · Architectural Language',
-    framing: 'wide',
-    pane: 'Every LAVAL mantel begins with a language. The family you choose shapes every subsequent decision — from the opening profile to the leg system to the finish. Choose the one that fits the room\u2019s architecture, not only its mood.',
-  },
-  { id: 'profile', index: 2, label: 'Profile',
-    title: 'Select a Profile',
-    eyebrow: 'Step 02 · Opening & Frieze',
-    framing: 'opening',
-    pane: 'The profile sets the opening geometry and the frieze logic above it. Three profiles are available within your chosen family; each carries a quietly different architectural posture.',
-  },
-  { id: 'leg',     index: 3, label: 'Legs',
-    title: 'Choose a Leg System',
-    eyebrow: 'Step 03 · Jambs',
-    framing: 'legs',
-    pane: 'Legs carry the weight of the shelf and define the mantel\u2019s vertical rhythm. The family and profile constrain which legs compose correctly; incompatible options are dimmed.',
-  },
-  { id: 'shelf',   index: 4, label: 'Shelf',
-    title: 'Select a Shelf',
-    eyebrow: 'Step 04 · Crown',
-    framing: 'crown',
-    pane: 'The shelf is the crown of the composition. Its profile, thickness, and edge language complete the family read.',
-  },
-  { id: 'finish',  index: 5, label: 'Finish',
-    title: 'Choose a Finish',
-    eyebrow: 'Step 05 · Material',
-    framing: 'wide',
-    pane: 'Material resolves the mantel. Pale limestone and soft ivory stone work broadly; dramatic veined marble is reserved for compositions that can carry its weight.',
-  },
-  { id: 'review',  index: 6, label: 'Review',
-    title: 'Review & Request',
-    eyebrow: 'Step 06 · Confirm',
-    framing: 'review',
-    pane: 'Your selections compose a specification, not a finished quote. A LAVAL team member will confirm scope, dimensions, and material lead time after reviewing your request.',
-  },
-];
+    <div class="menu-grid">
+      <nav class="menu-nav" aria-label="Overlay navigation">
+        <a href="index.html">Home</a>
+        <a href="#families">Families</a>
+        <a href="configurator/">Configurator</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="contact.html">Contact</a>
+      </nav>
 
-/* Budget bands per LAVAL_Launch_Ops_Closure_Pack v1 §2.1 */
-export const BUDGET_BANDS = [
-  'Under $8K',
-  '$8K \u2013 $15K',
-  '$15K \u2013 $25K',
-  '$25K+',
-];
+      <div class="menu-notes">
+        <p class="menu-kicker">LAVAL</p>
+        <h2>Architectural stone, refined for the room.</h2>
+        <p>
+          Natural stone mantels for Charleston renovation and high-end new construction.
+          Discover the families, then continue to the configurator for project direction.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 
-export const TIMING_OPTIONS = [
-  'Exploring',
-  'Within 3 months',
-  '3\u20136 months',
-  '6\u201312 months',
-  'Flexible',
-];
+<!-- =========================================================
+     MAIN
+========================================================= -->
+<main id="top">
 
-export const CLIENT_TYPES = [
-  { id: 'homeowner', label: 'Homeowner' },
-  { id: 'trade',     label: 'Trade / Designer' },
-];
+  <!-- HERO — full 100svh, bleeds behind transparent nav -->
+  <section class="hero hero--home" id="hero">
+    <div class="hero-media" aria-hidden="true"></div>
+    <div class="hero-scrim" aria-hidden="true"></div>
 
-/* --- Lookup helpers ------------------------------------------------------ */
-export const byId = (list, id) => list.find(x => x.id === id) || null;
-export const familyById   = (id) => byId(FAMILIES, id);
-export const profileById  = (id) => byId(PROFILES, id);
-export const legById      = (id) => byId(LEGS, id);
-export const shelfById    = (id) => byId(SHELVES, id);
-export const finishById   = (id) => byId(FINISHES, id);
+    <div class="container hero-inner">
+      <div class="hero-copy hero-copy--center">
+        <p class="hero-location">Charleston, South Carolina</p>
+        <h1>Architectural Mantels</h1>
+        <p class="hero-subline">
+          Natural stone fireplace mantels for luxury renovation and high-end new construction.
+        </p>
 
-/* Returns { allowed: boolean, caution: boolean } for a given option in context. */
-export function isAllowed(kind, optionId, familyId) {
-  if (!familyId) return { allowed: true, caution: false };
-  const rules = ALLOWED[familyId];
-  if (!rules) return { allowed: true, caution: false };
-  const set = rules[kind];
-  const allowed = set.includes(optionId);
-  const caution = (rules.caution[kind] || []).includes(optionId);
-  return { allowed, caution };
-}
+        <div class="hero-actions hero-actions--center">
+          <a class="text-link text-link--light" href="#families">Discover</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAMILIES -->
+  <section id="families" class="section families-section">
+    <div class="rail-shell">
+      <div class="section-head reveal">
+        <h2>The Families</h2>
+        <p>Three distinct mantel signatures in natural stone.</p>
+      </div>
+
+      <div class="rail reveal-group">
+
+        <article class="rail-item">
+          <div class="rail-media">
+            <img
+              src="images/Forma_approved_homepage_image.jpg"
+              alt="Forma family mantel in natural stone."
+              loading="lazy"
+            >
+          </div>
+          <div class="rail-copy">
+            <p class="card-label">Quiet Sculptural</p>
+            <h3 class="h-card">Forma</h3>
+            <p>Soft massing and restrained sculptural presence.</p>
+          </div>
+        </article>
+
+        <article class="rail-item">
+          <div class="rail-media">
+            <img
+              src="images/Aurelia_approved_homepage_image.jpg"
+              alt="Aurelia family mantel in natural stone."
+              loading="lazy"
+            >
+          </div>
+          <div class="rail-copy">
+            <p class="card-label">Classical</p>
+            <h3 class="h-card">Aurelia</h3>
+            <p>Classical proportion with a cleaner architectural read.</p>
+          </div>
+        </article>
+
+        <article class="rail-item">
+          <div class="rail-media">
+            <img
+              src="images/Seraphine_approved_homepage_image.jpg"
+              alt="Seraphine family mantel in natural stone."
+              loading="lazy"
+            >
+          </div>
+          <div class="rail-copy">
+            <p class="card-label">Ornate</p>
+            <h3 class="h-card">Seraphine</h3>
+            <p>Decorative richness, softened for a more current room.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE — full-bleed editorial image -->
+  <section class="section home-editorial-section">
+    <div class="feature reveal">
+      <article class="feature-card">
+        <img
+          class="feature-image"
+          src="images/Craft_credibility_image.jpg"
+          alt="Stone craftsmanship and consultation."
+          loading="lazy"
+        >
+        <div class="feature-scrim" aria-hidden="true"></div>
+
+        <div class="feature-content">
+          <p class="eyebrow">Project Direction</p>
+          <h2>Chisel &amp; Stone</h2>
+          <p>
+            Craftsmen carve until creation is set free.
+          </p>
+          <div class="feature-actions">
+            <a class="text-link text-link--light" href="configurator/">Explore the Configurator</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- QUIET CTA -->
+  <section class="section home-cta-section">
+    <div class="home-cta-wrap">
+      <div class="home-cta-block reveal">
+        <h2>Trade &amp; Private Clients</h2>
+        <p class="home-cta-lead">For designers, architects, builders, and homeowners.</p>
+        <p class="home-cta-body">
+          Use the configurator for early direction, or contact LAVAL directly
+          for project review and measured next steps.
+        </p>
+        <div class="home-cta-link-row">
+          <a class="text-link" href="contact.html">Contact LAVAL</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER — full viewport width with edge padding
+========================================================= -->
+<footer class="site-footer">
+  <div class="footer-hub">
+
+    <div class="footer-column">
+      <h3>Contact Hub</h3>
+      <ul class="footer-links">
+        <li><a href="contact.html">Request pricing</a></li>
+        <li><a href="contact.html">Contact &amp; appointments</a></li>
+        <li><a href="configurator/">Project consultation</a></li>
+        <li><a href="portfolio.html">Portfolio inquiry</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Project Support</h3>
+      <ul class="footer-links">
+        <li><a href="configurator/">Material direction</a></li>
+        <li><a href="#families">Family overview</a></li>
+        <li><a href="contact.html">Photos &amp; dimensions</a></li>
+        <li><a href="contact.html">Lead time &amp; scope</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>About LAVAL</h3>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="configurator/">Configurator</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="#families">Families</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-column">
+      <h3>Privacy &amp; Legal</h3>
+      <ul class="footer-links">
+        <li><a href="contact.html">Project inquiry terms</a></li>
+        <li><a href="contact.html">Communication preferences</a></li>
+        <li><a href="index.html">Site map</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <span class="footer-brand-mark">LAVAL</span>
+      <p class="footer-note">Charleston, South Carolina · Natural stone first</p>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================================================
+     SCRIPT
+========================================================= -->
+<script>
+  const body        = document.body;
+  const siteHeader  = document.getElementById('siteHeader');
+  const menuTrigger = document.getElementById('menuTrigger');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const menuClose   = document.getElementById('menuClose');
+  const menuLinks   = menuOverlay.querySelectorAll('a');
+
+  function setScrolledState() {
+    siteHeader.classList.toggle('is-scrolled', window.scrollY > 60);
+  }
+
+  window.addEventListener('scroll', setScrolledState, { passive: true });
+  window.addEventListener('load', setScrolledState);
+
+  function openMenu() {
+    menuOverlay.classList.add('is-open');
+    body.classList.add('menu-open');
+    menuTrigger.setAttribute('aria-expanded', 'true');
+    menuOverlay.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeMenu() {
+    menuOverlay.classList.remove('is-open');
+    body.classList.remove('menu-open');
+    menuTrigger.setAttribute('aria-expanded', 'false');
+    menuOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  menuTrigger.addEventListener('click', function () {
+    menuOverlay.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+
+  menuClose.addEventListener('click', closeMenu);
+  menuLinks.forEach(function (link) { link.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // Scroll reveal — IntersectionObserver (fires once, no re-hide)
+  (function () {
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.reveal, .reveal-group').forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -48px 0px'
+    });
+
+    document.querySelectorAll('.reveal, .reveal-group').forEach(function (el) {
+      observer.observe(el);
+    });
+  })();
+</script>
+
+</body>
+</html>
