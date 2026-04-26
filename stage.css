@@ -1,169 +1,444 @@
 /* =========================================================================
-   LAVAL — Protected Stage (OBJ-11..16)
-   The subject (mantel) lives here. No HUD panel may invade the frieze axis.
-   World shell (OBJ-14) + floor glow (OBJ-15) + fog (OBJ-16) live under the
-   subject per the Z-layer discipline: World L0 / Floor L1 / Subject L2 /
-   Hotspots L3 / HUD L4.
+   LAVAL — Right Browser (OBJ-17..21)
+   Primary selection territory. Circle-first option tokens. Nested sub-editor
+   mounts INSIDE this envelope — never as a modal or a new page.
    ========================================================================= */
 
-.stage {
-  grid-area: stage;
+.browser {
+  grid-area: browser;
   position: relative;
-  overflow: hidden;
-  z-index: var(--z-world);
-}
-
-/* The world shell — a soft warm studio, not a scenic environment.
-   Recolors (LAW-10) would adjust these gradients without touching HUD. */
-.stage__world {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(
-      60% 45% at 50% 70%,
-      rgba(255, 244, 220, 0.08) 0%,
-      rgba(255, 244, 220, 0.02) 45%,
-      transparent 75%
-    ),
-    radial-gradient(
-      120% 100% at 50% 110%,
-      var(--world-base) 0%,
-      var(--world-mid) 48%,
-      var(--world-top) 100%
-    );
-  z-index: var(--z-world);
-}
-
-/* Floor glow — an ellipse of warm ivory under the subject.
-   Stays subordinate to subject and HUD legibility. */
-.stage__floor-glow {
-  position: absolute;
-  left: 50%; bottom: 6%;
-  width: 72%; height: 22%;
-  transform: translateX(-50%);
-  background: radial-gradient(
-    ellipse at center,
-    var(--floor-glow) 0%,
-    rgba(232, 220, 198, 0.08) 40%,
-    transparent 70%
-  );
-  filter: blur(28px);
-  z-index: var(--z-floor);
-  pointer-events: none;
-}
-
-/* Fog — soft atmosphere, low contrast. Never reads as VFX. */
-.stage__fog {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(60% 40% at 50% 30%, var(--fog) 0%, transparent 70%),
-    radial-gradient(80% 30% at 50% 95%, rgba(255, 248, 235, 0.04) 0%, transparent 70%);
-  z-index: var(--z-floor);
-  pointer-events: none;
-}
-
-/* Subtle vignette — section E: "very light use only" */
-.stage__vignette {
-  position: absolute; inset: 0;
-  background: radial-gradient(
-    100% 80% at 50% 50%,
-    transparent 55%,
-    rgba(0, 0, 0, 0.28) 100%
-  );
-  z-index: var(--z-hotspots);
-  pointer-events: none;
-  mix-blend-mode: multiply;
-}
-
-/* The subject zone itself — the camera acts on this element's transform. */
-.stage__subject {
-  position: absolute;
-  inset: 0;
-  z-index: var(--z-subject);
-  display: grid;
-  place-items: center;
-  transition:
-    transform var(--dur-reframe) var(--ease-calm),
-    filter    var(--dur-reframe) var(--ease-calm);
-  will-change: transform, filter;
-}
-
-/* The SVG mantel container. Width is generous for full-body framing;
-   camera.js adjusts transform (scale + translate) to mimic push-in/pull-back. */
-.mantel {
-  width: min(62%, 640px);
-  aspect-ratio: 5 / 6;
-  position: relative;
-  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.45));
-  transition: filter var(--dur-reframe) var(--ease-calm);
-}
-.mantel svg { width: 100%; height: 100%; display: block; }
-
-/* A gentle breath idle animation — below the "quiet utility software" line.
-   Disabled by prefers-reduced-motion via tokens.css. */
-@keyframes stage-breath {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-2px); }
-}
-.mantel { animation: stage-breath 6.5s var(--ease-calm) infinite; }
-
-/* Empty state / pre-selection hint that reads as editorial quiet */
-.stage__hint {
-  position: absolute;
-  left: 50%; bottom: 14%;
-  transform: translateX(-50%);
-  z-index: var(--z-hotspots);
-  padding: 8px 16px;
+  z-index: var(--z-hud);
+  margin: 4px var(--inset-band) var(--inset-band) 0;
+  padding: 22px 22px 22px;
+  background: var(--glass-fill);
   border: 1px solid var(--border-ivory);
-  background: var(--glass-fill-low);
   backdrop-filter: blur(var(--blur-hud));
   -webkit-backdrop-filter: blur(var(--blur-hud));
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.browser__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-ivory);
+}
+.browser__eyebrow {
   font-size: var(--fs-label-s);
   letter-spacing: var(--track-eyebrow);
   text-transform: uppercase;
   font-weight: 500;
   color: var(--text-on-dark-helper);
-  opacity: 0;
-  transition: opacity var(--dur-commit) var(--ease-soft);
 }
-.stage[data-step="family"]:not([data-family]) .stage__hint { opacity: 1; }
+.browser__count {
+  font-size: var(--fs-label-s);
+  letter-spacing: var(--track-caps);
+  color: var(--text-on-dark-helper);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+.browser__title {
+  font-family: var(--display-serif);
+  font-weight: 300;
+  font-size: 28px;
+  line-height: var(--lh-editorial);
+  color: var(--text-on-dark-active);
+  letter-spacing: -0.005em;
+}
 
-/* Connector SVG overlay — CONN-A..D. Shows during active focus states. */
-.connectors {
-  position: absolute; inset: 0;
-  z-index: var(--z-hotspots);
+/* The option list — always scrollable locally (LAW-15) */
+.browser__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,252,246,0.22) transparent;
+}
+.browser__body::-webkit-scrollbar { width: 4px; }
+.browser__body::-webkit-scrollbar-thumb { background: rgba(255,252,246,0.18); border-radius: 2px; }
+
+/* Option row — circle-first orb plus label cluster */
+.option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px 10px 8px;
+  border-radius: var(--radius-chip);
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+  width: 100%;
+  transition:
+    background var(--dur-hover) var(--ease-soft),
+    border-color var(--dur-hover) var(--ease-soft),
+    opacity var(--dur-commit) var(--ease-soft);
+}
+.option:hover:not([disabled]) {
+  background: rgba(255, 252, 246, 0.05);
+  border-color: rgba(255, 252, 246, 0.14);
+}
+.option.is-selected {
+  background: rgba(255, 250, 243, 0.09);
+  border-color: rgba(255, 252, 246, 0.38);
+}
+.option[disabled] {
+  opacity: 0.40;
+  cursor: not-allowed;
+}
+
+.option__orb {
+  width: var(--orb-browser);
+  height: var(--orb-browser);
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 auto;
+  background: var(--ivory);
+  border: 1px solid rgba(255, 252, 246, 0.22);
+  transition: box-shadow var(--dur-hover) var(--ease-soft),
+              border-color var(--dur-hover) var(--ease-soft);
+}
+.option:hover:not([disabled]) .option__orb {
+  border-color: rgba(255, 252, 246, 0.48);
+}
+.option.is-selected .option__orb {
+  border-color: rgba(255, 252, 246, 0.95);
+  box-shadow:
+    0 0 0 2px var(--char),
+    0 0 0 3px var(--ring-active);
+}
+
+/* The orb interior — SVG glyph / material / thumbnail */
+.option__orb svg,
+.option__orb img,
+.option__orb .swatch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Material swatch for finishes — actual material gradients live here */
+.swatch {
+  border-radius: 50%;
+}
+
+.option__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.option__name {
+  font-family: var(--display-serif);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--text-on-dark-active);
+  letter-spacing: -0.002em;
+}
+.option__code {
+  font-size: var(--fs-label-s);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-on-dark-helper);
+}
+.option__desc {
+  font-size: var(--fs-label);
+  line-height: 1.5;
+  color: var(--text-on-dark-primary);
+  font-weight: 300;
+  margin-top: 2px;
+}
+
+.option__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  flex: 0 0 auto;
+}
+.option__ring {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 252, 246, 0.34);
+  transition: all var(--dur-hover) var(--ease-soft);
+}
+.option.is-selected .option__ring {
+  background: var(--ivory);
+  border-color: var(--ivory);
+  box-shadow: inset 0 0 0 3px var(--char);
+}
+.option__block-tag {
+  font-size: 9.5px;
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-on-dark-helper);
+  padding: 2px 6px;
+  border: 1px solid var(--border-ivory);
+  border-radius: var(--radius-hair);
+  white-space: nowrap;
+}
+
+/* --- Nested sub-editor sheet (OBJ-21..25) -------------------------------
+   Mounts INSIDE this browser envelope. Never a full-screen modal.
+   Used for the Request Pricing form at the review step. */
+.sheet {
+  position: absolute;
+  inset: 0;
+  background: var(--glass-fill-high);
+  border-radius: var(--radius-panel);
+  backdrop-filter: blur(var(--blur-hud-strong));
+  -webkit-backdrop-filter: blur(var(--blur-hud-strong));
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transform: translateY(4%);
+  opacity: 0;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--dur-commit) var(--ease-soft);
+  transition:
+    transform var(--dur-commit) var(--ease-soft),
+    opacity   var(--dur-commit) var(--ease-soft);
 }
-.connectors.is-visible { opacity: 1; }
+.sheet.is-open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.sheet__header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-ivory);
+}
+.sheet__title {
+  font-family: var(--display-serif);
+  font-weight: 300;
+  font-size: 24px;
+  line-height: var(--lh-editorial);
+  color: var(--text-on-dark-active);
+}
+.sheet__eyebrow {
+  font-size: var(--fs-label-s);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-on-dark-helper);
+}
+.sheet__close {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  color: var(--text-on-dark-helper);
+  transition: color var(--dur-hover) var(--ease-soft),
+              background var(--dur-hover) var(--ease-soft);
+}
+.sheet__close:hover { color: var(--text-on-dark-active); background: var(--halo-hover); }
+.sheet__close::before, .sheet__close::after {
+  content: "";
+  position: absolute;
+  width: 12px; height: 1px;
+  background: currentColor;
+}
+.sheet__close { position: relative; }
+.sheet__close::before { transform: rotate(45deg); }
+.sheet__close::after  { transform: rotate(-45deg); }
 
-.connectors line,
-.connectors path {
-  stroke: var(--connector-line);
-  stroke-width: 1.25;
-  stroke-linecap: round;
-  fill: none;
-  filter: drop-shadow(0 0 4px var(--connector-halo));
+.sheet__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 16px;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,252,246,0.22) transparent;
 }
-.connectors circle.node {
-  fill: var(--connector-node);
-  filter: drop-shadow(0 0 6px var(--connector-halo));
+.sheet__body::-webkit-scrollbar { width: 4px; }
+.sheet__body::-webkit-scrollbar-thumb { background: rgba(255,252,246,0.18); border-radius: 2px; }
+
+/* --- Form fields (quiet, luxurious, generous) --------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.connectors circle.node-origin {
-  fill: var(--connector-line);
-  r: 3;
+.field__label {
+  font-size: var(--fs-label-s);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-on-dark-helper);
+}
+.field__helper {
+  font-size: var(--fs-label);
+  color: var(--text-on-dark-helper);
+  font-weight: 300;
+  font-style: italic;
 }
 
-/* Camera zones — applied to .stage__subject. Driven by data-framing attr. */
-.stage__subject[data-framing="wide"]     { transform: scale(1.00) translate3d(0, 0, 0); }
-.stage__subject[data-framing="crown"]    { transform: scale(1.26) translate3d(0, 11%, 0); }
-.stage__subject[data-framing="legs"]     { transform: scale(1.32) translate3d(0, -10%, 0); }
-.stage__subject[data-framing="opening"]  { transform: scale(1.18) translate3d(0, 2%, 0); }
-.stage__subject[data-framing="review"]   { transform: scale(0.94); }
-
-/* Mobile: camera stays wide to avoid cropping on small viewports. */
-@media (max-width: 820px) {
-  .stage__subject[data-framing] { transform: scale(1.0); }
-  .mantel { width: min(76%, 420px); }
+.input, .textarea, .select {
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(255, 252, 246, 0.06);
+  border: 1px solid var(--border-ivory);
+  border-radius: var(--radius-chip);
+  color: var(--text-on-dark-active);
+  font-family: var(--ui-sans);
+  font-size: var(--fs-body);
+  font-weight: 300;
+  transition: border-color var(--dur-hover) var(--ease-soft),
+              background var(--dur-hover) var(--ease-soft);
 }
+.input:focus, .textarea:focus, .select:focus {
+  outline: none;
+  border-color: rgba(255, 252, 246, 0.48);
+  background: rgba(255, 252, 246, 0.09);
+}
+.input::placeholder, .textarea::placeholder {
+  color: var(--text-on-dark-helper);
+  font-style: italic;
+  opacity: 0.8;
+}
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.55;
+}
+.select { appearance: none; background-image:
+  linear-gradient(45deg, transparent 50%, currentColor 50%),
+  linear-gradient(-45deg, transparent 50%, currentColor 50%);
+  background-position: calc(100% - 18px) 50%, calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 34px;
+}
+
+/* Chip-group (budget bands, timing, tier) */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-caps);
+  color: var(--text-on-dark-primary);
+  border: 1px solid var(--border-ivory);
+  background: transparent;
+  font-weight: 500;
+  transition: all var(--dur-hover) var(--ease-soft);
+}
+.chip:hover { color: var(--text-on-dark-active); border-color: rgba(255,252,246,0.42); }
+.chip.is-active {
+  background: var(--ivory);
+  color: var(--char);
+  border-color: var(--ivory);
+}
+
+/* Two-column field row where space permits */
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .row-2 { grid-template-columns: 1fr; }
+}
+
+.sheet__footer {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-ivory);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px;
+}
+
+/* Success state after submit */
+.sheet__success {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 36px 4px 10px;
+  text-align: center;
+}
+.sheet__success-mark {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  margin: 0 auto 8px;
+  border: 1px solid rgba(255,252,246,0.42);
+  color: var(--text-on-dark-active);
+  font-family: var(--display-serif);
+  font-size: 20px;
+}
+.sheet__success-title {
+  font-family: var(--display-serif);
+  font-weight: 300;
+  font-size: 26px;
+  line-height: var(--lh-editorial);
+  color: var(--text-on-dark-active);
+}
+.sheet__success-body {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-on-dark-primary);
+  max-width: 42ch;
+  margin: 0 auto;
+}
+
+/* --- Review state layout ------------------------------------------------ */
+.review-grid {
+  display: grid;
+  gap: 12px;
+}
+.review-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-chip);
+  background: rgba(255, 252, 246, 0.04);
+  border: 1px solid var(--border-ivory);
+}
+.review-row__step {
+  font-size: var(--fs-label-s);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  color: var(--text-on-dark-helper);
+  font-weight: 500;
+  width: 70px;
+}
+.review-row__name {
+  font-family: var(--display-serif);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--text-on-dark-active);
+  letter-spacing: -0.002em;
+}
+.review-row__edit {
+  font-size: var(--fs-label-s);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-on-dark-helper);
+  transition: color var(--dur-hover) var(--ease-soft);
+}
+.review-row__edit:hover { color: var(--text-on-dark-active); }
