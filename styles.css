@@ -1,2220 +1,397 @@
-/* =========================================================================
-   LAVAL Configurator — Phase 1 static shell styles
-   -------------------------------------------------------------------------
-   Tokens derive from evidence in source_evidence_log.md and the LAVAL
-   Forensic Spec v7. Colors are LAVAL palette only; source coloration is
-   explicitly excluded.
-
-   Anchors are screen-space per LAVAL spec v7 §C: the HUD lives on viewport
-   edges and does not move with the mantel stage.
-   ========================================================================= */
-
-
-/* -------------------------------------------------------------------------
-   Tokens
-   ------------------------------------------------------------------------- */
-:root {
-  /* World shell — warm charcoal field (mood-board dark sections) */
-  --laval-world-deep:    #14110d;
-  --laval-world-mid:     #1c1814;
-  --laval-world-soft:    #2a241c;
-  --laval-world-rim:     #3a3128;
-
-  /* Stone palette — direct from Mood Board chips */
-  --laval-stone-1:       #bbb6ab;
-  --laval-stone-2:       #ddd9d0;
-  --laval-stone-3:       #d3cec5;
-  --laval-stone-4:       #9a7f62;
-  --laval-stone-5:       #9e8873;
-
-  /* Glass surfaces — warm ivory wash, not cold blue */
-  --laval-glass-shell:        rgba(250, 247, 242, 0.06);
-  --laval-glass-shell-strong: rgba(250, 247, 242, 0.10);
-  --laval-glass-editor:       rgba(250, 247, 242, 0.08);
-  --laval-glass-editor-soft:  rgba(250, 247, 242, 0.04);
-  --laval-glass-pill:         rgba(255, 247, 235, 0.16);
-
-  /* Hairlines — low-alpha charcoal + soft warm lift, never heavy */
-  --laval-hairline-dark:    rgba(21, 21, 21, 0.18);
-  --laval-hairline-warm:    rgba(255, 247, 235, 0.10);
-  --laval-hairline-bright:  rgba(255, 247, 235, 0.22);
-
-  /* Type colors */
-  --laval-text-primary:    rgba(255, 247, 235, 0.92);
-  --laval-text-secondary:  rgba(255, 247, 235, 0.62);
-  --laval-text-tertiary:   rgba(255, 247, 235, 0.40);
-  --laval-text-disabled:   rgba(255, 247, 235, 0.28);
-  --laval-text-active:     #fffbf3;
-
-  /* Tokens from source evidence (clamped to LAVAL spec v7 §D bands) */
-  --laval-blur-shell:   20px;   /* shell-tier glass */
-  --laval-blur-editor:  24px;   /* editor-tier glass */
-  --laval-radius-chip:  10px;
-  --laval-radius-panel: 20px;
-
-  /* Type stacks — Cormorant Garamond for editorial, Inter for UI.
-     Fallbacks resolve cleanly if Google Fonts is unreachable. */
-  --laval-display-serif: 'Cormorant Garamond', 'Cormorant', 'EB Garamond',
-                         'Garamond', 'Apple Garamond', 'Times New Roman', serif;
-  --laval-ui-sans: 'Inter', -apple-system, BlinkMacSystemFont,
-                   'Segoe UI', 'Helvetica Neue', system-ui, sans-serif;
-
-  /* Motion — within LAVAL spec v7 §G timing bands */
-  --laval-ease-soft: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --laval-ease-in-out: cubic-bezier(0.4, 0.0, 0.2, 1);
-  --laval-t-hover: 120ms;
-  --laval-t-select: 180ms;
-  --laval-t-mount: 260ms;
-}
-
-
-/* -------------------------------------------------------------------------
-   Reset and base
-   ------------------------------------------------------------------------- */
-*, *::before, *::after { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--laval-world-deep);
-  color: var(--laval-text-primary);
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 13px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-button {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  background: none;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-button[disabled] { cursor: default; }
-
-ul { list-style: none; margin: 0; padding: 0; }
-
-
-/* -------------------------------------------------------------------------
-   Shell root
-   ------------------------------------------------------------------------- */
-.laval-shell {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  min-width: 1280px;   /* desktop-only Phase 1; responsive is Phase 5 */
-  min-height: 760px;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-
-/* -------------------------------------------------------------------------
-   World shell — background field, floor glow, fog, vignette
-   Lives at z-index 0; HUD layers above.
-   ------------------------------------------------------------------------- */
-.laval-world {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 65%,
-      var(--laval-world-soft) 0%,
-      var(--laval-world-mid) 40%,
-      var(--laval-world-deep) 100%);
-}
-
-.laval-world-floor {
-  position: absolute;
-  left: 0; right: 0;
-  bottom: 0;
-  height: 30%;
-  background:
-    radial-gradient(ellipse 50% 80% at 50% 100%,
-      rgba(186, 168, 138, 0.18) 0%,
-      rgba(186, 168, 138, 0.06) 40%,
-      transparent 80%);
-  pointer-events: none;
-}
-
-.laval-world-fog {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(to bottom,
-      rgba(20, 17, 13, 0.3) 0%,
-      transparent 30%,
-      transparent 65%,
-      rgba(20, 17, 13, 0.4) 100%);
-  pointer-events: none;
-}
-
-.laval-world-vignette {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 100% 100% at 50% 50%,
-      transparent 50%,
-      rgba(0, 0, 0, 0.35) 100%);
-  pointer-events: none;
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 6 — ProtectedMantelStage
-   Center stage. No HUD zone may invade this region.
-   ------------------------------------------------------------------------- */
-.laval-stage {
-  position: absolute;
-  z-index: 1;
-  /* Protected zone: between left pane / rail on the left and right browser
-     on the right. Top reserves space for governance band; bottom for dock. */
-  left: 28%;
-  right: 27%;
-  top: 12%;
-  bottom: 12%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.laval-stage-figure {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.laval-mantel {
-  width: auto;
-  height: 100%;
-  max-height: 78vh;
-  max-width: 100%;
-  display: block;
-  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
-}
-
-.laval-stage-caption {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  text-align: center;
-}
-
-.laval-stage-caption-eyebrow {
-  font-family: var(--laval-ui-sans);
-  font-weight: 500;
-  font-size: 9.5px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--laval-text-tertiary);
-}
-
-.laval-stage-caption-text {
-  font-family: var(--laval-display-serif);
-  font-weight: 300;
-  font-style: italic;
-  font-size: 14px;
-  color: var(--laval-text-secondary);
-}
-
-
-/* -------------------------------------------------------------------------
-   Eyebrow utility class — reused across zones
-   ------------------------------------------------------------------------- */
-.laval-eyebrow {
-  display: inline-block;
-  font-family: var(--laval-ui-sans);
-  font-weight: 500;
-  font-size: 9.5px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--laval-text-tertiary);
-}
-
-
-/* -------------------------------------------------------------------------
-   Glyph (small inline SVG icons)
-   ------------------------------------------------------------------------- */
-.laval-glyph {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 1 — TopNavCluster
-   Upper-left quiet cluster on the top governance band.
-   ------------------------------------------------------------------------- */
-.laval-top-nav {
-  position: absolute;
-  z-index: 5;
-  left: 1.8%;
-  top: 1.8%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 14px;
-  background: var(--laval-glass-shell);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-shell));
-  -webkit-backdrop-filter: blur(var(--laval-blur-shell));
-}
-
-.laval-top-nav-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 4px 8px 4px 4px;
-  border-radius: var(--laval-radius-chip);
-  color: var(--laval-text-secondary);
-  font-size: 11.5px;
-  letter-spacing: 0.01em;
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-top-nav-back:hover {
-  color: var(--laval-text-active);
-  background: var(--laval-glass-shell-strong);
-}
-
-.laval-top-nav-divider {
-  color: var(--laval-text-tertiary);
-  font-size: 11px;
-}
-
-.laval-top-nav-title {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 14.5px;
-  letter-spacing: 0.01em;
-  color: var(--laval-text-primary);
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 2 — TopUtilityCapsule
-   Top-center compact utility cluster.
-   ------------------------------------------------------------------------- */
-.laval-top-utility {
-  position: absolute;
-  z-index: 5;
-  top: 1.8%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 8px;
-  background: var(--laval-glass-shell);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-shell));
-  -webkit-backdrop-filter: blur(var(--laval-blur-shell));
-}
-
-.laval-utility-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--laval-radius-chip);
-  color: var(--laval-text-secondary);
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-utility-btn:hover:not([disabled]) {
-  color: var(--laval-text-active);
-  background: var(--laval-glass-shell-strong);
-}
-
-.laval-utility-btn[disabled] {
-  color: var(--laval-text-disabled);
-}
-
-.laval-utility-sep {
-  width: 1px;
-  height: 18px;
-  background: var(--laval-hairline-warm);
-  margin: 0 4px;
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 3 — TopRightReviewPill
-   Brighter accent pill, same glass family.
-   ------------------------------------------------------------------------- */
-.laval-top-pill {
-  position: absolute;
-  z-index: 5;
-  right: 1.8%;
-  top: 1.8%;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 14px 9px 16px;
-  background: var(--laval-glass-pill);
-  border: 1px solid var(--laval-hairline-bright);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-shell));
-  -webkit-backdrop-filter: blur(var(--laval-blur-shell));
-  color: var(--laval-text-active);
-  transition: background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-top-pill:hover:not([disabled]) {
-  background: rgba(255, 247, 235, 0.22);
-}
-
-.laval-top-pill-label {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-}
-
-.laval-top-pill[disabled] { opacity: 0.85; }
-
-
-/* -------------------------------------------------------------------------
-   Zone 4 — LeftSemanticPane
-   Tall left pane, structural not modal.
-   ------------------------------------------------------------------------- */
-.laval-left-pane {
-  position: absolute;
-  z-index: 4;
-  left: 1.8%;
-  top: 11.5%;
-  width: 22%;
-  height: 76%;
-  padding: 28px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  background: var(--laval-glass-editor);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-editor));
-  -webkit-backdrop-filter: blur(var(--laval-blur-editor));
-  overflow: hidden;
-}
-
-.laval-pane-header {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.laval-pane-title {
-  font-family: var(--laval-display-serif);
-  font-weight: 300;
-  font-size: 30px;
-  line-height: 1.1;
-  margin: 0;
-  color: var(--laval-text-primary);
-  letter-spacing: 0.005em;
-}
-
-.laval-pane-body {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 12px;
-  line-height: 1.78;
-  color: var(--laval-text-secondary);
-  margin: 0;
-  max-width: 28ch;
-}
-
-.laval-pane-divider {
-  height: 1px;
-  background: var(--laval-hairline-warm);
-  margin: 4px 0;
-}
-
-.laval-pane-summary {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.laval-pane-summary-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.laval-pane-summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 11.5px;
-  color: var(--laval-text-secondary);
-  padding-bottom: 6px;
-  border-bottom: 1px dashed var(--laval-hairline-warm);
-}
-
-.laval-pane-summary-item:last-child { border-bottom: 0; }
-
-.laval-pane-summary-item.is-empty .laval-pane-summary-val {
-  color: var(--laval-text-tertiary);
-  font-family: var(--laval-display-serif);
-  font-style: italic;
-  font-weight: 300;
-  font-size: 13px;
-}
-
-.laval-pane-summary-key {
-  font-family: var(--laval-ui-sans);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 5 — MantelStepRail + StepRailOrb
-   Near-subject vertical rail. Five orbs, array-driven.
-   Spec: orb dia 28-38 px, gap 10-18 px.
-   ------------------------------------------------------------------------- */
-.laval-step-rail {
-  position: absolute;
-  z-index: 5;
-  left: 25.5%;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 14px 10px;
-  background: var(--laval-glass-shell);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-editor));
-  -webkit-backdrop-filter: blur(var(--laval-blur-editor));
-}
-
-.laval-step-rail-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-items: center;
-}
-
-.laval-step-orb {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(250, 247, 242, 0.04);
-  border: 1px solid var(--laval-hairline-warm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--laval-text-secondary);
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft),
-              box-shadow var(--laval-t-select) var(--laval-ease-soft);
-}
-
-.laval-step-orb:hover {
-  color: var(--laval-text-active);
-  background: rgba(250, 247, 242, 0.10);
-  border-color: var(--laval-hairline-bright);
-}
-
-.laval-step-orb.is-selected {
-  color: var(--laval-text-active);
-  background: rgba(250, 247, 242, 0.14);
-  border-color: rgba(255, 247, 235, 0.55);
-  box-shadow:
-    0 0 0 1px rgba(255, 247, 235, 0.15),
-    0 0 18px rgba(255, 247, 235, 0.12);
-}
-
-.laval-step-orb-tooltip {
-  position: absolute;
-  left: 48px;
-  top: 50%;
-  transform: translateY(-50%);
-  white-space: nowrap;
-  padding: 6px 10px;
-  background: var(--laval-glass-editor);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-chip);
-  backdrop-filter: blur(var(--laval-blur-shell));
-  -webkit-backdrop-filter: blur(var(--laval-blur-shell));
-  font-size: 11px;
-  color: var(--laval-text-primary);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-step-orb:hover .laval-step-orb-tooltip {
-  opacity: 1;
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 7 — RightOptionBrowser
-   ------------------------------------------------------------------------- */
-.laval-right-browser {
-  position: absolute;
-  z-index: 4;
-  right: 1.8%;
-  top: 11.5%;
-  width: 24%;
-  height: 76%;
-  display: flex;
-  flex-direction: column;
-  background: var(--laval-glass-editor);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-editor));
-  -webkit-backdrop-filter: blur(var(--laval-blur-editor));
-  overflow: hidden;
-}
-
-.laval-browser-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 22px 22px 16px;
-  border-bottom: 1px solid var(--laval-hairline-warm);
-}
-
-.laval-browser-header-titles {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.laval-browser-title {
-  font-family: var(--laval-display-serif);
-  font-weight: 300;
-  font-size: 26px;
-  line-height: 1;
-  margin: 0;
-  color: var(--laval-text-primary);
-}
-
-.laval-browser-header-tools {
-  display: flex;
-  gap: 4px;
-}
-
-.laval-browser-tool {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--laval-radius-chip);
-  color: var(--laval-text-secondary);
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-browser-tool:hover:not([disabled]) {
-  color: var(--laval-text-active);
-  background: var(--laval-glass-shell-strong);
-}
-
-.laval-browser-tool[disabled] { color: var(--laval-text-disabled); }
-
-.laval-browser-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 18px 18px 22px;
-}
-
-.laval-browser-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-
-/* -------------------------------------------------------------------------
-   Option tile (RightOptionBrowser child)
-   ------------------------------------------------------------------------- */
-.laval-tile {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  background: var(--laval-glass-editor-soft);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  cursor: pointer;
-  transition: background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-tile:hover {
-  background: rgba(250, 247, 242, 0.07);
-  border-color: var(--laval-hairline-bright);
-}
-
-.laval-tile.is-selected {
-  background: rgba(250, 247, 242, 0.10);
-  border-color: rgba(255, 247, 235, 0.45);
-  box-shadow: 0 0 0 1px rgba(255, 247, 235, 0.10);
-}
-
-.laval-tile-swatch {
-  width: 56px;
-  height: 56px;
-  border-radius: var(--laval-radius-chip);
-  flex-shrink: 0;
-  background:
-    linear-gradient(135deg,
-      var(--laval-stone-2) 0%,
-      var(--laval-stone-1) 50%,
-      var(--laval-stone-3) 100%);
-  border: 1px solid var(--laval-hairline-warm);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Swatch variants per family — subtle differentiation only */
-.laval-tile-swatch[data-swatch="ss"] {
-  background:
-    radial-gradient(circle at 30% 30%,
-      var(--laval-stone-2) 0%,
-      var(--laval-stone-3) 60%,
-      var(--laval-stone-1) 100%);
-}
-
-.laval-tile-swatch[data-swatch="fo"] {
-  background:
-    linear-gradient(160deg,
-      var(--laval-stone-2) 0%,
-      var(--laval-stone-3) 30%,
-      var(--laval-stone-5) 70%,
-      var(--laval-stone-4) 100%);
-}
-
-.laval-tile-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
-}
-
-.laval-tile-label {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.2;
-  color: var(--laval-text-primary);
-  letter-spacing: 0.005em;
-}
-
-.laval-tile-subtitle {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 11px;
-  line-height: 1.5;
-  color: var(--laval-text-secondary);
-}
-
-.laval-tile-ring {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 1px solid var(--laval-hairline-warm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-tile.is-selected .laval-tile-ring {
-  border-color: var(--laval-text-active);
-  background: var(--laval-text-active);
-}
-
-.laval-tile.is-selected .laval-tile-ring::after {
-  content: '';
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--laval-world-deep);
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 8 — Nested editor envelope slot
-   Empty in Phase 1. Mount point only.
-   ------------------------------------------------------------------------- */
-.laval-editor-slot {
-  /* Hidden by default. When Phase 3 mounts content, remove [hidden]
-     and set position/size inside the right browser. */
-  position: absolute;
-  inset: 0;
-}
-
-
-/* -------------------------------------------------------------------------
-   Zone 9 — BottomWidgetDock
-   Three grouped zones, distinct widgets, hairline separators.
-   ------------------------------------------------------------------------- */
-.laval-bottom-dock {
-  position: absolute;
-  z-index: 5;
-  left: 50%;
-  bottom: 3%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  padding: 8px 10px;
-  background: var(--laval-glass-shell);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(var(--laval-blur-shell));
-  -webkit-backdrop-filter: blur(var(--laval-blur-shell));
-}
-
-.laval-dock-state {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  justify-content: center;
-  padding: 4px 16px 4px 12px;
-  min-width: 140px;
-}
-
-.laval-dock-state-eyebrow {
-  font-weight: 500;
-  font-size: 8.5px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--laval-text-tertiary);
-}
-
-.laval-dock-state-text {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--laval-text-primary);
-  letter-spacing: 0.01em;
-}
-
-.laval-dock-sep {
-  width: 1px;
-  background: var(--laval-hairline-warm);
-  margin: 4px 0;
-}
-
-.laval-dock-widgets {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 14px;
-}
-
-.laval-dock-token {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(250, 247, 242, 0.05);
-  border: 1px solid var(--laval-hairline-warm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--laval-text-tertiary);
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 10px;
-  cursor: pointer;
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-dock-token:hover {
-  color: var(--laval-text-active);
-  background: rgba(250, 247, 242, 0.10);
-  border-color: var(--laval-hairline-bright);
-}
-
-.laval-dock-token.is-selected {
-  color: var(--laval-text-active);
-  background: rgba(250, 247, 242, 0.14);
-  border-color: rgba(255, 247, 235, 0.45);
-}
-
-.laval-dock-advance {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px 6px 16px;
-  margin: 4px 4px 4px 12px;
-  background: var(--laval-glass-pill);
-  border: 1px solid var(--laval-hairline-bright);
-  border-radius: var(--laval-radius-chip);
-  color: var(--laval-text-active);
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-  transition: background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-dock-advance:hover:not([disabled]) {
-  background: rgba(255, 247, 235, 0.22);
-}
-
-.laval-dock-advance[disabled] { opacity: 0.65; }
-
-
-/* -------------------------------------------------------------------------
-   Zone 10 — FocusConnectorLayer
-   Empty SVG overlay. Hidden by default. Phase 4 activates.
-   ------------------------------------------------------------------------- */
-.laval-connector-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.laval-connector-layer[hidden] { display: none; }
-
-
-/* -------------------------------------------------------------------------
-   Scrollbar — quiet, software-like
-   ------------------------------------------------------------------------- */
-.laval-browser-body::-webkit-scrollbar { width: 6px; }
-.laval-browser-body::-webkit-scrollbar-track { background: transparent; }
-.laval-browser-body::-webkit-scrollbar-thumb {
-  background: var(--laval-hairline-warm);
-  border-radius: 3px;
-}
-.laval-browser-body::-webkit-scrollbar-thumb:hover {
-  background: var(--laval-hairline-bright);
-}
-
-
-/* -------------------------------------------------------------------------
-   Reduced motion — respect user preference
-   ------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
-}
-
-/* =========================================================================
-   Phase 2 additions — state model visual states
-   These rules extend Phase 1 styles and do not modify existing rules.
-   ========================================================================= */
-
-/* --- Rail orb: done state (step has a selection, not currently active) --- */
-.laval-step-orb.is-done:not(.is-selected) {
-  color: var(--laval-text-primary);
-  background: rgba(155, 143, 115, 0.12);
-  border-color: rgba(155, 143, 115, 0.35);
-}
-
-/* --- Dock token: done state ------------------------------------------------ */
-.laval-dock-token.is-done:not(.is-selected) {
-  color: var(--laval-text-primary);
-  background: rgba(155, 143, 115, 0.12);
-  border-color: rgba(155, 143, 115, 0.30);
-}
-
-/* --- Summary item: filled (has a real selection) -------------------------- */
-.laval-pane-summary-item.is-filled .laval-pane-summary-val {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--laval-text-primary);
-  font-style: normal;
-}
-
-/* --- Continue button: enabled state --------------------------------------- */
-.laval-dock-advance:not([disabled]) {
-  background: rgba(200, 185, 155, 0.22);
-  border-color: rgba(255, 247, 235, 0.50);
-  cursor: pointer;
-}
-
-.laval-dock-advance:not([disabled]):hover {
-  background: rgba(200, 185, 155, 0.32);
-}
-
-/* --- Reset button: now enabled in Phase 2 --------------------------------- */
-.laval-utility-btn[aria-label="Reset selection"]:not([disabled]) {
-  color: var(--laval-text-secondary);
-}
-
-/* --- Swatch variants for all 5 steps -------------------------------------- */
-
-/* Profile swatches */
-.laval-tile-swatch[data-swatch="p-rect"]    { background: linear-gradient(160deg, #d6cdbf 0%, #c0b39f 100%); }
-.laval-tile-swatch[data-swatch="p-flute"]   { background: repeating-linear-gradient(90deg, #cfc5b4 0px, #cfc5b4 6px, #b8ad9c 6px, #b8ad9c 12px); }
-.laval-tile-swatch[data-swatch="p-arch"]    { background: radial-gradient(ellipse 100% 60% at 50% 100%, #e0d8cc 0%, #c4b9a8 100%); }
-.laval-tile-swatch[data-swatch="p-cove"]    { background: radial-gradient(circle at 30% 70%, #dbd3c5 0%, #c8bfb0 60%, #b5aa9a 100%); }
-.laval-tile-swatch[data-swatch="p-wave"]    { background: linear-gradient(180deg, #d8d0c2 0%, #c9bfb0 40%, #d4cbbe 70%, #c1b8a8 100%); }
-.laval-tile-swatch[data-swatch="p-niche"]   { background: radial-gradient(ellipse 80% 120% at 50% 0%, #ddd6c9 0%, #c0b5a3 100%); }
-.laval-tile-swatch[data-swatch="p-crest"]   { background: linear-gradient(135deg, #e0d6c6 0%, #c9bba8 40%, #a89580 100%); }
-.laval-tile-swatch[data-swatch="p-baroque"] { background: linear-gradient(160deg, #c8bba8 0%, #a89278 40%, #927d65 100%); }
-.laval-tile-swatch[data-swatch="p-columned"]{ background: repeating-linear-gradient(0deg, #d3c9bb 0px, #d3c9bb 10px, #c4b9aa 10px, #c4b9aa 14px); }
-
-/* Leg swatches */
-.laval-tile-swatch[data-swatch="l-plain"]  { background: linear-gradient(180deg, #d8d1c5 0%, #c5bcae 100%); }
-.laval-tile-swatch[data-swatch="l-flute"]  { background: repeating-linear-gradient(90deg, #cdc4b5 0px, #cdc4b5 5px, #b8b0a2 5px, #b8b0a2 9px); }
-.laval-tile-swatch[data-swatch="l-round"]  { background: radial-gradient(ellipse 50% 100% at 50% 50%, #ddd6c9 0%, #c0b5a3 80%, #aca192 100%); }
-.laval-tile-swatch[data-swatch="l-taper"]  { background: linear-gradient(180deg, #dbd3c5 0%, #c8bfb0 50%, #bfb5a6 100%); }
-.laval-tile-swatch[data-swatch="l-scroll"] { background: linear-gradient(135deg, #d0c7b8 0%, #a8987f 60%, #8a7a64 100%); }
-
-/* Shelf swatches */
-.laval-tile-swatch[data-swatch="s-classical"]  { background: linear-gradient(180deg, #e2dbd0 0%, #cdc4b6 60%, #bbb0a0 100%); }
-.laval-tile-swatch[data-swatch="s-mitered"]    { background: linear-gradient(160deg, #d8d0c2 0%, #c4bbb0 50%, #d8d0c2 100%); }
-.laval-tile-swatch[data-swatch="s-crown"]      { background: linear-gradient(135deg, #c8bba8 0%, #d6cfc3 35%, #c0b49e 100%); }
-.laval-tile-swatch[data-swatch="s-serpentine"] { background: radial-gradient(ellipse 120% 60% at 50% 50%, #ddd5c5 0%, #c3b8a5 60%, #b0a48f 100%); }
-
-/* Finish swatches — more differentiated since these are material choices */
-.laval-tile-swatch[data-swatch="f-limestone"]    {
-  background: linear-gradient(160deg, #d4cec6 0%, #c8c2b8 40%, #bfb9ae 100%);
-}
-.laval-tile-swatch[data-swatch="f-ivory"]        {
-  background: linear-gradient(160deg, #e8e2d8 0%, #ddd7cc 40%, #d1cbbf 100%);
-}
-.laval-tile-swatch[data-swatch="f-white-marble"] {
-  background:
-    linear-gradient(160deg, #eeeae3 0%, #e4ded6 100%),
-    repeating-linear-gradient(35deg, transparent 0px, transparent 8px,
-      rgba(180,170,160,0.18) 8px, rgba(180,170,160,0.18) 9px);
-}
-.laval-tile-swatch[data-swatch="f-veined"]       {
-  background:
-    linear-gradient(160deg, #d4cfc8 0%, #c0bab0 40%, #a8a298 100%);
-  position: relative;
-  overflow: hidden;
-}
-.laval-tile-swatch[data-swatch="f-veined"]::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(25deg, transparent 0px, transparent 12px,
-      rgba(60,48,36,0.25) 12px, rgba(60,48,36,0.25) 14px,
-      transparent 14px, transparent 22px);
-}
-.laval-tile-swatch[data-swatch="f-taupe"]        {
-  background: linear-gradient(160deg, #c8b99a 0%, #b8a888 40%, #a09076 100%);
-}
-
-/* =========================================================================
-   Phase 3 — Nested material editor
-   Rules are append-only; no Phase 1/2 rules are overwritten.
-   Source evidence details are in laval_component_map.json and
-   source_evidence_log.md — not repeated here.
-   ========================================================================= */
-
-/* -----------------------------------------------------------------------
-   Browser body: constrained when editor is mounted.
-   .laval-right-browser receives data-editor-active="true" via JS.
-   ----------------------------------------------------------------------- */
-.laval-right-browser[data-editor-active] .laval-browser-body {
-  flex: 0 0 auto;
-  max-height: 44%;
-  overflow-y: auto;
-}
-
-/* -----------------------------------------------------------------------
-   Editor slot: flex child of .laval-right-browser below the tile grid.
-   position:relative + inset:auto override Phase 1's position:absolute;inset:0
-   so the slot flows in the flex column rather than overlaying the tile grid.
-   ----------------------------------------------------------------------- */
-.laval-right-browser[data-editor-active] #laval-editor-slot {
-  position: relative;
-  inset: auto;
-  flex: 1 1 0;
-  min-height: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--laval-hairline-warm);
-}
-
-/* -----------------------------------------------------------------------
-   Nested editor shell
-   ----------------------------------------------------------------------- */
-.laval-nested-editor {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-.laval-nested-editor-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 18px 9px;
-  border-bottom: 1px solid var(--laval-hairline-warm);
-  flex-shrink: 0;
-}
-
-.laval-nested-editor-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex-shrink: 0;
-  margin-right: 4px;
-}
-
-.laval-nested-editor-title {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--laval-text-primary);
-  letter-spacing: 0.01em;
-}
-
-/* Tab strip — source-evidence-backed tab grammar */
-.laval-nested-editor-tabs {
-  display: flex;
-  gap: 2px;
-  flex: 1;
-}
-
-.laval-editor-tab {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 11px;
-  border-radius: var(--laval-radius-chip);
-  border: 1px solid transparent;
-  font-family: var(--laval-ui-sans);
-  font-weight: 400;
-  font-size: 11px;
-  color: var(--laval-text-secondary);
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-editor-tab:hover {
-  color: var(--laval-text-primary);
-  background: var(--laval-glass-shell-strong);
-}
-
-.laval-editor-tab.is-active {
-  color: var(--laval-text-active);
-  background: rgba(250, 247, 242, 0.10);
-  border-color: var(--laval-hairline-warm);
-}
-
-.laval-nested-editor-close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: var(--laval-radius-chip);
-  color: var(--laval-text-tertiary);
-  font-size: 15px;
-  line-height: 1;
-  flex-shrink: 0;
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-nested-editor-close:hover {
-  color: var(--laval-text-primary);
-  background: var(--laval-glass-shell-strong);
-}
-
-/* Body — scrollable chip or placeholder area.
-   Reduced vertical padding vs Phase 3 draft to improve fit at 900 px. */
-.laval-nested-editor-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 14px 4px;
-}
-
-.laval-nested-editor-body::-webkit-scrollbar { width: 4px; }
-.laval-nested-editor-body::-webkit-scrollbar-track { background: transparent; }
-.laval-nested-editor-body::-webkit-scrollbar-thumb {
-  background: var(--laval-hairline-warm);
-  border-radius: 2px;
-}
-
-.laval-nested-editor-note {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 10px;
-  line-height: 1.55;
-  color: var(--laval-text-tertiary);
-  margin: 0;
-  padding: 5px 18px 10px;
-  border-top: 1px solid var(--laval-hairline-warm);
-  flex-shrink: 0;
-}
-
-/* -----------------------------------------------------------------------
-   Finish chip grid — compact 2-column grid.
-   Compact chip grammar — details in laval_component_map.json.
-   ----------------------------------------------------------------------- */
-.laval-finish-chip-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 7px;
-}
-
-.laval-finish-chip {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 8px 8px;
-  background: var(--laval-glass-editor-soft);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-chip);
-  cursor: pointer;
-  width: 100%;
-  transition: background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft),
-              box-shadow var(--laval-t-select) var(--laval-ease-soft);
-}
-
-.laval-finish-chip:hover {
-  background: rgba(250, 247, 242, 0.08);
-  border-color: var(--laval-hairline-bright);
-}
-
-.laval-finish-chip.is-selected {
-  background: rgba(250, 247, 242, 0.12);
-  border-color: rgba(255, 247, 235, 0.45);
-  box-shadow: 0 0 0 1px rgba(255, 247, 235, 0.10);
-}
-
-.laval-finish-chip-swatch {
-  width: 34px;
-  height: 34px;
-  border-radius: 5px;
-  border: 1px solid var(--laval-hairline-warm);
-  flex-shrink: 0;
-}
-
-/* Chip swatches reuse Phase 2 data-swatch rules — no new declarations needed */
-
-.laval-finish-chip-label {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 1.3;
-  color: var(--laval-text-primary);
-  text-align: center;
-  letter-spacing: 0.005em;
-}
-
-/* -----------------------------------------------------------------------
-   Material Look placeholder — placeholder only, no real material engine
-   ----------------------------------------------------------------------- */
-.laval-material-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 20px 12px;
-  text-align: center;
-  min-height: 80px;
-}
-
-.laval-material-placeholder-label {
-  font-family: var(--laval-display-serif);
-  font-weight: 300;
-  font-style: italic;
-  font-size: 15px;
-  color: var(--laval-text-secondary);
-}
-
-.laval-material-placeholder-sub {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 11px;
-  color: var(--laval-text-tertiary);
-  line-height: 1.6;
-  max-width: 20ch;
-}
-
-/* -----------------------------------------------------------------------
-   Mount transition — within LAVAL spec v7 §G LAW-06 180–260 ms band
-   ----------------------------------------------------------------------- */
-#laval-editor-slot {
-  opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 240ms var(--laval-ease-soft),
-    transform 240ms var(--laval-ease-soft);
-}
-
-.laval-right-browser[data-editor-active] #laval-editor-slot {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* =========================================================================
-   Phase 4 — Connector layer activation
-   Rules are append-only; no Phase 1/2/3 rules are overwritten.
-   ========================================================================= */
-
-/* Fade-in when the hidden attribute is removed.
-   The layer already has pointer-events:none from Phase 1. */
-.laval-connector-layer:not([hidden]) {
-  animation: laval-conn-fadein 180ms var(--laval-ease-soft) both;
-}
-
-@keyframes laval-conn-fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-/* =========================================================================
-   Phase 5 — Constrained desktop responsive pass
-   Append-only. No Phase 1/2/3/4 rules rewritten.
-   Targets: ≤1280px compact desktop, ≤1100px minimum desktop.
-   Mobile below 768px is explicitly out of scope.
-   ========================================================================= */
-
-/* -------------------------------------------------------------------------
-   1280px — Compact desktop
-   Narrow panes and browser slightly; protect center stage.
-   ------------------------------------------------------------------------- */
-@media (max-width: 1280px) {
-
-  /* Allow shell to go below Phase 1's 1280px floor toward 1024px */
-  .laval-shell {
-    min-width: 1024px;
-  }
-
-  /* Left pane: slightly narrower + tighter padding */
-  .laval-left-pane {
-    width: 20%;
-    padding: 22px 18px 20px;
-    gap: 14px;
-  }
-
-  .laval-pane-title {
-    font-size: 26px;
-  }
-
-  .laval-pane-body {
-    font-size: 11.5px;
-  }
-
-  /* Step rail: track the left pane right edge */
-  .laval-step-rail {
-    left: 22.5%;
-  }
-
-  /* Protected stage: reclaim space from narrowed panes */
-  .laval-stage {
-    left: 26%;
-    right: 25%;
-  }
-
-  /* Right browser: slightly narrower */
-  .laval-right-browser {
-    width: 22%;
-  }
-
-  .laval-browser-header {
-    padding: 18px 18px 14px;
-  }
-
-  .laval-browser-title {
-    font-size: 22px;
-  }
-
-  /* Bottom dock: reduce min-width of state zone */
-  .laval-dock-state {
-    min-width: 120px;
-    padding: 4px 12px 4px 10px;
-  }
-
-  .laval-dock-state-text {
-    font-size: 13px;
-  }
-}
-
-/* -------------------------------------------------------------------------
-   1100px — Minimum desktop / wide tablet-landscape
-   Compress panes more aggressively; preserve all 10 zones.
-   No stacked cards. No mobile nav. No hamburger.
-   ------------------------------------------------------------------------- */
-@media (max-width: 1100px) {
-
-  /* Left pane: compact mode — narrower, tighter typography */
-  .laval-left-pane {
-    width: 18%;
-    padding: 16px 14px 16px;
-    gap: 10px;
-  }
-
-  .laval-pane-title {
-    font-size: 20px;
-    letter-spacing: 0;
-  }
-
-  .laval-pane-body {
-    font-size: 11px;
-    line-height: 1.65;
-    max-width: 100%;
-  }
-
-  .laval-pane-summary {
-    gap: 6px;
-  }
-
-  .laval-pane-summary-list {
-    gap: 5px;
-  }
-
-  .laval-pane-summary-item {
-    font-size: 10.5px;
-  }
-
-  /* Step rail: compact orbs */
-  .laval-step-rail {
-    left: 20.5%;
-    padding: 10px 8px;
-  }
-
-  .laval-step-rail-list {
-    gap: 10px;
-  }
-
-  .laval-step-orb {
-    width: 30px;
-    height: 30px;
-    font-size: 11px;
-  }
-
-  .laval-step-orb-tooltip {
-    left: 40px;
-    font-size: 10px;
-  }
-
-  /* Protected stage: narrower side margins free up more stage room */
-  .laval-stage {
-    left: 24%;
-    right: 23%;
-  }
-
-  /* Right browser: compact but readable */
-  .laval-right-browser {
-    width: 21%;
-  }
-
-  .laval-browser-header {
-    padding: 14px 14px 12px;
-  }
-
-  .laval-browser-title {
-    font-size: 20px;
-  }
-
-  .laval-browser-body {
-    padding: 12px 12px 16px;
-  }
-
-  .laval-tile {
-    padding: 10px 12px;
-    gap: 10px;
-  }
-
-  .laval-tile-swatch {
-    width: 44px;
-    height: 44px;
-  }
-
-  .laval-tile-label {
-    font-size: 14px;
-  }
-
-  .laval-tile-subtitle {
-    font-size: 10px;
-  }
-
-  /* Bottom dock: compact but horizontal */
-  .laval-bottom-dock {
-    padding: 6px 8px;
-  }
-
-  .laval-dock-state {
-    min-width: 100px;
-    padding: 4px 10px 4px 8px;
-  }
-
-  .laval-dock-state-eyebrow {
-    font-size: 7.5px;
-  }
-
-  .laval-dock-state-text {
-    font-size: 12px;
-  }
-
-  .laval-dock-token {
-    width: 20px;
-    height: 20px;
-    font-size: 9.5px;
-  }
-
-  .laval-dock-advance {
-    padding: 5px 11px 5px 13px;
-    font-size: 11.5px;
-    margin: 3px 3px 3px 10px;
-  }
-
-  /* Top governance — slightly tighter text */
-  .laval-top-nav-title {
-    font-size: 13px;
-  }
-
-  .laval-top-pill-label {
-    font-size: 12px;
-  }
-
-  /* Nested editor adjustments inside the compressed browser */
-  .laval-nested-editor-header {
-    padding: 9px 14px 8px;
-    gap: 8px;
-  }
-
-  .laval-nested-editor-title {
-    font-size: 12px;
-  }
-
-  .laval-editor-tab {
-    padding: 4px 9px;
-    font-size: 10.5px;
-  }
-
-  .laval-nested-editor-body {
-    padding: 8px 10px 4px;
-  }
-
-  .laval-finish-chip-grid {
-    gap: 6px;
-  }
-
-  .laval-finish-chip {
-    padding: 6px 6px 7px;
-    gap: 4px;
-  }
-
-  .laval-finish-chip-swatch {
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-  }
-
-  .laval-finish-chip-label {
-    font-size: 9.5px;
-  }
-
-  .laval-nested-editor-note {
-    font-size: 9.5px;
-    padding: 4px 14px 9px;
-  }
-
-  /* Browser body height allocation when editor is mounted */
-  .laval-right-browser[data-editor-active] .laval-browser-body {
-    max-height: 42%;
-  }
-}
-
-/* =========================================================================
-   Phase 6 — Review state and lead-capture form
-   Append-only. No Phase 1–5 rules rewritten.
-   ========================================================================= */
-
-/* -------------------------------------------------------------------------
-   Shell state: dimming existing zones when review is active
-   .laval-shell receives data-review-active="true" from JS
-   ------------------------------------------------------------------------- */
-.laval-shell[data-review-active] .laval-left-pane,
-.laval-shell[data-review-active] .laval-right-browser,
-.laval-shell[data-review-active] .laval-step-rail,
-.laval-shell[data-review-active] .laval-bottom-dock {
-  opacity: 0.22;
-  pointer-events: none;
-  transition: opacity 260ms var(--laval-ease-soft);
-}
-
-.laval-shell[data-review-active] .laval-world {
-  filter: brightness(0.75);
-  transition: filter 320ms var(--laval-ease-soft);
-}
-
-.laval-shell[data-review-active] .laval-stage {
-  opacity: 0.35;
-  pointer-events: none;
-  transition: opacity 260ms var(--laval-ease-soft);
-}
-
-/* Top nav stays fully visible in review state */
-.laval-shell[data-review-active] .laval-top-nav,
-.laval-shell[data-review-active] .laval-top-utility,
-.laval-shell[data-review-active] .laval-top-pill {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* -------------------------------------------------------------------------
-   Review sheet — centered glass panel inside the shell
-   ------------------------------------------------------------------------- */
-.laval-review-sheet {
-  position: absolute;
-  z-index: 8;
-  /* Centered in the protected-stage area, leaving top nav visible */
-  left: 8%;
-  right: 8%;
-  top: 11%;
-  bottom: 5%;
-  display: flex;
-  flex-direction: column;
-  background: rgba(26, 22, 16, 0.92);
-  border: 1px solid var(--laval-hairline-bright);
-  border-radius: var(--laval-radius-panel);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  overflow: hidden;
-  /* Mount animation */
-  animation: laval-review-mount 300ms var(--laval-ease-soft) both;
-}
-
-.laval-review-sheet[hidden] { display: none; }
-
-@keyframes laval-review-mount {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* -------------------------------------------------------------------------
-   Review header
-   ------------------------------------------------------------------------- */
-.laval-review-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 22px 32px 18px;
-  border-bottom: 1px solid var(--laval-hairline-warm);
-  flex-shrink: 0;
-}
-
-.laval-review-header-text {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.laval-review-title {
-  font-family: var(--laval-display-serif);
-  font-weight: 300;
-  font-size: 28px;
-  line-height: 1;
-  margin: 0;
-  color: var(--laval-text-primary);
-  letter-spacing: 0.005em;
-}
-
-.laval-review-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 14px 7px 10px;
-  border-radius: var(--laval-radius-chip);
-  border: 1px solid var(--laval-hairline-warm);
-  background: var(--laval-glass-editor-soft);
-  color: var(--laval-text-secondary);
-  font-family: var(--laval-ui-sans);
-  font-weight: 400;
-  font-size: 11.5px;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-review-back:hover {
-  color: var(--laval-text-active);
-  background: var(--laval-glass-shell-strong);
-  border-color: var(--laval-hairline-bright);
-}
-
-/* -------------------------------------------------------------------------
-   Review body: summary on left, form on right
-   ------------------------------------------------------------------------- */
-.laval-review-body {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.laval-review-summary {
-  flex: 0 0 38%;
-  padding: 28px 28px 24px;
-  border-right: 1px solid var(--laval-hairline-warm);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-}
-
-.laval-review-divider {
-  display: none; /* used in narrow layouts only */
-}
-
-.laval-review-form-wrap {
-  flex: 1;
-  padding: 28px 32px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  overflow-y: auto;
-}
-
-.laval-review-section-title {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 16px;
-  margin: 0;
-  color: var(--laval-text-primary);
-  letter-spacing: 0.01em;
-}
-
-/* -------------------------------------------------------------------------
-   Selection summary list
-   ------------------------------------------------------------------------- */
-.laval-review-summary-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.laval-review-summary-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid var(--laval-hairline-warm);
-  font-size: 12.5px;
-}
-
-.laval-review-summary-item:last-child { border-bottom: 0; }
-
-.laval-review-summary-key {
-  font-family: var(--laval-ui-sans);
-  font-weight: 400;
-  color: var(--laval-text-tertiary);
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
-}
-
-.laval-review-summary-val {
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--laval-text-primary);
-  text-align: right;
-}
-
-.laval-review-summary-val.is-empty {
-  color: var(--laval-text-tertiary);
-  font-style: italic;
-  font-weight: 300;
-}
-
-.laval-review-note {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 10.5px;
-  line-height: 1.65;
-  color: var(--laval-text-tertiary);
-  margin: 0;
-}
-
-/* -------------------------------------------------------------------------
-   Request Pricing form
-   ------------------------------------------------------------------------- */
-.laval-review-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.laval-review-form[hidden] { display: none; }
-
-.laval-form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.laval-form-label {
-  font-family: var(--laval-ui-sans);
-  font-weight: 500;
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--laval-text-tertiary);
-}
-
-.laval-form-req {
-  color: rgba(255, 207, 160, 0.65);
-  margin-left: 2px;
-}
-
-.laval-form-opt {
-  font-weight: 300;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--laval-text-tertiary);
-  opacity: 0.7;
-}
-
-.laval-form-input {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 13px;
-  color: var(--laval-text-primary);
-  background: rgba(250, 247, 242, 0.04);
-  border: 1px solid var(--laval-hairline-warm);
-  border-radius: var(--laval-radius-chip);
-  padding: 10px 14px;
-  outline: none;
-  caret-color: rgba(255, 247, 235, 0.7);
-  transition: border-color var(--laval-t-hover) var(--laval-ease-soft),
-              background var(--laval-t-hover) var(--laval-ease-soft);
-  resize: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.laval-form-input::placeholder {
-  color: var(--laval-text-disabled);
-  font-weight: 300;
-}
-
-.laval-form-input:focus {
-  border-color: rgba(255, 247, 235, 0.28);
-  background: rgba(250, 247, 242, 0.07);
-}
-
-.laval-form-input:invalid:not(:placeholder-shown) {
-  border-color: rgba(200, 120, 80, 0.40);
-}
-
-.laval-form-textarea {
-  line-height: 1.65;
-}
-
-.laval-form-req-note {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 10px;
-  color: var(--laval-text-tertiary);
-  margin: -4px 0 0;
-}
-
-.laval-form-submit {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 11px 22px;
-  border-radius: var(--laval-radius-chip);
-  border: 1px solid var(--laval-hairline-bright);
-  background: rgba(200, 185, 155, 0.22);
-  color: var(--laval-text-active);
-  font-family: var(--laval-display-serif);
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  align-self: flex-start;
-  transition: background var(--laval-t-hover) var(--laval-ease-soft),
-              border-color var(--laval-t-hover) var(--laval-ease-soft);
-}
-
-.laval-form-submit:hover {
-  background: rgba(200, 185, 155, 0.32);
-  border-color: rgba(255, 247, 235, 0.50);
-}
-
-/* -------------------------------------------------------------------------
-   Confirmation state (shown after submit, hides form)
-   ------------------------------------------------------------------------- */
-.laval-review-confirm {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 20px 0 4px;
-  border-top: 1px solid var(--laval-hairline-warm);
-  margin-top: 8px;
-}
-
-.laval-review-confirm[hidden] { display: none; }
-
-.laval-review-confirm-text {
-  font-family: var(--laval-display-serif);
-  font-weight: 300;
-  font-style: italic;
-  font-size: 18px;
-  color: var(--laval-text-primary);
-  margin: 0;
-}
-
-.laval-review-confirm-sub {
-  font-family: var(--laval-ui-sans);
-  font-weight: 300;
-  font-size: 11.5px;
-  color: var(--laval-text-secondary);
-  margin: 0;
-}
-
-/* -------------------------------------------------------------------------
-   Responsive adjustments for review sheet
-   ------------------------------------------------------------------------- */
-@media (max-width: 1280px) {
-  .laval-review-sheet {
-    left: 6%;
-    right: 6%;
-  }
-
-  .laval-review-summary {
-    flex: 0 0 36%;
-    padding: 22px 22px 20px;
-  }
-
-  .laval-review-form-wrap {
-    padding: 22px 26px 20px;
-  }
-}
-
-@media (max-width: 1100px) {
-  .laval-review-sheet {
-    left: 4%;
-    right: 4%;
-    top: 10%;
-    bottom: 4%;
-  }
-
-  /* Stack summary above form at narrow widths */
-  .laval-review-body {
-    flex-direction: column;
-    overflow-y: auto;
-  }
-
-  .laval-review-summary {
-    flex: none;
-    border-right: none;
-    border-bottom: 1px solid var(--laval-hairline-warm);
-    padding: 18px 20px 16px;
-    gap: 14px;
-    overflow-y: visible;
-  }
-
-  .laval-review-form-wrap {
-    flex: none;
-    padding: 18px 20px 20px;
-    overflow-y: visible;
-  }
-
-  .laval-review-title {
-    font-size: 22px;
-  }
-
-  .laval-review-summary-item {
-    font-size: 11.5px;
-    padding: 9px 0;
-  }
-
-  .laval-review-summary-val {
-    font-size: 13px;
-  }
-}
-
-/* =========================================================================
-   Phase 7 — Accessibility hardening
-   --------------------------------------------------------------------------
-   Adds visible :focus-visible affordances for every major interactive
-   control in the shell. The token is a 1px warm-ivory outline plus a thin
-   outer parchment halo with a 2px offset. It is visible to keyboard users
-   without making the shell feel like a default-styled web form. Mouse
-   clicks still receive no outline because :focus-visible only triggers
-   for keyboard navigation in modern browsers.
-
-   References:
-     LAVAL_CLAUDE_98_README §13 (acceptable focus style law)
-     A11Y-001 / A11Y-002 / A11Y-003 / A11Y-004 in qa/feature_list.json
-   ========================================================================= */
-
-:root {
-  --laval-focus-ring:        rgba(255, 247, 235, 0.85);
-  --laval-focus-halo:        rgba(255, 247, 235, 0.18);
-  --laval-focus-offset:      2px;
-  --laval-focus-ring-width:  1px;
-}
-
-/* Universal default — anything keyboard-focused gets a quiet warm outline.
-   Specific controls below override the offset where geometry needs it. */
-.laval-shell *:focus { outline: none; }
-
-.laval-shell *:focus-visible {
-  outline: var(--laval-focus-ring-width) solid var(--laval-focus-ring);
-  outline-offset: var(--laval-focus-offset);
-  box-shadow: 0 0 0 3px var(--laval-focus-halo);
-  border-radius: 4px;
-}
-
-/* Top-left back button + top utility buttons — square hit areas.
-   Use 3px offset so the halo sits clear of glyphs without crowding the
-   adjacent capsule edge. */
-.laval-top-nav-back:focus-visible,
-.laval-utility-btn:not([disabled]):focus-visible {
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-
-/* Top-right Request Pricing pill — pill geometry, larger radius. */
-.laval-top-pill:not([disabled]):focus-visible {
-  outline-offset: 3px;
-  border-radius: 999px;
-}
-
-/* Step rail orbs — circle controls, halo follows the orb. */
-.laval-step-orb:focus-visible {
-  outline: var(--laval-focus-ring-width) solid var(--laval-focus-ring);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 4px var(--laval-focus-halo);
-  border-radius: 50%;
-}
-
-/* Bottom dock numbered tokens — small chip controls. */
-.laval-dock-token:focus-visible {
-  outline-offset: 3px;
-  border-radius: 6px;
-  box-shadow: 0 0 0 3px var(--laval-focus-halo);
-}
-
-/* Continue / Review pill in bottom dock. */
-.laval-dock-advance:not([disabled]):focus-visible {
-  outline-offset: 3px;
-  border-radius: 999px;
-  box-shadow: 0 0 0 3px var(--laval-focus-halo);
-}
-
-/* Right-browser option tiles — rounded rectangle, bigger halo. */
-.laval-tile:focus-visible {
-  outline: var(--laval-focus-ring-width) solid var(--laval-focus-ring);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 4px var(--laval-focus-halo);
-  border-radius: var(--laval-radius-tile, 14px);
-}
-
-/* Right-browser header tools (Filter, More) — small icon buttons. */
-.laval-browser-tool:not([disabled]):focus-visible {
-  outline-offset: 2px;
-  border-radius: 6px;
-}
-
-/* Nested editor tab strip + close button + finish chips. */
-.laval-editor-tab:focus-visible {
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
-.laval-nested-editor-close:focus-visible {
-  outline-offset: 3px;
-  border-radius: 50%;
-}
-
-.laval-finish-chip:focus-visible {
-  outline: var(--laval-focus-ring-width) solid var(--laval-focus-ring);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px var(--laval-focus-halo);
-  border-radius: var(--laval-radius-chip, 10px);
-}
-
-/* Review sheet controls. */
-.laval-review-back:focus-visible {
-  outline-offset: 3px;
-  border-radius: 999px;
-}
-
-.laval-form-input:focus-visible {
-  /* Form inputs already have a quiet focus state from the
-     .laval-form-input:focus rule above; reinforce only for keyboard. */
-  outline: var(--laval-focus-ring-width) solid var(--laval-focus-ring);
-  outline-offset: 1px;
-  box-shadow: 0 0 0 3px var(--laval-focus-halo);
-  border-color: rgba(255, 247, 235, 0.55);
-}
-
-.laval-form-submit:focus-visible {
-  outline-offset: 3px;
-  border-radius: 999px;
-  box-shadow: 0 0 0 3px var(--laval-focus-halo);
-}
-
-/* =========================================================================
-   Phase 7 — Reduced-motion hardening
-   --------------------------------------------------------------------------
-   The Phase 1 prefers-reduced-motion block (line 936) already collapses
-   transition/animation duration to 0.01ms. Phase 7 adds explicit guards
-   for any animated property a user with motion sensitivity would notice:
-   the connector glow filter and any future scroll-behavior. We also flag
-   the connector orb for non-animated rendering by suppressing the SVG
-   blur filter under reduced motion (filter:none) so the orb stays crisp
-   instead of pulsing.
-   ========================================================================= */
-@media (prefers-reduced-motion: reduce) {
-  .laval-connector-layer * {
-    /* Suppress the soft glow filter under reduced-motion so the connector
-       reads as a static mark rather than an animated trail. */
-    filter: none !important;
-  }
-  html { scroll-behavior: auto; }
-}
-
-
-/* =========================================================================
-   Pass 2 — Layered 2D mantel preview mount
-   ------------------------------------------------------------------------- */
-.laval-mantel-mount {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
-}
-.laval-mantel-mount .laval-mantel {
-  width: auto;
-  height: 100%;
-  max-height: 70vh;
-  max-width: 100%;
-  display: block;
-  filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
-  transition: filter 220ms ease;
-}
-@media (prefers-reduced-motion: reduce) {
-  .laval-mantel-mount .laval-mantel { transition: none; }
-}
-
-/* =========================================================================
-   Real image asset pass — Mantle Familes.zip integration
-   --------------------------------------------------------------------------
-   The stage now renders fixed-canvas 2400×1800 transparent PNG layers.
-   Selector controls may show 1024×1024 icon assets instead of CSS swatches.
-   ========================================================================= */
-.laval-mantel-mount .laval-asset-stage {
-  position: relative;
-  width: min(100%, calc(70vh * 1.3333));
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  display: block;
-  isolation: isolate;
-  filter: drop-shadow(0 34px 42px rgba(0, 0, 0, 0.56));
-}
-.laval-asset-layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center center;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-.laval-tile-media,
-.laval-finish-chip-media {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--laval-hairline-warm);
-  background: rgba(250, 247, 242, 0.08);
-}
-.laval-tile-media {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--laval-radius-chip);
-}
-.laval-tile-image,
-.laval-finish-chip-image {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center center;
-}
-.laval-tile-media .laval-tile-swatch,
-.laval-finish-chip-media .laval-finish-chip-swatch {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: 0;
-}
-.laval-finish-chip-media {
-  width: 46px;
-  height: 46px;
-  border-radius: 8px;
-}
-.laval-finish-chip-label { max-width: 11ch; }
-@media (max-width: 1180px) {
-  .laval-tile-media { width: 50px; height: 50px; }
-  .laval-mantel-mount .laval-asset-stage { width: min(100%, calc(62vh * 1.3333)); }
-}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LAVAL — Mantel Configurator</title>
+  <meta name="description" content="LAVAL mantel configurator — Premium static configurator prototype.">
+  <meta name="robots" content="noindex,nofollow">
+
+  <!--
+    Typography law: Cormorant Garamond for editorial hierarchy + Inter for UI.
+    External font loading is attempted via Google Fonts. If unreachable, the
+    proper font stacks in styles.css fall through to system serif/sans.
+    No font files are bundled with the prototype.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300&family=Inter:wght@300;400;500&display=swap">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!--
+    LavalConfiguratorShell — root viewport. Every shell zone is a direct
+    child of .laval-shell so anchors are screen-space, not page-flow.
+    Subject and connector layers sit beneath HUD; HUD sits above stage.
+  -->
+  <div class="laval-shell" id="laval-shell" data-shell-state="wide">
+
+    <!-- World shell: deep warm charcoal field, fog, floor glow -->
+    <div class="laval-world" aria-hidden="true">
+      <div class="laval-world-floor"></div>
+      <div class="laval-world-fog"></div>
+      <div class="laval-world-vignette"></div>
+    </div>
+
+    <!--
+      Zone 6 — ProtectedMantelStage
+      Center stage holds the staged-2D mantel composition. No HUD zone may
+      invade this region per LAVAL Forensic Spec v7 §C OBJ-11.
+      Phase 1 ships an inline SVG silhouette, not a generic rectangle.
+    -->
+    <main class="laval-stage" aria-label="Mantel preview stage">
+      <figure class="laval-stage-figure"
+              id="laval-stage-figure"
+              data-family="tailored-classical"
+              data-profile=""
+              data-leg=""
+              data-shelf=""
+              data-finish="">
+        <!--
+          Layered 2D mantel preview. Inline SVG is regenerated by
+          renderMantelPreview() on every selection change. data-* attributes
+          on the figure mirror the active state so CSS can theme overlays.
+        -->
+        <div class="laval-mantel-mount" id="laval-mantel-mount" role="img"
+             aria-label="Mantel preview"></div>
+        <figcaption class="laval-stage-caption">
+          <span class="laval-stage-caption-eyebrow">Preview</span>
+          <span class="laval-stage-caption-text" id="laval-stage-caption-text">Tailored Classical · Select options to refine</span>
+        </figcaption>
+      </figure>
+    </main>
+
+    <!--
+      Zone 1 — TopNavCluster
+      Quiet upper-left back/location/title cluster on the top governance band.
+    -->
+    <nav class="laval-top-nav" aria-label="Workspace breadcrumb">
+      <button class="laval-top-nav-back" type="button" aria-label="Back to workspace">
+        <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M10 3 L5 8 L10 13" fill="none" stroke="currentColor"
+                stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Workspace</span>
+      </button>
+      <span class="laval-top-nav-divider" aria-hidden="true">·</span>
+      <span class="laval-top-nav-title">Mantel Configurator</span>
+    </nav>
+
+    <!--
+      Zone 2 — TopUtilityCapsule
+      Top-center utility cluster: Undo / Redo / Reset / Save Draft.
+      Phase 1: static, non-functional (no state to undo yet).
+    -->
+    <div class="laval-top-utility" role="toolbar" aria-label="Editing utilities">
+      <button class="laval-utility-btn" type="button" aria-label="Undo" disabled>
+        <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 8 H11 a3 3 0 0 1 0 6 H7 M4 8 L7 5 M4 8 L7 11"
+                fill="none" stroke="currentColor" stroke-width="1.25"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="laval-utility-btn" type="button" aria-label="Redo" disabled>
+        <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M12 8 H5 a3 3 0 0 0 0 6 H9 M12 8 L9 5 M12 8 L9 11"
+                fill="none" stroke="currentColor" stroke-width="1.25"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <span class="laval-utility-sep" aria-hidden="true"></span>
+      <button class="laval-utility-btn" type="button" aria-label="Reset selection" disabled>
+        <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 8 a5 5 0 1 0 1.5 -3.5 M3 3 V5 H5"
+                fill="none" stroke="currentColor" stroke-width="1.25"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="laval-utility-btn" type="button" aria-label="Save draft" disabled>
+        <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 3 H11 L13 5 V13 H3 Z M5 3 V7 H10 V3 M5 13 V10 H11 V13"
+                fill="none" stroke="currentColor" stroke-width="1.25"
+                stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!--
+      Zone 3 — TopRightReviewPill
+      Brighter accent pill on the upper-right; same glass family.
+      Phase 1: visual only, non-functional.
+    -->
+    <button class="laval-top-pill" type="button" disabled>
+      <span class="laval-top-pill-label">Request Pricing</span>
+      <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+        <path d="M5 3 L10 8 L5 13" fill="none" stroke="currentColor"
+              stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <!--
+      Zone 4 — LeftSemanticPane
+      Tall left-side explanatory pane. Phase 1: static summary text only.
+    -->
+    <aside class="laval-left-pane" aria-label="Step context">
+      <div class="laval-pane-header">
+        <span class="laval-eyebrow" id="laval-pane-eyebrow">Step 01</span>
+        <h1 class="laval-pane-title" id="laval-pane-title">Mantel Family</h1>
+      </div>
+      <p class="laval-pane-body" id="laval-pane-helper">
+        Choose the architectural family that anchors the mantel. The family
+        sets the silhouette grammar; later steps refine profile, legs, shelf,
+        and stone finish without restyling the whole composition.
+      </p>
+
+      <div class="laval-pane-divider" aria-hidden="true"></div>
+
+      <div class="laval-pane-summary">
+        <span class="laval-eyebrow">Selection so far</span>
+        <ul class="laval-pane-summary-list">
+          <li class="laval-pane-summary-item is-empty">
+            <span class="laval-pane-summary-key">Family</span>
+            <span class="laval-pane-summary-val">—</span>
+          </li>
+          <li class="laval-pane-summary-item is-empty">
+            <span class="laval-pane-summary-key">Profile</span>
+            <span class="laval-pane-summary-val">—</span>
+          </li>
+          <li class="laval-pane-summary-item is-empty">
+            <span class="laval-pane-summary-key">Leg</span>
+            <span class="laval-pane-summary-val">—</span>
+          </li>
+          <li class="laval-pane-summary-item is-empty">
+            <span class="laval-pane-summary-key">Shelf</span>
+            <span class="laval-pane-summary-val">—</span>
+          </li>
+          <li class="laval-pane-summary-item is-empty">
+            <span class="laval-pane-summary-key">Finish</span>
+            <span class="laval-pane-summary-val">—</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!--
+      Zone 5 — MantelStepRail
+      Near-subject vertical rail of five orbs. Array-driven from
+      prototype/data/options.js via app.js.
+    -->
+    <nav class="laval-step-rail" aria-label="Configurator steps">
+      <ul class="laval-step-rail-list" id="laval-step-rail-list">
+        <!-- StepRailOrb children rendered by app.js from STEPS -->
+      </ul>
+    </nav>
+
+    <!--
+      Zone 7 — RightOptionBrowser
+      Primary right-side option browsing region with a header utility row
+      and a tile grid body. Phase 1 ships static placeholder family tiles.
+
+      Zone 8 — Nested Editor Envelope Slot
+      Empty mount point inside the browser. Phase 1 renders nothing here.
+    -->
+    <aside class="laval-right-browser" aria-label="Options">
+      <header class="laval-browser-header">
+        <div class="laval-browser-header-titles">
+          <span class="laval-eyebrow">Options</span>
+          <h2 class="laval-browser-title" id="laval-browser-title">Family</h2>
+        </div>
+        <div class="laval-browser-header-tools" role="toolbar" aria-label="Browser tools">
+          <button class="laval-browser-tool" type="button" aria-label="Filter" disabled>
+            <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 4 H13 L10 9 V13 L6 12 V9 Z"
+                    fill="none" stroke="currentColor" stroke-width="1.25"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button class="laval-browser-tool" type="button" aria-label="More" disabled>
+            <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+              <circle cx="4" cy="8" r="1" fill="currentColor"/>
+              <circle cx="8" cy="8" r="1" fill="currentColor"/>
+              <circle cx="12" cy="8" r="1" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="laval-browser-body">
+        <ul class="laval-browser-grid" id="laval-browser-grid">
+          <!-- FAMILY_TILES rendered by app.js -->
+        </ul>
+      </div>
+
+      <!-- Nested editor envelope slot — empty in Phase 1 -->
+      <div class="laval-editor-slot"
+           id="laval-editor-slot"
+           data-mounted="false"
+           hidden
+           aria-hidden="true">
+      </div>
+    </aside>
+
+    <!--
+      Zone 9 — BottomWidgetDock
+      Three grouped zones: descriptive state · compact widget dock · advance.
+      Distinct widgets, hairline separators, low-profile.
+    -->
+    <div class="laval-bottom-dock" role="toolbar" aria-label="Step progress and advance">
+      <div class="laval-dock-state">
+        <span class="laval-dock-state-eyebrow">Step</span>
+        <span class="laval-dock-state-text" id="laval-dock-step-text">01 of 05 · Family</span>
+      </div>
+
+      <span class="laval-dock-sep" aria-hidden="true"></span>
+
+      <div class="laval-dock-widgets" id="laval-dock-widgets">
+        <!-- StepRailOrb micro-tokens rendered by app.js -->
+      </div>
+
+      <span class="laval-dock-sep" aria-hidden="true"></span>
+
+      <button class="laval-dock-advance" type="button" disabled>
+        <span>Continue</span>
+        <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M5 3 L10 8 L5 13" fill="none" stroke="currentColor"
+                stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!--
+      Zone 10 — FocusConnectorLayer
+      Empty overlay layer; hidden by default. Phase 4 activates the connector
+      line and orb-node guidance subsystem. Evidence and mapping details are
+      in source_evidence_log.md and laval_component_map.json.
+    -->
+    <svg class="laval-connector-layer"
+         id="laval-connector-layer"
+         viewBox="0 0 100 100"
+         preserveAspectRatio="none"
+         aria-hidden="true"
+         hidden>
+      <!-- Phase 4 will draw connector lines + orb nodes here -->
+    </svg>
+
+    <!-- ===================================================================
+      Phase 6 — Review state / lead-capture sheet
+      Shown when user clicks "Review" on Step 5 with a Finish selection.
+      Remains inside the shell — not a new page, not a full-screen modal.
+      Top nav stays visible; shell identity preserved.
+    =================================================================== -->
+    <div class="laval-review-sheet"
+         id="laval-review-sheet"
+         role="dialog"
+         aria-modal="false"
+         aria-label="Review selection and request pricing"
+         hidden>
+
+      <!-- Review header -->
+      <div class="laval-review-header">
+        <div class="laval-review-header-text">
+          <span class="laval-eyebrow">Step 06</span>
+          <h2 class="laval-review-title">Review &amp; Request Pricing</h2>
+        </div>
+        <button class="laval-review-back" id="laval-review-back" type="button">
+          <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M10 3 L5 8 L10 13" fill="none" stroke="currentColor"
+                  stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Back to Configurator</span>
+        </button>
+      </div>
+
+      <!-- Review body: summary + form side by side -->
+      <div class="laval-review-body">
+
+        <!-- Selection summary panel -->
+        <div class="laval-review-summary">
+          <h3 class="laval-review-section-title">Your Selection</h3>
+          <ul class="laval-review-summary-list" id="laval-review-summary-list">
+            <!-- Populated by activateReviewState() -->
+          </ul>
+          <p class="laval-review-note">
+            This is an architectural preview. Final specifications and
+            stone availability are confirmed by our studio.
+          </p>
+        </div>
+
+        <!-- Divider -->
+        <div class="laval-review-divider" aria-hidden="true"></div>
+
+        <!-- Request Pricing form -->
+        <div class="laval-review-form-wrap">
+          <h3 class="laval-review-section-title">Request Pricing</h3>
+
+          <!-- Confirmation (shown after submit) -->
+          <div class="laval-review-confirm" id="laval-review-confirm" hidden>
+            <p class="laval-review-confirm-text">
+              Request received. We'll be in touch.
+            </p>
+            <p class="laval-review-confirm-sub">
+              Our studio will contact you within two business days.
+            </p>
+          </div>
+
+          <!-- Form -->
+          <form class="laval-review-form" id="laval-review-form" novalidate>
+            <div class="laval-form-field">
+              <label class="laval-form-label" for="laval-field-name">Name <span class="laval-form-req" aria-hidden="true">*</span></label>
+              <input
+                class="laval-form-input"
+                id="laval-field-name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                required
+                placeholder="Your full name"
+                aria-required="true"/>
+            </div>
+            <div class="laval-form-field">
+              <label class="laval-form-label" for="laval-field-email">Email <span class="laval-form-req" aria-hidden="true">*</span></label>
+              <input
+                class="laval-form-input"
+                id="laval-field-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                placeholder="your@email.com"
+                aria-required="true"/>
+            </div>
+            <div class="laval-form-field">
+              <label class="laval-form-label" for="laval-field-phone">Phone <span class="laval-form-opt">(optional)</span></label>
+              <input
+                class="laval-form-input"
+                id="laval-field-phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                placeholder="(optional)"/>
+            </div>
+            <div class="laval-form-field">
+              <label class="laval-form-label" for="laval-field-message">Message <span class="laval-form-opt">(optional)</span></label>
+              <textarea
+                class="laval-form-input laval-form-textarea"
+                id="laval-field-message"
+                name="message"
+                rows="3"
+                placeholder="Installation timeline, project context, or questions..."></textarea>
+            </div>
+            <p class="laval-form-req-note"><span aria-hidden="true">*</span> Required fields</p>
+            <button class="laval-form-submit" id="laval-form-submit" type="submit">
+              Request Pricing
+            </button>
+          </form>
+        </div>
+
+      </div><!-- /.laval-review-body -->
+    </div><!-- /#laval-review-sheet -->
+
+  </div><!-- /.laval-shell -->
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
