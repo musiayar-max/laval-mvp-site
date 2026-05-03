@@ -1,136 +1,181 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LAVAL — Configurator</title>
-  <meta name="description" content="Build a disciplined mantel direction with the LAVAL staged configurator.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand-mark" href="index.html">
-        <div class="brand-name">LAVAL</div>
-        <div class="brand-script">Stone Maison</div>
-      </a>
-      <nav class="nav-links">
-        <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" aria-current="page" href="configurator.html">Configurator</a>
-        <a class="nav-link" href="trade.html">Trade</a>
-        <a class="nav-link" href="portfolio.html">Portfolio</a>
-        <a class="btn btn-secondary" href="contact.html">Request Pricing</a>
-      </nav>
-    </div>
-  </header>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LAVAL — Mantel Configurator</title>
+  <meta name="description" content="Compose a LAVAL natural-stone mantel. Family, profile, leg, shelf, finish — a quiet editor for a permanent object." />
+  <meta name="theme-color" content="#171512" />
 
-  <main>
-    <section class="page-hero">
-      <div class="container">
-        <div class="overline">Staged configurator</div>
-        <h1 class="page-title">Choose a family. Then refine the language.</h1>
-        <p class="lead">The configurator is intentionally constrained at launch. It is designed to help users express taste, structure leads, and move toward a responsible quote. The launch build uses real reference imagery and honest representative previews rather than fake renders.</p>
+  <!-- Typography: Cormorant Garamond (display) + Inter (UI). Non-negotiable. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet order matters: tokens first, then shell, then internal zones -->
+  <link rel="stylesheet" href="./assets/css/tokens.css" />
+  <link rel="stylesheet" href="./assets/css/shell.css" />
+  <link rel="stylesheet" href="./assets/css/stage.css" />
+  <link rel="stylesheet" href="./assets/css/browser.css" />
+</head>
+<body class="is-configurator">
+
+  <!--
+    LAVAL Creator Shell
+    ---------------------------------------------------------------------
+    This is not a page with sections. It is a persistent editor shell.
+    Zones (forensic spec):
+      .top       — top chrome (left nav / center utility capsule / right accent pill)
+      .pane      — left semantic pane (eyebrow, title, prose, live summary)
+      .stage     — protected subject zone (mantel + connectors)
+      .rail      — near-subject category rail (orbs, one per step)
+      .browser   — right browser (circle-first option rows)
+      .sheet     — nested browser sheet (Request Pricing form lives here, not a modal)
+      .hud       — bottom floating dock (state / tiles / nav)
+    State lives in /assets/js/state.js. Render is driven by /assets/js/configurator.js.
+  -->
+  <main class="shell" aria-label="LAVAL mantel configurator">
+
+    <!-- ===== TOP CHROME ===== -->
+    <header class="top" role="banner">
+      <div class="top__left">
+        <a class="wordmark" href="./index.html" aria-label="LAVAL home">LAVAL</a>
+        <span class="crumb" data-top="crumb">Configurator</span>
       </div>
+
+      <div class="top__center" aria-live="polite">
+        <span class="cap-label">Step</span>
+        <span class="cap-divider"></span>
+        <span class="cap-step" data-top="step">1 &nbsp;&middot;&nbsp; Family</span>
+      </div>
+
+      <div class="top__right">
+        <button type="button" class="pill-ghost" data-action="reset" title="Start over">Reset</button>
+        <span class="pill-accent" data-top="pill">Charleston, SC</span>
+      </div>
+    </header>
+
+    <!-- ===== LEFT SEMANTIC PANE ===== -->
+    <aside class="pane" aria-label="Step context">
+      <div class="pane__eyebrow" data-pane="eyebrow">Composition</div>
+      <h1 class="pane__title" data-pane="title">Choose a family.</h1>
+      <div class="pane__rule" aria-hidden="true"></div>
+      <div class="pane__body" data-pane="body">
+        <!-- Populated by configurator.js. Plain prose, editorial voice. -->
+      </div>
+
+      <div class="pane__summary" aria-label="Current selections">
+        <ul data-pane="summary">
+          <!-- Live summary rows injected here as each step is committed. -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- ===== PROTECTED STAGE ===== -->
+    <section class="stage" data-framing="wide" aria-label="Mantel preview">
+      <div class="stage__world" aria-hidden="true"></div>
+      <div class="stage__floor-glow" aria-hidden="true"></div>
+      <div class="stage__fog" aria-hidden="true"></div>
+      <div class="stage__vignette" aria-hidden="true"></div>
+
+      <!-- The subject is the only thing that reframes. Camera work = transform on this node. -->
+      <div class="stage__subject">
+        <div class="mantel" role="img" aria-label="Mantel preview">
+          <!-- mantel-svg.js mounts the procedural SVG here and morphs it live. -->
+        </div>
+      </div>
+
+      <!-- Connector overlay (fine ivory lines from selected option to mantel locus) -->
+      <svg class="connectors" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
+
+      <div class="stage__hint" aria-hidden="true">Your stone, composed.</div>
     </section>
 
-    <section class="section">
-      <div class="container config-shell">
-        <div>
-          <div class="stepper">
-            <span class="step-chip is-complete">1. Family</span>
-            <span class="step-chip">2. Profile</span>
-            <span class="step-chip">3. Leg</span>
-            <span class="step-chip">4. Shelf</span>
-            <span class="step-chip">5. Finish</span>
-          </div>
+    <!-- ===== NEAR-SUBJECT CATEGORY RAIL ===== -->
+    <nav class="rail" aria-label="Configuration steps">
+      <button class="orb" type="button" data-step="family">
+        <span class="orb__inner">1</span>
+        <span class="orb__label">Family</span>
+      </button>
+      <button class="orb" type="button" data-step="profile">
+        <span class="orb__inner">2</span>
+        <span class="orb__label">Profile</span>
+      </button>
+      <button class="orb" type="button" data-step="leg">
+        <span class="orb__inner">3</span>
+        <span class="orb__label">Leg</span>
+      </button>
+      <button class="orb" type="button" data-step="shelf">
+        <span class="orb__inner">4</span>
+        <span class="orb__label">Shelf</span>
+      </button>
+      <button class="orb" type="button" data-step="finish">
+        <span class="orb__inner">5</span>
+        <span class="orb__label">Finish</span>
+      </button>
+      <button class="orb" type="button" data-step="review">
+        <span class="orb__inner">6</span>
+        <span class="orb__label">Review</span>
+      </button>
+    </nav>
 
-          <section class="section" style="padding-top:0;">
-            <div class="section-head">
-              <div>
-                <div class="overline">Step 1</div>
-                <h2 class="section-title">Family</h2>
-              </div>
-              <p class="section-subtitle">Choose the overall language first. Everything else is constrained by this decision.</p>
-            </div>
-            <div class="grid grid-3" data-family-grid></div>
-          </section>
+    <!-- ===== RIGHT BROWSER ===== -->
+    <aside class="browser" aria-label="Option browser">
+      <header class="browser__header">
+        <div class="browser__eyebrow" data-browser="eyebrow">Family</div>
+        <div class="browser__titleRow">
+          <h2 class="browser__title" data-browser="title">Choose a family</h2>
+          <span class="browser__count" data-browser="count">3 options</span>
+        </div>
+      </header>
 
-          <section class="section" style="padding-top:0;">
-            <div class="section-head">
-              <div>
-                <div class="overline">Step 2</div>
-                <h2 class="section-title">Profile package</h2>
-              </div>
-              <p class="section-subtitle">Each profile package hides the opening and frieze relationship internally.</p>
-            </div>
-            <div class="grid grid-3" data-profile-grid></div>
-          </section>
+      <div class="browser__body" data-browser="body">
+        <!-- Option rows injected by configurator.js. Circle-first, not rectangular cards. -->
+      </div>
 
-          <section class="section" style="padding-top:0;">
-            <div class="section-head">
-              <div>
-                <div class="overline">Step 3</div>
-                <h2 class="section-title">Leg system</h2>
-              </div>
-              <p class="section-subtitle">Leg paths stay restricted by family so the results remain coherent.</p>
-            </div>
-            <div class="grid grid-3" data-leg-grid></div>
-          </section>
+      <!-- Nested sheet (Request Pricing, Review detail). Opens inside the browser. Never a modal. -->
+      <div class="sheet" aria-hidden="true">
+        <div class="sheet__body">
+          <!-- Form or review content injected here when sheet.isOpen === true -->
+        </div>
+        <div class="sheet__footer">
+          <!-- Submit / Close actions injected by configurator.js -->
+        </div>
+      </div>
+    </aside>
 
-          <section class="section" style="padding-top:0;">
-            <div class="section-head">
-              <div>
-                <div class="overline">Step 4</div>
-                <h2 class="section-title">Shelf / crown</h2>
-              </div>
-              <p class="section-subtitle">Choose the top line that sets the mantel’s final character.</p>
-            </div>
-            <div class="grid grid-2" data-shelf-grid></div>
-          </section>
-
-          <section class="section" style="padding-top:0;">
-            <div class="section-head">
-              <div>
-                <div class="overline">Step 5</div>
-                <h2 class="section-title">Finish / material look</h2>
-              </div>
-              <p class="section-subtitle">Finish cards use real stone-reference crops. The launch preview stays representative rather than pretending to be a final render.</p>
-            </div>
-            <div class="grid grid-3" data-finish-grid></div>
-          </section>
+    <!-- ===== BOTTOM HUD (floating dock) ===== -->
+    <footer class="hud" role="contentinfo" aria-label="Step navigation">
+      <div class="hud__strip">
+        <!-- Group A: state -->
+        <div class="hud__state" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="hud__state-text" data-hud="state">Draft · Step 1 of 6</span>
         </div>
 
-        <aside class="panel config-panel">
-          <div class="overline">Review</div>
-          <h2 class="section-title" style="font-size:2.5rem; margin-bottom:10px;">Current direction</h2>
-          <div class="preview-stage" data-preview-stage></div>
-          <div class="preview-meta">
-            <div class="summary-list" data-summary-list></div>
-          </div>
-          <div class="config-actions">
-            <a class="btn btn-primary" data-review-link href="contact.html">Request Pricing</a>
-            <a class="btn btn-ghost" href="trade.html">Trade Path</a>
-          </div>
-          <p class="subtle" style="margin-top:14px;">Selections carry into the pricing form as hidden fields so the quote conversation begins with a structured design summary.</p>
-        </aside>
+        <!-- Group B: individually-bounded step tiles (never fused into a pill) -->
+        <div class="hud__dock" data-hud="dock">
+          <!-- configurator.js injects six <button class="hud-tile"> nodes here -->
+        </div>
+
+        <!-- Group C: nav -->
+        <div class="hud__nav">
+          <button class="hud-nav-btn is-back" type="button" data-hud="back" disabled>
+            <span class="arrow" aria-hidden="true"></span>
+            <span class="label">Back</span>
+          </button>
+          <button class="hud-nav-btn" type="button" data-hud="next">
+            <span class="label">Continue</span>
+            <span class="arrow" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
-    </section>
+    </footer>
+
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <div class="brand-name">LAVAL</div>
-        <p class="footer-note">Layered 2D first. Rough placeholders behind a premium shell. The structure is the product at this stage.</p>
-      </div>
-      <div class="footer-note">Family → Profile → Leg → Shelf → Finish · Charleston only</div>
-    </div>
-  </footer>
+  <!-- Controller. Imports state, data, svg, camera, connectors as ES modules. -->
+  <script type="module" src="./assets/js/configurator.js"></script>
 
-  <script src="assets/js/site.js"></script>
-  <script src="assets/js/configurator.js"></script>
 </body>
 </html>
