@@ -1,0 +1,12 @@
+{
+  "name": "laval-mvp-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Static LAVAL MVP website with integrated mantel configurator.",
+  "scripts": {
+    "build": "node build-site.mjs",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  }
+}
