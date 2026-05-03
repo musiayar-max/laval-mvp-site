@@ -1,0 +1,141 @@
+
+const LAVAL = window.LAVAL || {};
+
+LAVAL.brand = {
+  name: 'LAVAL',
+  families: [
+    {
+      code: 'FM-01',
+      slug: 'tailored-classical',
+      name: 'Tailored Classical',
+      description: 'Quiet, rectilinear, disciplined, and refined classical language.',
+      profileCodes: ['TC-P1', 'TC-P2', 'TC-P3'],
+      allowedLegs: ['LG-1', 'LG-2', 'LG-4'],
+      allowedShelves: ['SH-1', 'SH-2'],
+      allowedFinishes: ['FN-1', 'FN-2', 'FN-3', 'FN-4', 'FN-5'],
+      summary: 'Structured proportions, restrained ornament, strong architectural confidence.',
+      heroImage: 'assets/img/families/fm-01.jpg'
+    },
+    {
+      code: 'FM-02',
+      slug: 'soft-sculptural',
+      name: 'Soft Sculptural',
+      description: 'Rounded, arched, softened massing with low-to-medium ornament.',
+      profileCodes: ['SS-P1', 'SS-P2', 'SS-P3'],
+      allowedLegs: ['LG-3', 'LG-4'],
+      allowedShelves: ['SH-3', 'SH-4', 'SH-1'],
+      allowedFinishes: ['FN-1', 'FN-2', 'FN-3', 'FN-5'],
+      summary: 'Warm geometry, softer arches, and a quieter sense of craft.',
+      heroImage: 'assets/img/families/fm-02.jpg'
+    },
+    {
+      code: 'FM-03',
+      slug: 'french-ornate',
+      name: 'French Ornate',
+      description: 'Serpentine, cresting, shell/cartouche, and old-world decorative luxury.',
+      profileCodes: ['FO-P1', 'FO-P2', 'FO-P3'],
+      allowedLegs: ['LG-4', 'LG-5'],
+      allowedShelves: ['SH-4', 'SH-3'],
+      allowedFinishes: ['FN-2', 'FN-3', 'FN-4'],
+      summary: 'Expressive curves, sculpted crown lines, and couture-level ornament.',
+      heroImage: 'assets/img/families/fm-03.jpg'
+    }
+  ],
+  profiles: [
+    { code: 'TC-P1', familyCode: 'FM-01', slug: 'tc-p1-framed-rectilinear', name: 'Framed Rectilinear', op: 'OP-01', fr: 'FR-02', description: 'Clean rectangular opening with restrained framing.', image: 'assets/img/profiles/tc-p1.jpg', previewImage: 'assets/img/previews/tc-p1.jpg' },
+    { code: 'TC-P2', familyCode: 'FM-01', slug: 'tc-p2-fluted-lintel', name: 'Fluted Lintel', op: 'OP-01', fr: 'FR-03', description: 'Stronger classical molding with fluted logic.', image: 'assets/img/profiles/tc-p2.jpg', previewImage: 'assets/img/previews/tc-p2.jpg' },
+    { code: 'TC-P3', familyCode: 'FM-01', slug: 'tc-p3-soft-arch-frame', name: 'Soft Arch Frame', op: 'OP-02', fr: 'FR-03', description: 'Rectilinear body with a softened inner arch.', image: 'assets/img/profiles/tc-p3.jpg', previewImage: 'assets/img/previews/tc-p3.jpg' },
+    { code: 'SS-P1', familyCode: 'FM-02', slug: 'ss-p1-rounded-cove', name: 'Rounded Cove', op: 'OP-02', fr: 'FR-04', description: 'Soft cove arch with thick, quiet shoulders.', image: 'assets/img/profiles/ss-p1.jpg', previewImage: 'assets/img/previews/ss-p1.jpg' },
+    { code: 'SS-P2', familyCode: 'FM-02', slug: 'ss-p2-wave-frieze', name: 'Wave Frieze', op: 'OP-03', fr: 'FR-05', description: 'A gently animated frieze with refined curvature.', image: 'assets/img/profiles/ss-p2.jpg', previewImage: 'assets/img/previews/ss-p2.jpg' },
+    { code: 'SS-P3', familyCode: 'FM-02', slug: 'ss-p3-niche-arch', name: 'Niche Arch', op: 'OP-05', fr: 'FR-04', om: 'OM-01', description: 'Architectural niche language with elevated presence.', image: 'assets/img/profiles/ss-p3.jpg', previewImage: 'assets/img/previews/ss-p3.jpg' },
+    { code: 'FO-P1', familyCode: 'FM-03', slug: 'fo-p1-crest-arch', name: 'Crest Arch', op: 'OP-03', fr: 'FR-05', description: 'Serpentine French opening with a centered crest.', image: 'assets/img/profiles/fo-p1.jpg', previewImage: 'assets/img/previews/fo-p1.jpg' },
+    { code: 'FO-P2', familyCode: 'FM-03', slug: 'fo-p2-baroque-relief', name: 'Baroque Relief', op: 'OP-03', fr: 'FR-06', description: 'Richer relief across the frieze and body.', image: 'assets/img/profiles/fo-p2.jpg', previewImage: 'assets/img/previews/fo-p2.jpg' },
+    { code: 'FO-P3', familyCode: 'FM-03', slug: 'fo-p3-columned-arch', name: 'Columned Arch', op: 'OP-04', fr: 'FR-05', description: 'A formal arch with stronger side support logic.', image: 'assets/img/profiles/fo-p3.jpg', previewImage: 'assets/img/previews/fo-p3.jpg' }
+  ],
+  legs: [
+    { code: 'LG-1', slug: 'lg-1-plain-jamb', name: 'Plain Jamb', description: 'Straight and restrained.', image: 'assets/img/legs/lg-1.jpg' },
+    { code: 'LG-2', slug: 'lg-2-fluted-pilaster', name: 'Fluted Pilaster', description: 'Classic, tailored, and architectural.', image: 'assets/img/legs/lg-2.jpg' },
+    { code: 'LG-3', slug: 'lg-3-rounded-sculpted', name: 'Rounded Sculpted', description: 'Soft, fuller, and quieter than ornate.', image: 'assets/img/legs/lg-3.jpg' },
+    { code: 'LG-4', slug: 'lg-4-tapered-curve', name: 'Tapered Curve', description: 'Curved transitional leg with elegance.', image: 'assets/img/legs/lg-4.jpg' },
+    { code: 'LG-5', slug: 'lg-5-french-scroll', name: 'French Scroll', description: 'Decorative, old-world, expressive.', image: 'assets/img/legs/lg-5.jpg' }
+  ],
+  shelves: [
+    { code: 'SH-1', slug: 'sh-1-classical-shelf', name: 'Classical Shelf', description: 'Stepped and traditional.', image: 'assets/img/shelves/sh-1.jpg' },
+    { code: 'SH-2', slug: 'sh-2-mitered-frame-shelf', name: 'Mitered Frame Shelf', description: 'Sharper and more picture-frame-like.', image: 'assets/img/shelves/sh-2.jpg' },
+    { code: 'SH-3', slug: 'sh-3-sculpted-crown', name: 'Sculpted Crown', description: 'Thicker, softer, and more rounded.', image: 'assets/img/shelves/sh-3.jpg' },
+    { code: 'SH-4', slug: 'sh-4-french-serpentine-shelf', name: 'French Serpentine Shelf', description: 'Curved, old-world, and ornamental.', image: 'assets/img/shelves/sh-4.jpg' }
+  ],
+  finishes: [
+    { code: 'FN-1', slug: 'fn-1-pale-limestone', name: 'Pale Limestone', description: 'Light, chalky, quiet stone.', image: 'assets/img/finishes/fn-1.jpg' },
+    { code: 'FN-2', slug: 'fn-2-soft-ivory-stone', name: 'Soft Ivory Stone', description: 'Warm ivory / travertine-adjacent.', image: 'assets/img/finishes/fn-2.jpg' },
+    { code: 'FN-3', slug: 'fn-3-white-marble', name: 'White Marble', description: 'Bright, classic, and clean.', image: 'assets/img/finishes/fn-3.jpg' },
+    { code: 'FN-4', slug: 'fn-4-dramatic-veined-marble', name: 'Dramatic Veined Marble', description: 'Statement stone with strong veining.', image: 'assets/img/finishes/fn-4.jpg' },
+    { code: 'FN-5', slug: 'fn-5-warm-taupe-stone', name: 'Warm Taupe Stone', description: 'Muted warm-neutral stone.', image: 'assets/img/finishes/fn-5.jpg' }
+  ]
+};
+
+LAVAL.portfolio = [
+  { id: 'pf-1', title: 'Quiet Tailored Stone Traditional', familyCode: 'FM-01', image: 'assets/img/portfolio/pf-1.jpg' },
+  { id: 'pf-2', title: 'Fluted Viola Classical', familyCode: 'FM-01', image: 'assets/img/portfolio/pf-2.jpg' },
+  { id: 'pf-3', title: 'Soft Rounded Minimal Arch', familyCode: 'FM-02', image: 'assets/img/portfolio/pf-3.jpg' },
+  { id: 'pf-4', title: 'Integrated Niche / Chimney-Piece', familyCode: 'FM-02', image: 'assets/img/portfolio/pf-4.jpg' },
+  { id: 'pf-5', title: 'Athena Ornate Arched Surround', familyCode: 'FM-03', image: 'assets/img/portfolio/pf-5.jpg' },
+  { id: 'pf-6', title: 'Louis XV White Carrara / Rococo', familyCode: 'FM-03', image: 'assets/img/portfolio/pf-6.jpg' }
+];
+
+LAVAL.storageKey = 'laval-config';
+LAVAL.getSavedConfig = function () {
+  try {
+    return JSON.parse(localStorage.getItem(LAVAL.storageKey) || '{}');
+  } catch (error) {
+    return {};
+  }
+};
+
+LAVAL.saveConfig = function (config) {
+  localStorage.setItem(LAVAL.storageKey, JSON.stringify(config));
+};
+
+LAVAL.getByCode = function (collection, code) {
+  return (collection || []).find(item => item.code === code);
+};
+
+LAVAL.renderAssetImage = function renderAssetImage(src, alt, className = 'media-image') {
+  return `<img src="${src}" alt="${alt}" class="${className}" loading="lazy">`;
+};
+
+LAVAL.getReferencePreview = function getReferencePreview(config = {}) {
+  const profile = LAVAL.getByCode(LAVAL.brand.profiles, config.profileCode);
+  const family = LAVAL.getByCode(LAVAL.brand.families, config.familyCode) || LAVAL.brand.families[0];
+  return {
+    src: profile?.previewImage || family.heroImage,
+    alt: profile ? `${profile.name} representative reference image` : `${family.name} representative reference image`,
+    label: 'Representative reference image',
+    note: 'Selections stay structured and real. The MVP summary uses a representative reference image instead of a fake composited custom render.'
+  };
+};
+
+LAVAL.renderReferencePreview = function renderReferencePreview(config = {}) {
+  const preview = LAVAL.getReferencePreview(config);
+  return `
+    <div class="reference-frame">
+      ${LAVAL.renderAssetImage(preview.src, preview.alt, 'reference-image')}
+      <div class="reference-badge">${preview.label}</div>
+      <div class="reference-note">${preview.note}</div>
+    </div>`;
+};
+
+LAVAL.formatSelectionSummary = function formatSelectionSummary(config) {
+  const family = LAVAL.getByCode(LAVAL.brand.families, config.familyCode);
+  const profile = LAVAL.getByCode(LAVAL.brand.profiles, config.profileCode);
+  const leg = LAVAL.getByCode(LAVAL.brand.legs, config.legCode);
+  const shelf = LAVAL.getByCode(LAVAL.brand.shelves, config.shelfCode);
+  const finish = LAVAL.getByCode(LAVAL.brand.finishes, config.finishCode);
+  return {
+    family: family?.name || 'Not selected',
+    profile: profile?.name || 'Not selected',
+    leg: leg?.name || 'Not selected',
+    shelf: shelf?.name || 'Not selected',
+    finish: finish?.name || 'Not selected'
+  };
+};

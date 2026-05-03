@@ -1,80 +1,89 @@
-# FINAL_HANDOFF
+/* =========================================================================
+   LAVAL — Connector guidance system (CONN-A..D)
+   A fine ivory-pearl line bridges the selected source (right browser option)
+   to the relevant subject locus (the mantel region being edited). Orb nodes
+   mark elbow and terminus.
 
-## What was finished
+   Show during active focus states; dim/hide in idle or on the review step.
+   ========================================================================= */
 
-- Five-step flow works: Family → Profile → Leg → Shelf → Finish.
-- Center mantel preview visibly reconfigures across all five steps via a single inline-SVG renderer (`buildMantelSvg` / `renderMantelPreview` in `app.js`).
-- Family selection drives:
-  - silhouette geometry (`FAMILY_GEOM`: ml/mr/pilW/friezeH/cornerR/crownH);
-  - downstream filtering of Profile (existing `PROFILE_FAMILY_MAP`) **and now Leg + Shelf** via `compatibleFamilies` arrays + `getCompatibleOptions`;
-  - stale-selection invalidation: changing family clears any incompatible Profile / Leg / Shelf already chosen, and re-renders the active tile grid if needed.
-- Profile selection swaps the frieze decoration (9 distinct treatments).
-- Leg selection swaps the pilaster shape (5 treatments: plain, fluted, rounded, tapered curve, French scroll).
-- Shelf selection swaps the top cap (classical / mitered / sculpted crown / serpentine).
-- Finish selection swaps the stone gradient (5 finishes via `FINISH_THEME`) and adds veining overlays for marble finishes.
-- Right-side option browser stays anchored across all step changes (creator-shell topology preserved).
-- Nested finish/material editor opens inside the right browser envelope (not as a modal / not as a separate page) on Step 5, with two tabs (Stone Finish / Material Look) and a Close button that returns to the step list without leaving Step 5.
-- Selecting a finish chip inside the nested editor updates the preview immediately and syncs the chip selected state.
-- Continue/Review flow advances correctly; Review state opens an in-shell sheet with selection summary + Request Pricing form.
-- Form validates required fields (name + valid email); submit shows a confirmation panel and dev-only console-logs a structured payload (no backend by D-031/D-032).
-- Removed 22 MB of stale archived screenshots from the package per MD §9 (current app behavior had moved past them).
+const SUBJECT_LOCI = {
+  family:  null,                         // no pointer in family step
+  profile: { x: 0.50, y: 0.46 },         // frieze / opening shoulder
+  leg:     { x: 0.30, y: 0.72 },         // lower-left jamb
+  shelf:   { x: 0.50, y: 0.26 },         // top crown
+  finish:  { x: 0.62, y: 0.50 },         // mid-body surface
+  review:  null,
+};
 
-## How to run
+let raf = null;
 
-No build step. Serve the `prototype/` directory as static files:
+export function drawConnector({ svgEl, sourceEl, stageEl, mantelEl, step }) {
+  if (!svgEl || !stageEl) return;
 
-```bash
-# from the unzipped package root
-python3 -m http.server 8765 --directory prototype
-# then open http://localhost:8765
-```
+  svgEl.innerHTML = '';
+  svgEl.classList.remove('is-visible');
 
-Or:
+  const locus = SUBJECT_LOCI[step];
+  if (!locus || !sourceEl || !mantelEl) return;
 
-```bash
-npm start
-```
+  const stageRect  = stageEl.getBoundingClientRect();
+  const sourceRect = sourceEl.getBoundingClientRect();
+  const mantelRect = mantelEl.getBoundingClientRect();
 
-`npm start` runs the same Python static server. `package.json` declares `"type": "module"` so the ES-module imports in `app.js` resolve correctly when served over HTTP. Opening `prototype/index.html` directly via `file://` will fail because of the module fetch — always serve over a local static server.
+  // Set the SVG viewBox to match the stage in pixels so we can draw in px coords.
+  svgEl.setAttribute('viewBox', `0 0 ${stageRect.width} ${stageRect.height}`);
+  svgEl.setAttribute('preserveAspectRatio', 'none');
 
-## Files changed
+  // Source point — midpoint of the left edge of the source option (where it
+  // meets the stage column).
+  const sx = sourceRect.left - stageRect.left;
+  const sy = sourceRect.top - stageRect.top + sourceRect.height / 2;
 
-- `prototype/data/options.js` — added `compatibleFamilies` arrays to all 5 leg options and all 4 shelf options.
-- `prototype/app.js`
-  - new `getCompatibleOptions(stepId, familyId)` — generic family-compatibility filter.
-  - new `isSelectionStillValid(stepId, familyId)` — used by family-change invalidation.
-  - `renderOptionTiles` — now filters Leg and Shelf by selected family in addition to Profile.
-  - `selectOption` — when `stepId === 'family'`, walks Profile / Leg / Shelf and clears any stale incompatible selection.
-- `FINAL_HANDOFF.md` — rewritten to current state.
-- removed `qa/archived_screenshots/` (20 stale PNGs, ~22 MB) — they predated the current shell + preview behavior.
+  // Target point — locus inside the mantel's bounding rect, translated into
+  // stage-local coords.
+  const tx = mantelRect.left - stageRect.left + mantelRect.width * locus.x;
+  const ty = mantelRect.top  - stageRect.top  + mantelRect.height * locus.y;
 
-`prototype/index.html`, `prototype/styles.css`, and `package.json` were not modified in this pass.
+  // Elbow point — a single right-angle bend mid-way. Clean, deliberate.
+  const ex = tx + (sx - tx) * 0.42;
+  const ey = sy;
 
-## Checks run
+  // Build the line as two straight segments with an orb node at the elbow
+  // and a terminal orb at the target.
+  const ns = 'http://www.w3.org/2000/svg';
 
-```bash
-node --check prototype/app.js          # OK
-node --check prototype/data/options.js # OK
-```
+  const path = document.createElementNS(ns, 'path');
+  path.setAttribute('d', `M ${sx} ${sy} L ${ex} ${ey} L ${tx} ${ty}`);
+  svgEl.appendChild(path);
 
-Smoke-check of the new family→leg/shelf filter (run via `node --input-type=module`):
+  const originDot = document.createElementNS(ns, 'circle');
+  originDot.setAttribute('class', 'node node-origin');
+  originDot.setAttribute('cx', sx);
+  originDot.setAttribute('cy', sy);
+  originDot.setAttribute('r', 2);
+  svgEl.appendChild(originDot);
 
-```
-tailored-classical: 3 legs [plain-jamb, fluted-pilaster, tapered-curve] | 2 shelves [classical-shelf, mitered-frame-shelf]
-soft-sculptural:    3 legs [plain-jamb, rounded-sculpted, tapered-curve] | 2 shelves [mitered-frame-shelf, sculpted-crown]
-french-ornate:      3 legs [plain-jamb, fluted-pilaster, french-scroll] | 3 shelves [classical-shelf, sculpted-crown, french-serpentine-shelf]
-```
+  const elbowDot = document.createElementNS(ns, 'circle');
+  elbowDot.setAttribute('class', 'node');
+  elbowDot.setAttribute('cx', ex);
+  elbowDot.setAttribute('cy', ey);
+  elbowDot.setAttribute('r', 2.4);
+  svgEl.appendChild(elbowDot);
 
-Each family yields a non-empty, narrowed option set (no dead-ends, no all-options).
+  const termDot = document.createElementNS(ns, 'circle');
+  termDot.setAttribute('class', 'node');
+  termDot.setAttribute('cx', tx);
+  termDot.setAttribute('cy', ty);
+  termDot.setAttribute('r', 3);
+  svgEl.appendChild(termDot);
 
-## Remaining known issues
+  // Reveal in the next frame so the CSS transition runs
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(() => svgEl.classList.add('is-visible'));
+}
 
-- Static MVP only by design (no backend, no real pricing engine, no auth, no portal, no 3D, no on-chain — per project decisions D-025 / D-029 / D-031 / D-032 and the MD §4 / §11 scope law).
-- Compatibility map is intentionally narrow for the MVP. The "universal" leg `plain-jamb` is compatible with every family so no family is ever leg-empty; this is a design choice, not a bug.
-- The Material Look tab inside the nested finish editor is a placeholder pane (per MD §6: "Do not build a full HSV/RGB picker. The inZOI source informs structure, not feature scope.").
-- Mobile-narrow viewport behavior is preserved as inherited; the shell is currently optimized for desktop creator-shell topology.
-
-
-## Minor polish pass by ChatGPT
-- Removed stale phase labels/comments.
-- Fixed mobile viewport meta tag.
+export function hideConnector(svgEl) {
+  if (!svgEl) return;
+  svgEl.classList.remove('is-visible');
+}

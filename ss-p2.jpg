@@ -1,37 +1,23 @@
-LAVAL WEBSITE UPLOAD INSTRUCTIONS
+# LAVAL MVP Site
 
-This package is built so your homepage stays intact and the new configurator lives in its own folder.
+Static MVP website for LAVAL, including the homepage and integrated mantel configurator.
 
-WHAT TO UPLOAD TO GITHUB
-1. Extract this ZIP.
-2. Open the extracted folder.
-3. Upload the CONTENTS of that folder to your GitHub repo.
-4. When GitHub asks, overwrite/replace duplicate files.
-5. Commit changes.
+## Current site structure
 
-DO NOT upload this ZIP file itself.
-DO NOT pull files out of the configurator folder.
-
-IMPORTANT NEW FILE/FOLDER
+```text
+index.html
+contact.html
+portfolio.html
+configurator.html
 configurator/
   index.html
   styles.css
   app.js
-  data/options.js
-
-ROUTES AFTER DEPLOYMENT
-Homepage:
-/
-
-New configurator:
- /configurator/
- /configurator/index.html
-
-Old route handling:
-configurator.html is now only a redirect into /configurator/. This prevents Cloudflare clean URLs from showing the old configurator.
-
-WHAT WAS TOUCHED
-- Homepage links to configurator.html were changed to configurator/
-- Old root configurator.html was replaced with a redirect
-- New configurator folder was added
-- Existing homepage styling was not redesigned
+  data/
+    options.js
+css/
+  styles.css
+  homepage.css
+  pages.css
+images/
+assets/

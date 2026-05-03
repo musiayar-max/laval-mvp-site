@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Portfolio — LAVAL</title>
-  <meta name="description" content="Selected LAVAL mantel installations across Charleston renovation and high-end new construction.">
+  <title>Contact &amp; Appointments — LAVAL</title>
+  <meta name="description" content="Request pricing, contact LAVAL, or book a consultation for your Charleston renovation or high-end new construction project.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,141 +65,124 @@
 
 <main id="top">
 
-  <!-- PAGE HERO -->
-  <section class="page-hero page-hero--portfolio" id="hero">
-    <div class="hero-media" aria-hidden="true"></div>
-    <div class="hero-scrim" aria-hidden="true"></div>
-    <div class="container hero-inner">
-      <div class="hero-copy">
-        <p class="hero-location">Portfolio</p>
-        <h1>Selected installations.</h1>
-        <p class="hero-subline">
-          A record of mantel work across renovation and high-end new construction.
-        </p>
-        <div class="hero-actions">
-          <a class="text-link text-link--light" href="#work">View the work</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PORTFOLIO GRID -->
-  <section id="work" class="section portfolio-section">
+  <!-- PAGE INTRO — Bulgari contact page pattern -->
+  <section class="page-intro">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Portfolio</p>
-        <h2>Work across three families.</h2>
-        <p>A measured selection of finished rooms — each entry notes family, material, and project scope.</p>
-      </div>
-    </div>
-
-    <div class="portfolio-grid">
-
-      <article class="portfolio-item portfolio-item--tall">
-        <div class="portfolio-media">
-          <img src="images/Forma_approved_homepage_image.jpg" alt="Forma mantel installation." loading="lazy">
-        </div>
-        <div class="portfolio-copy">
-          <p class="card-label">Forma · Renovation</p>
-          <h3>South Battery Residence</h3>
-          <p>Sculptural limestone mantel, quiet geometry, set within a pared-back historic drawing room.</p>
-        </div>
-      </article>
-
-      <article class="portfolio-item">
-        <div class="portfolio-media">
-          <img src="images/Aurelia_approved_homepage_image.jpg" alt="Aurelia mantel installation." loading="lazy">
-        </div>
-        <div class="portfolio-copy">
-          <p class="card-label">Aurelia · New Construction</p>
-          <h3>Kiawah Estate</h3>
-          <p>Measured arched profile in honed marble, carried across a two-storey coastal living room.</p>
-        </div>
-      </article>
-
-      <article class="portfolio-item">
-        <div class="portfolio-media">
-          <img src="images/Seraphine_approved_homepage_image.jpg" alt="Seraphine mantel installation." loading="lazy">
-        </div>
-        <div class="portfolio-copy">
-          <p class="card-label">Seraphine · Renovation</p>
-          <h3>Tradd Street House</h3>
-          <p>Heirloom scrollwork softened for a contemporary palette; restored in aged cream limestone.</p>
-        </div>
-      </article>
-
-      <article class="portfolio-item portfolio-item--tall">
-        <div class="portfolio-media">
-          <img src="images/Craft_credibility_image.jpg" alt="Mantel craft detail installation." loading="lazy">
-        </div>
-        <div class="portfolio-copy">
-          <p class="card-label">Forma · New Construction</p>
-          <h3>Meeting Street Townhouse</h3>
-          <p>A low horizontal mantel in sandblasted travertine, set against a deep plaster surround.</p>
-        </div>
-      </article>
-
-      <article class="portfolio-item">
-        <div class="portfolio-media">
-          <img src="images/Aurelia_approved_homepage_image.jpg" alt="Aurelia secondary installation." loading="lazy">
-        </div>
-        <div class="portfolio-copy">
-          <p class="card-label">Aurelia · Renovation</p>
-          <h3>Legare Street Library</h3>
-          <p>Classical proportion, quietly resolved — paired with panelled joinery in a private library.</p>
-        </div>
-      </article>
-
-      <article class="portfolio-item">
-        <div class="portfolio-media">
-          <img src="images/Forma_approved_homepage_image.jpg" alt="Forma secondary installation." loading="lazy">
-        </div>
-        <div class="portfolio-copy">
-          <p class="card-label">Forma · New Construction</p>
-          <h3>Sullivan's Island Residence</h3>
-          <p>Monolithic stone shelf, minimal leg, flanked by a pair of blackened steel reveals.</p>
-        </div>
-      </article>
-
+      <p class="eyebrow">Contact</p>
+      <h1>Contact &amp; Appointments.</h1>
+      <p>
+        Three ways to reach the studio — each appropriate to a different
+        stage of the project. Responses are returned within two to three
+        business days.
+      </p>
     </div>
   </section>
 
-  <!-- EDITORIAL TWO-UP -->
-  <section class="section editorial-section">
-    <div class="editorial-twoup editorial-twoup--reverse">
-      <div class="editorial-twoup-media">
-        <img src="images/Craft_credibility_image.jpg" alt="Stone craftsmanship detail." loading="lazy">
-      </div>
-      <div class="editorial-twoup-copy">
-        <p class="eyebrow">Approach</p>
-        <h2>Room first. Mantel second.</h2>
+  <!-- CONTACT CHANNELS -->
+  <section class="section contact-grid-section section--flush-top">
+    <div class="contact-grid">
+
+      <article class="contact-channel">
+        <h2>Request pricing</h2>
         <p>
-          Each project begins with the room: its light, proportion, and
-          palette. The mantel is then composed to hold its weight within
-          that context — never imposed upon it.
+          Share photos, dimensions, and project scope. A measured quote
+          is prepared and returned by email.
         </p>
-        <a class="text-link" href="contact.html">Discuss a project</a>
-      </div>
+        <p><strong>pricing@laval.studio</strong></p>
+        <a class="text-link" href="mailto:pricing@laval.studio">Email the studio</a>
+      </article>
+
+      <article class="contact-channel">
+        <h2>Direct inquiry</h2>
+        <p>
+          For portfolio material, specification questions, or ongoing
+          project correspondence.
+        </p>
+        <p><strong>studio@laval.studio</strong></p>
+        <a class="text-link" href="mailto:studio@laval.studio">Send a message</a>
+      </article>
+
+      <article class="contact-channel">
+        <h2>Book a consultation</h2>
+        <p>
+          A short in-person or virtual conversation to establish direction
+          before a formal quote is prepared.
+        </p>
+        <p><strong>By appointment only</strong></p>
+        <a class="text-link" href="mailto:studio@laval.studio?subject=Consultation%20Request">Request appointment</a>
+      </article>
+
     </div>
   </section>
 
-  <!-- APPOINTMENT -->
+  <!-- APPOINTMENT CTA -->
   <section class="section appointment-section">
     <div class="appointment-card">
       <div>
-        <p class="eyebrow">Portfolio inquiry</p>
-        <h2>Project reference material.</h2>
+        <p class="eyebrow">Studio</p>
+        <h2>Based in Charleston.</h2>
       </div>
       <div>
         <p>
-          Additional portfolio material — drawings, finished details,
-          reference installations — is available through direct inquiry.
+          The studio is in Charleston, South Carolina. Projects are carried
+          out throughout the Lowcountry and, by arrangement, further afield.
+          Visits are by appointment only.
         </p>
         <div class="appointment-actions">
-          <a class="text-link" href="contact.html">Request Portfolio</a>
-          <a class="text-link text-link--muted" href="configurator.html">Open Configurator</a>
+          <a class="text-link" href="configurator.html">Open Configurator</a>
+          <a class="text-link text-link--muted" href="portfolio.html">View Portfolio</a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- FAMILY OVERVIEW RAIL — echoes homepage -->
+  <section class="section families-overview-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Families</p>
+        <h2>Three directions to begin.</h2>
+        <p>If you already have a direction in mind, the configurator is the fastest route into a quote.</p>
+      </div>
+    </div>
+
+    <div class="rail-shell">
+      <div class="rail">
+        <article class="rail-item">
+          <div class="rail-media">
+            <img src="images/Forma_approved_homepage_image.jpg" alt="Forma mantel." loading="lazy">
+          </div>
+          <div class="rail-copy">
+            <p class="card-label">Forma</p>
+            <h3 class="h-card">Forma</h3>
+            <p>Sculptural restraint in natural stone.</p>
+          </div>
+        </article>
+        <article class="rail-item">
+          <div class="rail-media">
+            <img src="images/Aurelia_approved_homepage_image.jpg" alt="Aurelia mantel." loading="lazy">
+          </div>
+          <div class="rail-copy">
+            <p class="card-label">Aurelia</p>
+            <h3 class="h-card">Aurelia</h3>
+            <p>Classical proportion, quietly resolved.</p>
+          </div>
+        </article>
+        <article class="rail-item">
+          <div class="rail-media">
+            <img src="images/Seraphine_approved_homepage_image.jpg" alt="Seraphine mantel." loading="lazy">
+          </div>
+          <div class="rail-copy">
+            <p class="card-label">Seraphine</p>
+            <h3 class="h-card">Seraphine</h3>
+            <p>Heirloom ornament, softened for today.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="container rail-footer">
+      <a class="text-link" href="configurator.html">Open the configurator</a>
     </div>
   </section>
 
