@@ -28,6 +28,7 @@ import {
 } from './data/asset-catalog.js';
 
 import { COMPONENT_ALIGNMENTS } from './data/component-alignments.js';
+import { COMPONENT_SPRITES } from './data/component-sprites.js';
 
 // ---------------------------------------------------------------------------
 // LAVAL_DEV_LEAD_LOGGING (refined build)
@@ -224,20 +225,18 @@ export function selectOption(stepId, optionId, sourceEl = null) {
   if (!(stepId in state.selections)) return;
 
   state.selections[stepId] = optionId;
-
   const mappedVariantId = getMappedVariantIdForSelection(stepId, optionId);
 
-  // True component swap rule:
-  // Profile defines the active layout/template. Leg, shelf, and finish remain
-  // independent selections and are normalized into that active profile's slots.
   if (stepId === 'family') {
-    state.activeVariantId = FAMILY_DEFAULT_VARIANT[optionId] || FAMILY_DEFAULT_VARIANT['tailored-classical'];
-    for (const downstream of ['profile', 'leg', 'shelf', 'finish']) {
-      state.selections[downstream] = null;
-    }
+    const defaultVariant = FAMILY_DEFAULT_VARIANT[optionId] || FAMILY_DEFAULT_VARIANT['tailored-classical'];
+    state.activeVariantId = defaultVariant;
+    setCoherentDefaultsForVariant(defaultVariant);
   } else if (stepId === 'profile' && mappedVariantId && ASSET_VARIANTS[mappedVariantId]) {
     state.activeVariantId = mappedVariantId;
-    syncSelectionFamilyToActiveVariant(mappedVariantId);
+    setCoherentDefaultsForVariant(mappedVariantId, { preserve: ['profile'] });
+    state.selections.profile = optionId;
+  } else if ((stepId === 'leg' || stepId === 'shelf' || stepId === 'finish') && mappedVariantId) {
+    syncSelectionFamilyToActiveVariant(getActiveVariantId());
   }
 
   renderOptionTiles(stepId);
@@ -247,10 +246,7 @@ export function selectOption(stepId, optionId, sourceEl = null) {
   updateContinueButton();
   updateStageCaption();
   renderMantelPreview();
-  if (stepId === 'finish' && state.activeStepId === 'finish') {
-    syncEditorChipState(optionId);
-  }
-
+  if (stepId === 'finish' && state.activeStepId === 'finish') syncEditorChipState(optionId);
   const connectorSource = resolveConnectorSource(stepId, optionId, sourceEl);
   if (connectorSource) showConnector(connectorSource);
 }
@@ -791,6 +787,17 @@ function getMappedVariantIdForSelection(stepId, optionId) {
   return null;
 }
 
+function setCoherentDefaultsForVariant(variantId, opts = {}) {
+  const preserve = new Set(opts.preserve || []);
+  const variant = ASSET_VARIANTS[variantId];
+  if (!variant) return;
+  if (!preserve.has('family')) state.selections.family = variant.family || state.selections.family;
+  if (!preserve.has('profile')) state.selections.profile = getOptionIdForVariant('profile', variantId) || state.selections.profile;
+  if (!preserve.has('leg')) state.selections.leg = getOptionIdForVariant('leg', variantId) || state.selections.leg;
+  if (!preserve.has('shelf')) state.selections.shelf = getOptionIdForVariant('shelf', variantId) || state.selections.shelf;
+  if (!preserve.has('finish')) state.selections.finish = getOptionIdForVariant('finish', variantId) || state.selections.finish;
+}
+
 function getOptionIdForVariant(stepId, variantId) {
   if (!stepId || !variantId) return null;
   const options = STEP_OPTIONS[stepId] || [];
@@ -818,6 +825,14 @@ function clearSelectionsOutsideActiveVariant(activeVariantId, changedStepId) {
   }
 }
 
+function getComponentMeta(variantId, component) {
+  return COMPONENT_ALIGNMENTS?.variants?.[variantId]?.components?.[component] || null;
+}
+
+function getSpriteMeta(variantId, component) {
+  return COMPONENT_SPRITES?.variants?.[variantId]?.components?.[component] || null;
+}
+
 function getStageOptionFromVariant(variant, component) {
   if (!variant || !component) return null;
   const componentOptions = variant.components?.[component];
@@ -839,58 +854,48 @@ function getMappedStageOption(stepId, optionId) {
 
 function getActiveVariantId() {
   if (state.activeVariantId && ASSET_VARIANTS[state.activeVariantId]) return state.activeVariantId;
-  const selectedProfile = state.selections.profile;
-  if (selectedProfile && ASSET_VARIANTS[selectedProfile]) return selectedProfile;
+  const mappedProfile = getMappedVariantIdForSelection('profile', state.selections.profile);
+  if (mappedProfile && ASSET_VARIANTS[mappedProfile]) return mappedProfile;
   const selectedFamily = state.selections.family || 'tailored-classical';
   return FAMILY_DEFAULT_VARIANT[selectedFamily] || FAMILY_DEFAULT_VARIANT['tailored-classical'];
 }
 
-function getComponentMeta(variantId, component) {
-  return COMPONENT_ALIGNMENTS?.variants?.[variantId]?.components?.[component] || null;
-}
-
-function getStageForComponentOption(component, activeVariant) {
+function getSourceVariantForComponent(component, activeVariant) {
   if (!activeVariant) return null;
-  if (component === 'profile') {
-    const meta = getComponentMeta(activeVariant.id, 'profile');
-    const fallback = getStageOptionFromVariant(activeVariant, 'profile');
-    return { component: 'profile', sourceVariantId: activeVariant.id, sourceVariant: activeVariant, option: { ...(fallback || {}), stage: meta?.cleanStage || fallback?.stage, label: fallback?.label || activeVariant.label } };
-  }
-  for (const [stepId, assetComponent] of Object.entries(SELECTABLE_LAYER_STEPS)) {
-    if (assetComponent !== component) continue;
-    const selected = getMappedStageOption(stepId, state.selections[stepId]);
-    if (selected?.option?.stage) return selected;
-  }
-  const option = getStageOptionFromVariant(activeVariant, component);
-  if (!option?.stage) return null;
-  return { component, sourceVariantId: activeVariant.id, sourceVariant: activeVariant, option };
+  if (component === 'profile') return activeVariant.id;
+  if (component === 'legs') return getMappedVariantIdForSelection('leg', state.selections.leg) || activeVariant.id;
+  if (component === 'shelf') return getMappedVariantIdForSelection('shelf', state.selections.shelf) || activeVariant.id;
+  return activeVariant.id;
 }
 
-function getTransformForLayer(layer, activeVariant) {
-  if (!layer || !activeVariant) return null;
-  if (layer.component === 'profile') return { tx: 0, ty: 0, sx: 1, sy: 1, mode: 'native' };
-  const sourceMeta = getComponentMeta(layer.sourceVariantId, layer.component);
-  const targetMeta = getComponentMeta(activeVariant.id, layer.component);
-  if (!sourceMeta?.bbox || !targetMeta?.bbox) return { tx: 0, ty: 0, sx: 1, sy: 1, mode: 'native' };
-  const [sx0, sy0, sx1, sy1] = sourceMeta.bbox;
-  const [tx0, ty0, tx1, ty1] = targetMeta.bbox;
-  const sw = Math.max(1, sx1 - sx0), sh = Math.max(1, sy1 - sy0);
-  const tw = Math.max(1, tx1 - tx0), th = Math.max(1, ty1 - ty0);
-  let scale;
-  if (layer.component === 'shelf' || layer.component === 'mantel-floor' || layer.component === 'hearth') scale = tw / sw;
-  else if (layer.component === 'legs') scale = Math.min(tw / sw, th / sh) * 0.98;
-  else if (layer.component === 'relief') scale = Math.min(tw / sw, th / sh) * 0.96;
-  else scale = Math.min(tw / sw, th / sh);
-  const srcCx = sx0 + sw / 2, srcCy = sy0 + sh / 2;
-  const tgtCx = tx0 + tw / 2, tgtCy = ty0 + th / 2;
-  return { tx: tgtCx - srcCx * scale, ty: tgtCy - srcCy * scale, sx: scale, sy: scale, mode: 'normalized' };
+function getTargetComponentName(activeVariant, requestedComponent) {
+  if (!activeVariant) return requestedComponent;
+  if (requestedComponent === 'mantel-floor' || requestedComponent === 'hearth') {
+    if (getComponentMeta(activeVariant.id, requestedComponent)) return requestedComponent;
+    return getComponentMeta(activeVariant.id, 'mantel-floor') ? 'mantel-floor' : 'hearth';
+  }
+  return requestedComponent;
 }
 
-function styleFromTransform(transform) {
-  if (!transform) return '';
-  const tx = (transform.tx / 2400) * 100;
-  const ty = (transform.ty / 1800) * 100;
-  return `--tx:${tx.toFixed(5)}%;--ty:${ty.toFixed(5)}%;--sx:${transform.sx.toFixed(5)};--sy:${transform.sy.toFixed(5)};`;
+function getTargetBox(activeVariant, component) {
+  const targetComponent = getTargetComponentName(activeVariant, component);
+  const meta = getComponentMeta(activeVariant.id, targetComponent) || getSpriteMeta(activeVariant.id, targetComponent);
+  if (meta?.bbox) return meta.bbox;
+  return [0, 0, 2400, 1800];
+}
+
+function pct(value, denom) { return ((value / denom) * 100).toFixed(5); }
+function slotStyleFromBox(box) {
+  const [x0, y0, x1, y1] = box;
+  return `--slot-left:${pct(x0,2400)}%;--slot-top:${pct(y0,1800)}%;--slot-width:${pct(x1-x0,2400)}%;--slot-height:${pct(y1-y0,1800)}%;`;
+}
+
+function getLayerDescriptor(component, activeVariant) {
+  const sourceVariantId = getSourceVariantForComponent(component, activeVariant);
+  if (!sourceVariantId) return null;
+  const sprite = getSpriteMeta(sourceVariantId, component);
+  if (!sprite?.src) return null;
+  return { component, sourceVariantId, sourceVariant: ASSET_VARIANTS[sourceVariantId], sprite, targetBox: getTargetBox(activeVariant, component) };
 }
 
 function getFinishToneClass() {
@@ -902,7 +907,6 @@ function getFinishToneClass() {
   if (selected.includes('gothic') || selected.includes('white') || selected.includes('marble')) return 'finish-white';
   return 'finish-limestone';
 }
-
 function getFocusClass() {
   if (state.activeStepId === 'profile') return 'focus-profile';
   if (state.activeStepId === 'leg') return 'focus-leg';
@@ -915,26 +919,25 @@ function buildAssetMantelMarkup() {
   const activeVariantId = getActiveVariantId();
   const activeVariant = ASSET_VARIANTS[activeVariantId];
   if (!activeVariant) return '<div class="laval-mantel laval-asset-stage" aria-label="Mantel preview unavailable"></div>';
-
-  const layerOrder = ['hearth', 'mantel-floor', 'firebox', 'door', 'profile', 'legs', 'shelf', 'relief'];
+  const nativeFloor = getComponentMeta(activeVariantId, 'mantel-floor') ? 'mantel-floor' : 'hearth';
+  const layerOrder = [nativeFloor, 'firebox', 'door', 'profile', 'legs', 'shelf', 'relief'];
   const layers = [];
+  const seen = new Set();
   for (const component of layerOrder) {
-    const layer = getStageForComponentOption(component, activeVariant);
-    if (!layer?.option?.stage) continue;
-    const transform = getTransformForLayer(layer, activeVariant);
+    if (seen.has(component)) continue;
+    seen.add(component);
+    const layer = getLayerDescriptor(component, activeVariant);
+    if (!layer?.sprite?.src) continue;
     const safeComponent = component.replace(/[^a-z0-9-]/gi, '-');
     const safeSource = layer.sourceVariantId.replace(/[^a-z0-9-]/gi, '-');
-    const selectedFlag = Object.values(SELECTABLE_LAYER_STEPS).includes(component) ? ' data-selectable-layer="true"' : '';
-    layers.push(`<img class="laval-asset-layer laval-asset-layer--${safeComponent} laval-asset-layer-source--${safeSource}" src="${layer.option.stage}" alt="" loading="eager" decoding="async" draggable="false" style="${styleFromTransform(transform)}" data-layer-component="${component}" data-source-variant="${layer.sourceVariantId}"${selectedFlag}>`);
+    const selectedFlag = (component === 'legs' || component === 'shelf' || component === 'profile') ? ' data-selectable-layer="true"' : '';
+    layers.push(`<img class="laval-slot-layer laval-slot-layer--${safeComponent} laval-slot-source--${safeSource}" src="${layer.sprite.src}" alt="" loading="eager" decoding="async" draggable="false" style="${slotStyleFromBox(layer.targetBox)}" data-layer-component="${component}" data-source-variant="${layer.sourceVariantId}"${selectedFlag}>`);
   }
-
   const familyClass = `family-${activeVariant.family || 'unknown'}`;
   const focusClass = getFocusClass();
   const finishClass = getFinishToneClass();
-  const guide = state.activeStepId && state.activeStepId !== 'family'
-    ? `<div class="laval-focus-ring laval-focus-ring--${state.activeStepId}" aria-hidden="true"></div>`
-    : '';
-  return `<div class="laval-mantel laval-asset-stage laval-true-swap-stage ${familyClass} ${focusClass} ${finishClass}" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" data-preview-mode="true-component-swap" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}">${layers.join('')}<div class="laval-material-wash" aria-hidden="true"></div>${guide}</div>`;
+  const guide = state.activeStepId && state.activeStepId !== 'family' ? `<div class="laval-focus-ring laval-focus-ring--${state.activeStepId}" aria-hidden="true"></div>` : '';
+  return `<div class="laval-mantel laval-asset-stage laval-slot-stage ${familyClass} ${focusClass} ${finishClass}" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" data-preview-mode="slot-component-swap" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}">${layers.join('')}<div class="laval-material-wash" aria-hidden="true"></div>${guide}</div>`;
 }
 
 export function renderMantelPreview() {
