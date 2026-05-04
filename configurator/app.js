@@ -863,24 +863,45 @@ function getLayerOptionForComponent(component, activeVariant) {
   return getStageOptionFromVariant(activeVariant, component);
 }
 
+function getCohesivePreviewOption(activeVariant) {
+  if (!activeVariant) return null;
+
+  // Surgical MVP rule:
+  // The imported stage PNGs are all 2400×1800, but many "finish" layers are
+  // actually full-family material renders and several "profile" layers are
+  // already complete mantel renders. Stacking those with legs/shelf/relief
+  // creates duplicate mantels. For the live MVP, render one coherent image
+  // per active package instead of stacking component layers.
+  const preferredComponents = activeVariant.family === 'french-ornate'
+    ? ['profile', 'finish', 'mantel-floor', 'shelf', 'legs']
+    : ['finish', 'profile', 'shelf', 'legs', 'mantel-floor'];
+
+  for (const component of preferredComponents) {
+    const option = getStageOptionFromVariant(activeVariant, component);
+    if (option?.stage) return { component, option };
+  }
+
+  for (const component of activeVariant.layerOrder || []) {
+    const option = getStageOptionFromVariant(activeVariant, component);
+    if (option?.stage) return { component, option };
+  }
+
+  return null;
+}
+
 function buildAssetMantelMarkup() {
   const activeVariantId = getActiveVariantId();
   const activeVariant = ASSET_VARIANTS[activeVariantId];
   if (!activeVariant) return '<div class="laval-mantel laval-asset-stage" aria-label="Mantel preview unavailable"></div>';
-  const order = Array.isArray(activeVariant.layerOrder) && activeVariant.layerOrder.length
-    ? activeVariant.layerOrder
-    : ['hearth', 'mantel-floor', 'firebox', 'firebox-fixed', 'door', 'profile', 'legs', 'shelf', 'finish', 'relief'];
-  const rendered = new Set();
-  const layerMarkup = [];
-  for (const component of order) {
-    if (rendered.has(component)) continue;
-    const option = getLayerOptionForComponent(component, activeVariant);
-    if (!option?.stage) continue;
-    rendered.add(component);
-    const safeComponent = component.replace(/[^a-z0-9-]/gi, '-');
-    layerMarkup.push(`<img class="laval-asset-layer laval-asset-layer--${safeComponent}" src="${option.stage}" alt="" loading="eager" decoding="async" draggable="false">`);
+
+  const preview = getCohesivePreviewOption(activeVariant);
+  if (!preview?.option?.stage) {
+    return `<div class="laval-mantel laval-asset-stage" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}"></div>`;
   }
-  return `<div class="laval-mantel laval-asset-stage" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}">${layerMarkup.join('\n')}</div>`;
+
+  const safeComponent = preview.component.replace(/[^a-z0-9-]/gi, '-');
+  const layer = `<img class="laval-asset-layer laval-asset-layer--single laval-asset-layer--${safeComponent}" src="${preview.option.stage}" alt="" loading="eager" decoding="async" draggable="false">`;
+  return `<div class="laval-mantel laval-asset-stage" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" data-preview-mode="cohesive-single-image" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}">${layer}</div>`;
 }
 
 export function renderMantelPreview() {
