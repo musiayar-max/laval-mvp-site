@@ -27,6 +27,8 @@ import {
   SELECTABLE_LAYER_STEPS
 } from './data/asset-catalog.js';
 
+import { COMPONENT_ALIGNMENTS } from './data/component-alignments.js';
+
 // ---------------------------------------------------------------------------
 // LAVAL_DEV_LEAD_LOGGING (refined build)
 // ---------------------------------------------------------------------------
@@ -223,29 +225,19 @@ export function selectOption(stepId, optionId, sourceEl = null) {
 
   state.selections[stepId] = optionId;
 
-  // Visual safety rule:
-  // The current image library is standardized by canvas, but not every leg,
-  // shelf, finish, and relief is truly cross-compatible across profile
-  // variants. Therefore a user action may switch the active variant package,
-  // but the preview always renders one coherent variant stack. This prevents
-  // the broken "two mantels on top of each other" state.
   const mappedVariantId = getMappedVariantIdForSelection(stepId, optionId);
 
+  // True component swap rule:
+  // Profile defines the active layout/template. Leg, shelf, and finish remain
+  // independent selections and are normalized into that active profile's slots.
   if (stepId === 'family') {
     state.activeVariantId = FAMILY_DEFAULT_VARIANT[optionId] || FAMILY_DEFAULT_VARIANT['tailored-classical'];
     for (const downstream of ['profile', 'leg', 'shelf', 'finish']) {
       state.selections[downstream] = null;
     }
-  } else if (mappedVariantId && ASSET_VARIANTS[mappedVariantId]) {
+  } else if (stepId === 'profile' && mappedVariantId && ASSET_VARIANTS[mappedVariantId]) {
     state.activeVariantId = mappedVariantId;
     syncSelectionFamilyToActiveVariant(mappedVariantId);
-
-    // If a non-profile choice moves the mantel to a different coherent package,
-    // sync the profile to that package and clear stale choices that belong to
-    // a different package. The user can re-pick those steps, but the preview
-    // never mixes incompatible layers.
-    state.selections.profile = mappedVariantId;
-    clearSelectionsOutsideActiveVariant(mappedVariantId, stepId);
   }
 
   renderOptionTiles(stepId);
@@ -834,16 +826,15 @@ function getStageOptionFromVariant(variant, component) {
   return defaultKey ? componentOptions[defaultKey] : null;
 }
 
-function getMappedStageOption(stepId, optionId, activeVariant) {
+function getMappedStageOption(stepId, optionId) {
   if (!stepId || !optionId) return null;
   const map = ASSET_OPTION_TO_LAYER?.[stepId]?.[optionId];
   if (!map) return null;
   const mappedVariant = ASSET_VARIANTS[map.variantId];
-  if (!mappedVariant || !activeVariant) return null;
-  // Exact-variant lock: do not pull a component from a sibling profile.
-  // Same-family assets can still have different baselines/opening boxes.
-  if (mappedVariant.id !== activeVariant.id) return null;
-  return getStageOptionFromVariant(mappedVariant, map.component);
+  if (!mappedVariant) return null;
+  const option = getStageOptionFromVariant(mappedVariant, map.component);
+  if (!option) return null;
+  return { stepId, optionId, component: map.component, sourceVariantId: map.variantId, sourceVariant: mappedVariant, option };
 }
 
 function getActiveVariantId() {
@@ -854,39 +845,70 @@ function getActiveVariantId() {
   return FAMILY_DEFAULT_VARIANT[selectedFamily] || FAMILY_DEFAULT_VARIANT['tailored-classical'];
 }
 
-function getLayerOptionForComponent(component, activeVariant) {
-  for (const [stepId, assetComponent] of Object.entries(SELECTABLE_LAYER_STEPS)) {
-    if (assetComponent !== component) continue;
-    const selectedLayer = getMappedStageOption(stepId, state.selections[stepId], activeVariant);
-    if (selectedLayer?.stage) return selectedLayer;
-  }
-  return getStageOptionFromVariant(activeVariant, component);
+function getComponentMeta(variantId, component) {
+  return COMPONENT_ALIGNMENTS?.variants?.[variantId]?.components?.[component] || null;
 }
 
-function getCohesivePreviewOption(activeVariant) {
+function getStageForComponentOption(component, activeVariant) {
   if (!activeVariant) return null;
-
-  // Surgical MVP rule:
-  // The imported stage PNGs are all 2400×1800, but many "finish" layers are
-  // actually full-family material renders and several "profile" layers are
-  // already complete mantel renders. Stacking those with legs/shelf/relief
-  // creates duplicate mantels. For the live MVP, render one coherent image
-  // per active package instead of stacking component layers.
-  const preferredComponents = activeVariant.family === 'french-ornate'
-    ? ['profile', 'finish', 'mantel-floor', 'shelf', 'legs']
-    : ['finish', 'profile', 'shelf', 'legs', 'mantel-floor'];
-
-  for (const component of preferredComponents) {
-    const option = getStageOptionFromVariant(activeVariant, component);
-    if (option?.stage) return { component, option };
+  if (component === 'profile') {
+    const meta = getComponentMeta(activeVariant.id, 'profile');
+    const fallback = getStageOptionFromVariant(activeVariant, 'profile');
+    return { component: 'profile', sourceVariantId: activeVariant.id, sourceVariant: activeVariant, option: { ...(fallback || {}), stage: meta?.cleanStage || fallback?.stage, label: fallback?.label || activeVariant.label } };
   }
-
-  for (const component of activeVariant.layerOrder || []) {
-    const option = getStageOptionFromVariant(activeVariant, component);
-    if (option?.stage) return { component, option };
+  for (const [stepId, assetComponent] of Object.entries(SELECTABLE_LAYER_STEPS)) {
+    if (assetComponent !== component) continue;
+    const selected = getMappedStageOption(stepId, state.selections[stepId]);
+    if (selected?.option?.stage) return selected;
   }
+  const option = getStageOptionFromVariant(activeVariant, component);
+  if (!option?.stage) return null;
+  return { component, sourceVariantId: activeVariant.id, sourceVariant: activeVariant, option };
+}
 
-  return null;
+function getTransformForLayer(layer, activeVariant) {
+  if (!layer || !activeVariant) return null;
+  if (layer.component === 'profile') return { tx: 0, ty: 0, sx: 1, sy: 1, mode: 'native' };
+  const sourceMeta = getComponentMeta(layer.sourceVariantId, layer.component);
+  const targetMeta = getComponentMeta(activeVariant.id, layer.component);
+  if (!sourceMeta?.bbox || !targetMeta?.bbox) return { tx: 0, ty: 0, sx: 1, sy: 1, mode: 'native' };
+  const [sx0, sy0, sx1, sy1] = sourceMeta.bbox;
+  const [tx0, ty0, tx1, ty1] = targetMeta.bbox;
+  const sw = Math.max(1, sx1 - sx0), sh = Math.max(1, sy1 - sy0);
+  const tw = Math.max(1, tx1 - tx0), th = Math.max(1, ty1 - ty0);
+  let scale;
+  if (layer.component === 'shelf' || layer.component === 'mantel-floor' || layer.component === 'hearth') scale = tw / sw;
+  else if (layer.component === 'legs') scale = Math.min(tw / sw, th / sh) * 0.98;
+  else if (layer.component === 'relief') scale = Math.min(tw / sw, th / sh) * 0.96;
+  else scale = Math.min(tw / sw, th / sh);
+  const srcCx = sx0 + sw / 2, srcCy = sy0 + sh / 2;
+  const tgtCx = tx0 + tw / 2, tgtCy = ty0 + th / 2;
+  return { tx: tgtCx - srcCx * scale, ty: tgtCy - srcCy * scale, sx: scale, sy: scale, mode: 'normalized' };
+}
+
+function styleFromTransform(transform) {
+  if (!transform) return '';
+  const tx = (transform.tx / 2400) * 100;
+  const ty = (transform.ty / 1800) * 100;
+  return `--tx:${tx.toFixed(5)}%;--ty:${ty.toFixed(5)}%;--sx:${transform.sx.toFixed(5)};--sy:${transform.sy.toFixed(5)};`;
+}
+
+function getFinishToneClass() {
+  const selected = state.selections.finish || '';
+  if (selected.includes('viola')) return 'finish-viola';
+  if (selected.includes('bold') || selected.includes('veined')) return 'finish-veined';
+  if (selected.includes('calacatta')) return 'finish-calacatta';
+  if (selected.includes('warm') || selected.includes('ivory')) return 'finish-warm';
+  if (selected.includes('gothic') || selected.includes('white') || selected.includes('marble')) return 'finish-white';
+  return 'finish-limestone';
+}
+
+function getFocusClass() {
+  if (state.activeStepId === 'profile') return 'focus-profile';
+  if (state.activeStepId === 'leg') return 'focus-leg';
+  if (state.activeStepId === 'shelf') return 'focus-shelf';
+  if (state.activeStepId === 'finish') return 'focus-finish';
+  return 'focus-family';
 }
 
 function buildAssetMantelMarkup() {
@@ -894,14 +916,25 @@ function buildAssetMantelMarkup() {
   const activeVariant = ASSET_VARIANTS[activeVariantId];
   if (!activeVariant) return '<div class="laval-mantel laval-asset-stage" aria-label="Mantel preview unavailable"></div>';
 
-  const preview = getCohesivePreviewOption(activeVariant);
-  if (!preview?.option?.stage) {
-    return `<div class="laval-mantel laval-asset-stage" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}"></div>`;
+  const layerOrder = ['hearth', 'mantel-floor', 'firebox', 'door', 'profile', 'legs', 'shelf', 'relief'];
+  const layers = [];
+  for (const component of layerOrder) {
+    const layer = getStageForComponentOption(component, activeVariant);
+    if (!layer?.option?.stage) continue;
+    const transform = getTransformForLayer(layer, activeVariant);
+    const safeComponent = component.replace(/[^a-z0-9-]/gi, '-');
+    const safeSource = layer.sourceVariantId.replace(/[^a-z0-9-]/gi, '-');
+    const selectedFlag = Object.values(SELECTABLE_LAYER_STEPS).includes(component) ? ' data-selectable-layer="true"' : '';
+    layers.push(`<img class="laval-asset-layer laval-asset-layer--${safeComponent} laval-asset-layer-source--${safeSource}" src="${layer.option.stage}" alt="" loading="eager" decoding="async" draggable="false" style="${styleFromTransform(transform)}" data-layer-component="${component}" data-source-variant="${layer.sourceVariantId}"${selectedFlag}>`);
   }
 
-  const safeComponent = preview.component.replace(/[^a-z0-9-]/gi, '-');
-  const layer = `<img class="laval-asset-layer laval-asset-layer--single laval-asset-layer--${safeComponent}" src="${preview.option.stage}" alt="" loading="eager" decoding="async" draggable="false">`;
-  return `<div class="laval-mantel laval-asset-stage" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" data-preview-mode="cohesive-single-image" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}">${layer}</div>`;
+  const familyClass = `family-${activeVariant.family || 'unknown'}`;
+  const focusClass = getFocusClass();
+  const finishClass = getFinishToneClass();
+  const guide = state.activeStepId && state.activeStepId !== 'family'
+    ? `<div class="laval-focus-ring laval-focus-ring--${state.activeStepId}" aria-hidden="true"></div>`
+    : '';
+  return `<div class="laval-mantel laval-asset-stage laval-true-swap-stage ${familyClass} ${focusClass} ${finishClass}" data-asset-variant="${activeVariantId}" data-asset-family="${activeVariant.family}" data-preview-mode="true-component-swap" role="img" aria-label="${activeVariant.familyLabel} — ${activeVariant.label}">${layers.join('')}<div class="laval-material-wash" aria-hidden="true"></div>${guide}</div>`;
 }
 
 export function renderMantelPreview() {
@@ -916,6 +949,7 @@ export function renderMantelPreview() {
   figure.dataset.leg     = sel.leg     || '';
   figure.dataset.shelf   = sel.shelf   || '';
   figure.dataset.finish  = sel.finish  || '';
+  figure.dataset.activeStep = state.activeStepId || 'family';
   if (activeVariant) {
     figure.dataset.assetVariant = activeVariantId;
     figure.dataset.assetStatus = activeVariant.status || '';

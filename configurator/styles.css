@@ -2218,3 +2218,24 @@ ul { list-style: none; margin: 0; padding: 0; }
   .laval-tile-media { width: 50px; height: 50px; }
   .laval-mantel-mount .laval-asset-stage { width: min(100%, calc(62vh * 1.3333)); }
 }
+
+
+/* =========================================================================
+   LAVAL True Component Swap Preview — hotfix v4
+   ========================================================================= */
+.laval-stage { left: 24.5%; right: 24.5%; top: 8.5%; bottom: 9%; }
+.laval-stage-figure { gap: 12px; }
+.laval-mantel-mount { width: min(68vw, 980px); height: min(58vh, 660px); display: flex; align-items: center; justify-content: center; }
+.laval-asset-stage { position: relative; width: min(68vw, 980px); aspect-ratio: 4 / 3; height: auto; overflow: visible; filter: drop-shadow(0 34px 44px rgba(0,0,0,.56)); transform-origin: 50% 54%; transition: transform 360ms var(--laval-ease-soft), filter 220ms var(--laval-ease-soft); }
+.laval-asset-stage.focus-family { transform: scale(1.18); }
+.laval-asset-stage.focus-profile { transform: scale(1.36) translateY(2.5%); }
+.laval-asset-stage.focus-leg { transform: scale(1.48) translateY(-1%); }
+.laval-asset-stage.focus-shelf { transform: scale(1.54) translateY(9%); }
+.laval-asset-stage.focus-finish { transform: scale(1.42); }
+.laval-asset-layer { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; image-rendering:auto; transform-origin:0 0; transform:translate3d(var(--tx,0),var(--ty,0),0) scale(var(--sx,1),var(--sy,1)); transition:transform 360ms var(--laval-ease-soft), opacity 220ms var(--laval-ease-soft), filter 220ms var(--laval-ease-soft); will-change:transform; }
+.laval-asset-layer--hearth,.laval-asset-layer--mantel-floor{z-index:1}.laval-asset-layer--firebox{z-index:2}.laval-asset-layer--door{z-index:3}.laval-asset-layer--profile{z-index:4}.laval-asset-layer--legs{z-index:5}.laval-asset-layer--shelf{z-index:6}.laval-asset-layer--relief{z-index:7}
+.laval-material-wash{position:absolute;inset:0;z-index:8;pointer-events:none;opacity:.18;mix-blend-mode:soft-light;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.24),transparent 24%),linear-gradient(135deg,rgba(255,255,255,.08),rgba(90,72,54,.10));}
+.laval-asset-stage.finish-limestone .laval-material-wash{background:linear-gradient(135deg,rgba(235,221,196,.24),rgba(157,130,96,.12))}.laval-asset-stage.finish-white .laval-material-wash{background:linear-gradient(145deg,rgba(255,255,255,.30),rgba(180,174,164,.14))}.laval-asset-stage.finish-warm .laval-material-wash{background:linear-gradient(140deg,rgba(248,235,210,.30),rgba(176,139,96,.14))}.laval-asset-stage.finish-calacatta .laval-material-wash{background:linear-gradient(140deg,rgba(255,248,234,.30),rgba(139,122,103,.16))}.laval-asset-stage.finish-veined .laval-material-wash{background:repeating-linear-gradient(120deg,rgba(255,255,255,.18) 0 10px,rgba(90,82,73,.16) 10px 13px,transparent 13px 42px);opacity:.16}.laval-asset-stage.finish-viola .laval-material-wash{background:linear-gradient(135deg,rgba(100,35,50,.32),rgba(238,225,211,.10));opacity:.22}
+.laval-focus-ring{position:absolute;z-index:10;border:1px solid rgba(255,247,235,.28);box-shadow:0 0 24px rgba(255,247,235,.10);border-radius:18px;pointer-events:none;opacity:.70}.laval-focus-ring--profile{left:23%;right:23%;top:26%;height:24%}.laval-focus-ring--leg{left:20%;right:20%;top:42%;height:45%}.laval-focus-ring--shelf{left:15%;right:15%;top:16%;height:18%}.laval-focus-ring--finish{left:19%;right:19%;top:24%;height:58%;opacity:.35}
+.laval-stage-caption{margin-top:4px}
+@media (max-height:820px){.laval-asset-stage.focus-family{transform:scale(1.08)}.laval-asset-stage.focus-profile{transform:scale(1.22) translateY(2%)}.laval-asset-stage.focus-leg{transform:scale(1.30) translateY(-1%)}.laval-asset-stage.focus-shelf{transform:scale(1.36) translateY(8%)}.laval-asset-stage.focus-finish{transform:scale(1.25)}}
