@@ -45,6 +45,10 @@ const LAVAL_DEV_LEAD_LOGGING = true; // Development-only. Disable or replace bef
 // ---------------------------------------------------------------------------
 const state = {
   activeStepId: DEFAULT_STEP_ID,
+  // MVP visual safety: keep one coherent asset variant active at a time.
+  // Cross-variant component stacking is intentionally disabled until every
+  // component family is regenerated against identical anchors.
+  activeVariantId: FAMILY_DEFAULT_VARIANT['tailored-classical'],
   selections: {
     family:  null,
     profile: null,
@@ -216,32 +220,45 @@ export function renderOptionTiles(stepId) {
 // ---------------------------------------------------------------------------
 export function selectOption(stepId, optionId, sourceEl = null) {
   if (!(stepId in state.selections)) return;
+
   state.selections[stepId] = optionId;
-  // Pass 3 + Pass 5: family change invalidates stale incompatible downstream
-  // selections (profile / leg / shelf). The active step's tiles are
-  // re-rendered if it is one of the affected steps.
+
+  // Visual safety rule:
+  // The current image library is standardized by canvas, but not every leg,
+  // shelf, finish, and relief is truly cross-compatible across profile
+  // variants. Therefore a user action may switch the active variant package,
+  // but the preview always renders one coherent variant stack. This prevents
+  // the broken "two mantels on top of each other" state.
+  const mappedVariantId = getMappedVariantIdForSelection(stepId, optionId);
+
   if (stepId === 'family') {
+    state.activeVariantId = FAMILY_DEFAULT_VARIANT[optionId] || FAMILY_DEFAULT_VARIANT['tailored-classical'];
     for (const downstream of ['profile', 'leg', 'shelf', 'finish']) {
-      if (state.selections[downstream] && !isSelectionStillValid(downstream, optionId)) {
-        state.selections[downstream] = null;
-        if (state.activeStepId === downstream) renderOptionTiles(downstream);
-      }
+      state.selections[downstream] = null;
     }
+  } else if (mappedVariantId && ASSET_VARIANTS[mappedVariantId]) {
+    state.activeVariantId = mappedVariantId;
+    syncSelectionFamilyToActiveVariant(mappedVariantId);
+
+    // If a non-profile choice moves the mantel to a different coherent package,
+    // sync the profile to that package and clear stale choices that belong to
+    // a different package. The user can re-pick those steps, but the preview
+    // never mixes incompatible layers.
+    state.selections.profile = mappedVariantId;
+    clearSelectionsOutsideActiveVariant(mappedVariantId, stepId);
   }
+
   renderOptionTiles(stepId);
   renderSelectionSummary();
+  renderStepRail();
+  renderDockTokens();
   updateContinueButton();
   updateStageCaption();
-  renderMantelPreview();          // Pass 2: visibly reconfigure the center stage
+  renderMantelPreview();
   if (stepId === 'finish' && state.activeStepId === 'finish') {
     syncEditorChipState(optionId);
   }
 
-  // Connector precision fix:
-  // renderOptionTiles() replaces browser tile DOM. Measuring sourceEl after
-  // that render can point at a stale/disconnected element, which makes the
-  // connector appear detached or random. Resolve the live selected control
-  // after rendering, then draw from that actual element.
   const connectorSource = resolveConnectorSource(stepId, optionId, sourceEl);
   if (connectorSource) showConnector(connectorSource);
 }
@@ -277,6 +294,7 @@ export function resetConfigurator() {
     state.selections[key] = null;
   }
   state.activeStepId = DEFAULT_STEP_ID;
+  state.activeVariantId = FAMILY_DEFAULT_VARIANT['tailored-classical'];
   renderStepRail();
   renderDockTokens();
   renderOptionTiles(DEFAULT_STEP_ID);
@@ -772,6 +790,42 @@ function buildMantelSvg() {
   </svg>`;
 }
 
+function getMappedVariantIdForSelection(stepId, optionId) {
+  if (!stepId || !optionId) return null;
+  const mapped = ASSET_OPTION_TO_LAYER?.[stepId]?.[optionId];
+  if (mapped?.variantId && ASSET_VARIANTS[mapped.variantId]) return mapped.variantId;
+  const option = (STEP_OPTIONS[stepId] || []).find((item) => item.id === optionId);
+  if (option?.assetVariantId && ASSET_VARIANTS[option.assetVariantId]) return option.assetVariantId;
+  return null;
+}
+
+function getOptionIdForVariant(stepId, variantId) {
+  if (!stepId || !variantId) return null;
+  const options = STEP_OPTIONS[stepId] || [];
+  const mapped = ASSET_OPTION_TO_LAYER?.[stepId] || {};
+  const direct = options.find((option) => option.assetVariantId === variantId);
+  if (direct) return direct.id;
+  const mappedEntry = Object.entries(mapped).find(([, value]) => value?.variantId === variantId);
+  return mappedEntry ? mappedEntry[0] : null;
+}
+
+function syncSelectionFamilyToActiveVariant(variantId) {
+  const variant = ASSET_VARIANTS[variantId];
+  if (!variant?.family) return;
+  state.selections.family = variant.family;
+}
+
+function clearSelectionsOutsideActiveVariant(activeVariantId, changedStepId) {
+  for (const stepId of ['leg', 'shelf', 'finish']) {
+    const selectedId = state.selections[stepId];
+    if (!selectedId) continue;
+    const selectedVariantId = getMappedVariantIdForSelection(stepId, selectedId);
+    if (selectedVariantId && selectedVariantId !== activeVariantId && stepId !== changedStepId) {
+      state.selections[stepId] = null;
+    }
+  }
+}
+
 function getStageOptionFromVariant(variant, component) {
   if (!variant || !component) return null;
   const componentOptions = variant.components?.[component];
@@ -786,11 +840,14 @@ function getMappedStageOption(stepId, optionId, activeVariant) {
   if (!map) return null;
   const mappedVariant = ASSET_VARIANTS[map.variantId];
   if (!mappedVariant || !activeVariant) return null;
-  if (mappedVariant.family !== activeVariant.family) return null;
+  // Exact-variant lock: do not pull a component from a sibling profile.
+  // Same-family assets can still have different baselines/opening boxes.
+  if (mappedVariant.id !== activeVariant.id) return null;
   return getStageOptionFromVariant(mappedVariant, map.component);
 }
 
 function getActiveVariantId() {
+  if (state.activeVariantId && ASSET_VARIANTS[state.activeVariantId]) return state.activeVariantId;
   const selectedProfile = state.selections.profile;
   if (selectedProfile && ASSET_VARIANTS[selectedProfile]) return selectedProfile;
   const selectedFamily = state.selections.family || 'tailored-classical';
