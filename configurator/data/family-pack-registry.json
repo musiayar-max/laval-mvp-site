@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "purpose": "Technical registry for current LAVAL configurator family packages. Human family taxonomy is preserved; productId prevents technical collisions.",
+  "families": [
+    {
+      "family": "tailored-classical",
+      "displayName": "Tailored Classical",
+      "packages": [
+        {
+          "productId": "tailored-classical-v1-1",
+          "label": "Tailored Classical — v1.1",
+          "assetRoot": "/configurator/assets/families/tailored-classical/v1_1",
+          "manifest": "/configurator/assets/families/tailored-classical/v1_1/manifest.json",
+          "status": "visual-qa-reopen",
+          "notes": "Technically valid, but shelf/profile relationship requires visual confirmation before production."
+        },
+        {
+          "productId": "tailored-classical-2of3-v1-0-1",
+          "label": "Tailored Classical — 2 of 3",
+          "assetRoot": "/configurator/assets/families/tailored-classical/2of3-v1_0_1",
+          "manifest": "/configurator/assets/families/tailored-classical/2of3-v1_0_1/manifest.json",
+          "status": "conditional-pass",
+          "notes": "Requires owner decision on semi-transparent finish layer."
+        }
+      ]
+    },
+    {
+      "family": "antique-neoclassical-arch",
+      "displayName": "Antique Neoclassical Arch",
+      "packages": [
+        {
+          "productId": "antique-neoclassical-arch-v1-0-1",
+          "label": "Antique Neoclassical Arch — v1.0.1",
+          "assetRoot": "/configurator/assets/families/antique-neoclassical-arch/v1_0_1",
+          "manifest": "/configurator/assets/families/antique-neoclassical-arch/v1_0_1/manifest.json",
+          "status": "ready-for-audit",
+          "notes": "Revised manifest supports reliefAnchor fallback and twin reliefAnchors."
+        }
+      ]
+    }
+  ]
+}

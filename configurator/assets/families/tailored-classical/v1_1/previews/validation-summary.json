@@ -1,0 +1,30 @@
+{
+  "package": "laval__tailored-classical__family-pack-v1_1.zip",
+  "stageCanvas": {
+    "width": 2400,
+    "height": 1800,
+    "aspectRatio": "4:3",
+    "format": "png",
+    "alpha": true,
+    "colorSpace": "srgb"
+  },
+  "iconCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "aspectRatio": "1:1",
+    "format": "png"
+  },
+  "checks": {
+    "relief_none_stage_is_null": true,
+    "no_relief_none_stage_file_created": true,
+    "clean_relief_stage_exists": true,
+    "clean_relief_stage_size": [
+      2400,
+      1800
+    ],
+    "clean_relief_stage_mode": "RGBA",
+    "assembled_with_relief_exists": true,
+    "assembled_no_relief_exists": true,
+    "debug_relief_anchor_overlay_exists": true
+  }
+}

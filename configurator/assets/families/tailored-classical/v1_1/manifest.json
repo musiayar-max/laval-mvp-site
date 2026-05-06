@@ -1,0 +1,125 @@
+{
+  "family": "tailored-classical",
+  "label": "Tailored Classical",
+  "version": "1.1",
+  "stageCanvas": {
+    "width": 2400,
+    "height": 1800,
+    "aspectRatio": "4:3",
+    "format": "png",
+    "alpha": true,
+    "colorSpace": "srgb"
+  },
+  "iconCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "aspectRatio": "1:1",
+    "format": "png"
+  },
+  "anchors": {
+    "centerlineX": 1200,
+    "baselineY": 1560,
+    "openingBox": {
+      "x": 720,
+      "y": 560,
+      "width": 960,
+      "height": 820
+    },
+    "reliefAnchor": {
+      "x": 1200,
+      "y": 365
+    }
+  },
+  "layerOrder": [
+    "door",
+    "profile",
+    "legs",
+    "shelf",
+    "finish",
+    "relief"
+  ],
+  "components": {
+    "profile": {
+      "required": true,
+      "options": {
+        "arched-classical-a": {
+          "label": "Arched Classical",
+          "stage": "stage/laval__tailored-classical__profile__arched-classical-a.png",
+          "icon": "icons/laval__tailored-classical__profile__arched-classical-a__icon.png"
+        }
+      }
+    },
+    "legs": {
+      "required": true,
+      "options": {
+        "pilaster-pair-a": {
+          "label": "Pilaster Pair",
+          "stage": "stage/laval__tailored-classical__legs__pilaster-pair-a.png",
+          "icon": "icons/laval__tailored-classical__legs__pilaster-pair-a__icon.png"
+        }
+      }
+    },
+    "shelf": {
+      "required": true,
+      "options": {
+        "molded-crown-a": {
+          "label": "Molded Crown",
+          "stage": "stage/laval__tailored-classical__shelf__molded-crown-a.png",
+          "icon": "icons/laval__tailored-classical__shelf__molded-crown-a__icon.png"
+        }
+      }
+    },
+    "door": {
+      "required": false,
+      "options": {
+        "arched-black-iron-a": {
+          "label": "Arched Black Iron",
+          "stage": "stage/laval__tailored-classical__door__arched-black-iron-a.png",
+          "icon": "icons/laval__tailored-classical__door__arched-black-iron-a__icon.png"
+        }
+      }
+    },
+    "finish": {
+      "required": true,
+      "options": {
+        "warm-cream-limestone-a": {
+          "label": "Warm Cream Limestone",
+          "stage": "stage/laval__tailored-classical__finish__warm-cream-limestone-a.png",
+          "icon": "icons/laval__tailored-classical__finish__warm-cream-limestone-a__icon.png"
+        }
+      }
+    },
+    "relief": {
+      "required": false,
+      "options": {
+        "none": {
+          "label": "No Relief",
+          "stage": null,
+          "icon": "icons/laval__tailored-classical__relief__none__icon.png"
+        },
+        "center-crest-a": {
+          "label": "Center Crest",
+          "stage": "stage/laval__tailored-classical__relief__center-crest-a.png",
+          "icon": "icons/laval__tailored-classical__relief__center-crest-a__icon.png"
+        }
+      }
+    }
+  },
+  "previews": {
+    "assembled": "previews/assembled-preview.png",
+    "reviewSheet": "previews/review-sheet.jpg",
+    "debugOverlay": "previews/debug-centerline-overlay.png",
+    "sourceReference": "previews/source-reference.jpg",
+    "assembledWithRelief": "previews/assembled-preview__with-relief.png",
+    "assembledNoRelief": "previews/assembled-preview__no-relief.png",
+    "debugReliefAnchorOverlay": "previews/debug-relief-anchor-overlay.png"
+  },
+  "futureMetadata": {
+    "fabricationReady": false,
+    "cncReady": false,
+    "threeDReady": false,
+    "provenanceReady": false,
+    "notes": "v1.1 adds the first validated Tailored Classical center-crest relief overlay. No-relief remains a null stage state. Human/fabrication validation is still required before construction use.",
+    "reliefAnchorValidated": true
+  }
+}

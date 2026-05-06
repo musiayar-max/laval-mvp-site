@@ -1,0 +1,143 @@
+{
+  "family": "antique-neoclassical-arch",
+  "label": "Antique Neoclassical Arch",
+  "version": "1.0.1",
+  "stageCanvas": {
+    "width": 2400,
+    "height": 1800,
+    "aspectRatio": "4:3",
+    "format": "png",
+    "alpha": true,
+    "colorSpace": "srgb"
+  },
+  "iconCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "aspectRatio": "1:1",
+    "format": "png"
+  },
+  "anchors": {
+    "centerlineX": 1200,
+    "baselineY": 1560,
+    "openingBox": {
+      "x": 760,
+      "y": 560,
+      "width": 880,
+      "height": 760
+    },
+    "reliefAnchors": {
+      "leftRoundel": {
+        "x": 650,
+        "y": 420
+      },
+      "rightRoundel": {
+        "x": 1750,
+        "y": 420
+      }
+    },
+    "reliefAnchor": {
+      "x": 1200,
+      "y": 420
+    }
+  },
+  "layerOrder": [
+    "door",
+    "profile",
+    "legs",
+    "shelf",
+    "finish",
+    "relief"
+  ],
+  "components": {
+    "profile": {
+      "required": true,
+      "options": {
+        "arched-neoclassical-surround-a": {
+          "label": "Arched Neoclassical Surround",
+          "stage": "stage/laval__antique-neoclassical-arch__profile__arched-neoclassical-surround-a.png",
+          "icon": "icons/laval__antique-neoclassical-arch__profile__arched-neoclassical-surround-a__icon.png"
+        }
+      }
+    },
+    "legs": {
+      "required": true,
+      "options": {
+        "plain-block-pilaster-pair-a": {
+          "label": "Plain Block Pilasters",
+          "stage": "stage/laval__antique-neoclassical-arch__legs__plain-block-pilaster-pair-a.png",
+          "icon": "icons/laval__antique-neoclassical-arch__legs__plain-block-pilaster-pair-a__icon.png"
+        }
+      }
+    },
+    "shelf": {
+      "required": true,
+      "options": {
+        "long-shallow-rounded-slab-a": {
+          "label": "Long Rounded Slab",
+          "stage": "stage/laval__antique-neoclassical-arch__shelf__long-shallow-rounded-slab-a.png",
+          "icon": "icons/laval__antique-neoclassical-arch__shelf__long-shallow-rounded-slab-a__icon.png"
+        }
+      }
+    },
+    "door": {
+      "required": false,
+      "options": {
+        "black-arched-cast-iron-insert-a": {
+          "label": "Black Arched Cast-Iron Insert",
+          "stage": "stage/laval__antique-neoclassical-arch__door__black-arched-cast-iron-insert-a.png",
+          "icon": "icons/laval__antique-neoclassical-arch__door__black-arched-cast-iron-insert-a__icon.png"
+        }
+      }
+    },
+    "finish": {
+      "required": true,
+      "options": {
+        "aged-warm-limestone-a": {
+          "label": "Aged Warm Limestone",
+          "stage": "stage/laval__antique-neoclassical-arch__finish__aged-warm-limestone-a.png",
+          "icon": "icons/laval__antique-neoclassical-arch__finish__aged-warm-limestone-a__icon.png"
+        }
+      }
+    },
+    "relief": {
+      "required": false,
+      "options": {
+        "none": {
+          "label": "No Relief",
+          "stage": null,
+          "icon": "icons/laval__antique-neoclassical-arch__relief__none__icon.png"
+        },
+        "twin-eroded-magnolia-roundels-a": {
+          "label": "Twin Eroded Magnolia Roundels",
+          "stage": "stage/laval__antique-neoclassical-arch__relief__twin-eroded-magnolia-roundels-a.png",
+          "icon": "icons/laval__antique-neoclassical-arch__relief__twin-eroded-magnolia-roundels-a__icon.png"
+        }
+      }
+    }
+  },
+  "defaultSelection": {
+    "family": "antique-neoclassical-arch",
+    "profile": "arched-neoclassical-surround-a",
+    "legs": "plain-block-pilaster-pair-a",
+    "shelf": "long-shallow-rounded-slab-a",
+    "door": "black-arched-cast-iron-insert-a",
+    "finish": "aged-warm-limestone-a",
+    "relief": "twin-eroded-magnolia-roundels-a"
+  },
+  "futureMetadata": {
+    "fabricationReady": false,
+    "cncReady": false,
+    "threeDReady": false,
+    "provenanceReady": false,
+    "notes": "v1.0.1 adds standard anchors.reliefAnchor fallback while preserving twin reliefAnchors for the roundel pair. Visual configurator asset package only; fabrication validation remains later.",
+    "anchorNormalized": true
+  },
+  "previews": {
+    "assembled": "previews/assembled-preview.png",
+    "assembledWithRelief": "previews/assembled-preview__with-relief.png",
+    "assembledNoRelief": "previews/assembled-preview__no-relief.png",
+    "debugOverlay": "previews/debug-alignment-overlay.png",
+    "sourceReference": "previews/source-reference.jpg",
+    "debugReliefAnchorOverlay": "previews/debug-relief-anchor-overlay.png"
+  }
+}

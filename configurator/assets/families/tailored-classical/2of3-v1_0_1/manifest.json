@@ -1,0 +1,131 @@
+{
+  "family": "tailored-classical",
+  "version": "1.0.1-repair",
+  "stageCanvas": {
+    "width": 2400,
+    "height": 1800,
+    "aspectRatio": "4:3",
+    "format": "png",
+    "alpha": true,
+    "colorSpace": "srgb"
+  },
+  "iconCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "aspectRatio": "1:1",
+    "format": "png"
+  },
+  "anchors": {
+    "centerlineX": 1200,
+    "baselineY": 1560,
+    "openingBox": {
+      "x": 760,
+      "y": 560,
+      "width": 880,
+      "height": 760
+    },
+    "reliefAnchor": {
+      "x": 1200,
+      "y": 360
+    }
+  },
+  "layerOrder": [
+    "door",
+    "profile",
+    "legs",
+    "shelf",
+    "finish",
+    "relief"
+  ],
+  "components": {
+    "door": {
+      "required": false,
+      "options": {
+        "black-arched-insert-a": {
+          "label": "Black Arched Insert",
+          "stage": "stage/laval__tailored-classical__door__black-arched-insert-a.png",
+          "icon": "icons/laval__tailored-classical__door__black-arched-insert-a__icon.png"
+        }
+      }
+    },
+    "profile": {
+      "required": true,
+      "options": {
+        "arched-panel-surround-a": {
+          "label": "Arched Panel Surround",
+          "stage": "stage/laval__tailored-classical__profile__arched-panel-surround-a.png",
+          "icon": "icons/laval__tailored-classical__profile__arched-panel-surround-a__icon.png"
+        }
+      }
+    },
+    "legs": {
+      "required": true,
+      "options": {
+        "pilaster-plinth-pair-a": {
+          "label": "Pilaster Plinth Pair",
+          "stage": "stage/laval__tailored-classical__legs__pilaster-plinth-pair-a.png",
+          "icon": "icons/laval__tailored-classical__legs__pilaster-plinth-pair-a__icon.png"
+        }
+      }
+    },
+    "shelf": {
+      "required": true,
+      "options": {
+        "long-shallow-classical-cap-a": {
+          "label": "Long Shallow Classical Cap",
+          "stage": "stage/laval__tailored-classical__shelf__long-shallow-classical-cap-a.png",
+          "icon": "icons/laval__tailored-classical__shelf__long-shallow-classical-cap-a__icon.png"
+        }
+      }
+    },
+    "finish": {
+      "required": true,
+      "options": {
+        "warm-honed-limestone-a": {
+          "label": "Warm Honed Limestone",
+          "stage": "stage/laval__tailored-classical__finish__warm-honed-limestone-a.png",
+          "icon": "icons/laval__tailored-classical__finish__warm-honed-limestone-a__icon.png"
+        }
+      }
+    },
+    "relief": {
+      "required": false,
+      "options": {
+        "none": {
+          "label": "No Relief",
+          "stage": null,
+          "icon": "icons/laval__tailored-classical__relief__none__icon.png"
+        },
+        "center-shell-scroll-crest-a": {
+          "label": "Center Shell Scroll Crest",
+          "stage": "stage/laval__tailored-classical__relief__center-shell-scroll-crest-a.png",
+          "icon": "icons/laval__tailored-classical__relief__center-shell-scroll-crest-a__icon.png"
+        }
+      }
+    }
+  },
+  "futureMetadata": {
+    "fabricationReady": false,
+    "cncReady": false,
+    "threeDReady": false,
+    "provenanceReady": false,
+    "portalReady": false,
+    "reliefResizedForAnchor": true,
+    "corruptFinishIconRegenerated": true,
+    "repairStatus": "technical repair preserving original Tailored Classical family slug; human taxonomy retained",
+    "familySlugPreservedFromSource": true
+  },
+  "notes": {
+    "noReliefBehavior": "relief none uses stage:null; no stage/laval__tailored-classical__relief__none.png file is included.",
+    "codePositioning": "All stage assets are intended to render at x=0, y=0, scale=1, rotation=0.",
+    "familyTaxonomy": "Family slug intentionally preserved as tailored-classical per human-designated taxonomy."
+  },
+  "label": "Tailored Classical",
+  "previews": {
+    "assembled": "previews/assembled-preview.png",
+    "assembledWithRelief": "previews/assembled-preview__with-relief.png",
+    "assembledNoRelief": "previews/assembled-preview__no-relief.png",
+    "debugReliefAnchorOverlay": "previews/debug-relief-anchor-overlay.png",
+    "sourceReference": "previews/source-reference.jpg"
+  }
+}

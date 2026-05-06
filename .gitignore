@@ -4,3 +4,11 @@ dist/
 *.zip
 package-lock.json
 .DS_Store
+
+# LAVAL local asset QA / intake artifacts
+_asset_audits/
+_asset_backups/
+_asset_extract/
+_asset_intake/
+_laval_drop/
+*.zip

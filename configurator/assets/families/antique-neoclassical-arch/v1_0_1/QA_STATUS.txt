@@ -1,0 +1,6 @@
+PASS
+- Stage PNGs are 2400 x 1800 RGBA.
+- Icon PNGs are 1024 x 1024.
+- No stage relief__none.png exists.
+- Manifest paths resolve.
+- Previews are review-only and not referenced as stage assets.
