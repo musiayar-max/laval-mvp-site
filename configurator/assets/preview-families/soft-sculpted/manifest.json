@@ -1,0 +1,42 @@
+{
+  "family": "soft-sculpted",
+  "version": "0.3.0-preview-selector",
+  "mode": "full-pre-rendered-finish-swap",
+  "stageCanvas": {
+    "width": 2400,
+    "height": 1800,
+    "aspectRatio": "4:3",
+    "format": "png",
+    "alpha": true,
+    "colorSpace": "sRGB"
+  },
+  "iconCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "aspectRatio": "1:1",
+    "format": "png"
+  },
+  "finishes": {
+    "cordova-limestone": {
+      "label": "Cordova Limestone",
+      "image": "images/laval__soft-sculpted__finish__cordova-limestone.png",
+      "icon": "icons/laval__soft-sculpted__finish__cordova-limestone__icon.png",
+      "source": "source/soft-sculpted__cordova-limestone__exact-source.png",
+      "note": "Warm cream limestone direction"
+    },
+    "alabama-marble": {
+      "label": "Alabama Marble",
+      "image": "images/laval__soft-sculpted__finish__alabama-marble.png",
+      "icon": "icons/laval__soft-sculpted__finish__alabama-marble__icon.png",
+      "source": "source/soft-sculpted__alabama-marble__exact-source.png",
+      "note": "Soft white Sylacauga marble direction"
+    },
+    "lincoln-calacatta": {
+      "label": "Lincoln Calacatta",
+      "image": "images/laval__soft-sculpted__finish__lincoln-calacatta.png",
+      "icon": "icons/laval__soft-sculpted__finish__lincoln-calacatta__icon.png",
+      "source": "source/soft-sculpted__lincoln-calacatta__exact-source.png",
+      "note": "High-movement white-and-grey marble direction"
+    }
+  }
+}

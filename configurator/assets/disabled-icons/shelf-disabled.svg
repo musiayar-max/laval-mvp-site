@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="112" fill="#f4f0e8"/>
+  <rect x="210" y="250" width="604" height="524" rx="60" fill="none" stroke="#6f675c" stroke-width="24" opacity="0.55"/>
+  <path d="M322 742V412h380v330" fill="none" stroke="#6f675c" stroke-width="22" stroke-linecap="round" opacity="0.55"/>
+  <text x="512" y="870" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="54" fill="#6f675c" opacity="0.72">Shelf</text>
+</svg>

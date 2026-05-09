@@ -1,0 +1,1 @@
+Existing Tailored Classical preview pack assets reused. Human-approved earlier; final UI audit still required after registry relabel.

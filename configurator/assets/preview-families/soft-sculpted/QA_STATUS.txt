@@ -1,0 +1,1 @@
+MVP preview-selector pass: dimensions normalized to 2400x1800 images and 1024x1024 icons. Human visual audit still required after install on dark shell.

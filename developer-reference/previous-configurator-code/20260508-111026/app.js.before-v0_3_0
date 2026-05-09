@@ -1,0 +1,502 @@
+/* ==========================================================================
+   LAVAL Configurator — MVP Family/Profile/Finish Preview Controller
+   --------------------------------------------------------------------------
+   Preserves the existing LAVAL configurator shell.
+   Does NOT redesign the UI.
+   Does NOT render layered stage assets.
+   Does NOT use material overlays.
+
+   Active:
+     01 Family
+     02 Profile
+     03 Finish
+
+   Deferred / greyed:
+     Legs
+     Shelf / Crown
+     Relief
+     Door / Firebox
+
+   Finish logic:
+     Each finish is a full pre-rendered mantel image.
+   ========================================================================== */
+
+import { LAVAL_PREVIEW_CONFIGURATOR_REGISTRY as REGISTRY } from './data/preview-configurator-registry.js';
+
+const ACTIVE_STEPS = [
+  {
+    id: 'family',
+    index: '01',
+    label: 'Family',
+    eyebrow: 'Step 01',
+    title: 'Mantel Family',
+    helper: 'Choose the architectural family that anchors the mantel. Each family uses one representative profile for this MVP.'
+  },
+  {
+    id: 'profile',
+    index: '02',
+    label: 'Profile',
+    eyebrow: 'Step 02',
+    title: 'Representative Profile',
+    helper: 'The MVP shows one complete representative profile per family. Deeper profile refinements are handled in consultation.'
+  },
+  {
+    id: 'finish',
+    index: '03',
+    label: 'Finish',
+    eyebrow: 'Step 03',
+    title: 'Stone Finish',
+    helper: 'Choose the stone direction. Each finish is a full pre-rendered mantel image, not a texture overlay.'
+  }
+];
+
+const DEFERRED_STEPS = [
+  { id: 'legs', label: 'Legs', note: 'Refined in consultation' },
+  { id: 'shelf', label: 'Shelf / Crown', note: 'Refined in consultation' },
+  { id: 'relief', label: 'Relief', note: 'Optional custom detail' },
+  { id: 'door', label: 'Door / Firebox', note: 'Confirmed in design review' }
+];
+
+const STONE_LABELS = {
+  'warm-limestone': 'Cordova Limestone',
+  'soft-white-marble': 'Alabama Marble',
+  'dramatic-grey-veined-marble': 'Lincoln Calacatta'
+};
+
+const state = {
+  activeStepId: 'family',
+  familyId: REGISTRY.families[0]?.id || null,
+  finishId: REGISTRY.families[0]?.defaultFinish || REGISTRY.families[0]?.finishes?.[0]?.id || null
+};
+
+const el = {};
+
+function $(selector) {
+  return document.querySelector(selector);
+}
+
+function resolveElements() {
+  el.shell = $('#laval-shell');
+  el.stageFigure = $('#laval-stage-figure');
+  el.mount = $('#laval-mantel-mount');
+  el.caption = $('#laval-stage-caption-text');
+
+  el.rail = $('#laval-step-rail-list');
+  el.dockWidgets = $('#laval-dock-widgets');
+  el.dockStepText = $('#laval-dock-step-text');
+
+  el.browserGrid = $('#laval-browser-grid');
+  el.browserTitle = $('#laval-browser-title');
+
+  el.paneEyebrow = $('#laval-pane-eyebrow');
+  el.paneTitle = $('#laval-pane-title');
+  el.paneHelper = $('#laval-pane-helper');
+  el.summaryList = $('.laval-pane-summary-list');
+
+  el.continueBtn = $('.laval-dock-advance');
+  el.resetBtn = $('.laval-top-utility [aria-label="Reset selection"]');
+
+  el.reviewSheet = $('#laval-review-sheet');
+  el.reviewSummary = $('#laval-review-summary-list');
+  el.reviewForm = $('#laval-review-form');
+  el.reviewConfirm = $('#laval-review-confirm');
+}
+
+function families() {
+  return REGISTRY.families || [];
+}
+
+function getFamily(familyId = state.familyId) {
+  return families().find((family) => family.id === familyId) || families()[0];
+}
+
+function normalizeFinishLabel(finish) {
+  return STONE_LABELS[finish?.id] || finish?.label || 'Stone Finish';
+}
+
+function getFinish(family = getFamily(), finishId = state.finishId) {
+  return family?.finishes?.find((finish) => finish.id === finishId) || family?.finishes?.[0] || null;
+}
+
+function setFamily(familyId) {
+  const family = getFamily(familyId);
+  if (!family) return;
+
+  state.familyId = family.id;
+  state.finishId = family.defaultFinish || family.finishes?.[0]?.id || null;
+  render();
+}
+
+function setFinish(finishId) {
+  const family = getFamily();
+  if (!family?.finishes?.some((finish) => finish.id === finishId)) return;
+
+  state.finishId = finishId;
+  render();
+}
+
+function setActiveStep(stepId) {
+  if (!ACTIVE_STEPS.some((step) => step.id === stepId)) return;
+
+  state.activeStepId = stepId;
+  render();
+}
+
+function activeStep() {
+  return ACTIVE_STEPS.find((step) => step.id === state.activeStepId) || ACTIVE_STEPS[0];
+}
+
+function activeStepIndex() {
+  return ACTIVE_STEPS.findIndex((step) => step.id === state.activeStepId);
+}
+
+function hasSelected(stepId) {
+  if (stepId === 'family') return Boolean(state.familyId);
+  if (stepId === 'profile') return Boolean(getFamily()?.profileId);
+  if (stepId === 'finish') return Boolean(state.finishId);
+  return false;
+}
+
+function renderStage() {
+  const family = getFamily();
+  const finish = getFinish(family);
+
+  if (!family || !finish || !el.mount) return;
+
+  el.stageFigure?.setAttribute('data-family', family.id);
+  el.stageFigure?.setAttribute('data-profile', family.profileId || '');
+  el.stageFigure?.setAttribute('data-finish', finish.id || '');
+
+  el.mount.innerHTML = `
+    <img
+      class="laval-mvp-preview-image"
+      src="${finish.image}"
+      alt="${family.displayName} mantel in ${normalizeFinishLabel(finish)}"
+      loading="eager"
+      decoding="async"
+    />
+  `;
+
+  if (el.caption) {
+    el.caption.textContent = `${family.displayName} · ${normalizeFinishLabel(finish)}`;
+  }
+}
+
+function renderStepRail() {
+  if (!el.rail) return;
+
+  const activeMarkup = ACTIVE_STEPS.map((step) => {
+    const isSelected = step.id === state.activeStepId;
+    const isDone = hasSelected(step.id);
+
+    return `
+      <li class="laval-step-rail-item">
+        <button
+          class="laval-step-orb${isSelected ? ' is-selected' : ''}${isDone && !isSelected ? ' is-done' : ''}"
+          type="button"
+          data-step-id="${step.id}"
+          aria-current="${isSelected ? 'step' : 'false'}"
+          aria-label="${step.label} — ${step.eyebrow}">
+          <span aria-hidden="true">${step.index}</span>
+          <span class="laval-step-orb-tooltip">${step.label}</span>
+        </button>
+      </li>
+    `;
+  }).join('');
+
+  const deferredMarkup = DEFERRED_STEPS.map((step) => `
+    <li class="laval-step-rail-item">
+      <button
+        class="laval-step-orb laval-step-orb--deferred"
+        type="button"
+        disabled
+        aria-disabled="true"
+        aria-label="${step.label} — ${step.note}">
+        <span aria-hidden="true">—</span>
+        <span class="laval-step-orb-tooltip">${step.label} · ${step.note}</span>
+      </button>
+    </li>
+  `).join('');
+
+  el.rail.innerHTML = activeMarkup + deferredMarkup;
+
+  el.rail.querySelectorAll('[data-step-id]').forEach((button) => {
+    button.addEventListener('click', () => setActiveStep(button.dataset.stepId));
+  });
+}
+
+function renderDockTokens() {
+  if (!el.dockWidgets) return;
+
+  el.dockWidgets.innerHTML = ACTIVE_STEPS.map((step) => {
+    const isSelected = step.id === state.activeStepId;
+    const isDone = hasSelected(step.id);
+
+    return `
+      <button
+        class="laval-dock-token${isSelected ? ' is-selected' : ''}${isDone && !isSelected ? ' is-done' : ''}"
+        type="button"
+        data-step-id="${step.id}"
+        aria-current="${isSelected ? 'step' : 'false'}"
+        aria-label="${step.label}">
+        ${step.index}
+      </button>
+    `;
+  }).join('');
+
+  el.dockWidgets.querySelectorAll('[data-step-id]').forEach((button) => {
+    button.addEventListener('click', () => setActiveStep(button.dataset.stepId));
+  });
+}
+
+function tileMarkup({ id, label, subtitle, icon, selected, disabled = false, action }) {
+  const imageMarkup = icon
+    ? `<img src="${icon}" alt="" loading="lazy" decoding="async">`
+    : '';
+
+  return `
+    <li>
+      <button
+        class="laval-tile${selected ? ' is-selected' : ''}${disabled ? ' is-disabled' : ''}"
+        type="button"
+        ${disabled ? 'disabled aria-disabled="true"' : ''}
+        ${action ? `data-action="${action}"` : ''}
+        ${id ? `data-option-id="${id}"` : ''}
+        aria-label="${label}">
+        <span class="laval-tile-swatch" aria-hidden="true">${imageMarkup}</span>
+        <span class="laval-tile-text">
+          <span class="laval-tile-label">${label}</span>
+          <span class="laval-tile-subtitle">${subtitle || ''}</span>
+        </span>
+        <span class="laval-tile-ring" aria-hidden="true"></span>
+      </button>
+    </li>
+  `;
+}
+
+function renderOptionTiles() {
+  if (!el.browserGrid) return;
+
+  const family = getFamily();
+  const finish = getFinish(family);
+
+  if (state.activeStepId === 'family') {
+    if (el.browserTitle) el.browserTitle.textContent = 'Mantel Family';
+
+    el.browserGrid.innerHTML = families().map((familyOption) => {
+      const representativeFinish =
+        familyOption.finishes?.find((item) => item.id === familyOption.defaultFinish) ||
+        familyOption.finishes?.[0];
+
+      return tileMarkup({
+        id: familyOption.id,
+        label: familyOption.displayName,
+        subtitle: familyOption.description || 'Representative family profile',
+        icon: representativeFinish?.icon || representativeFinish?.image,
+        selected: familyOption.id === state.familyId,
+        action: 'family'
+      });
+    }).join('');
+  }
+
+  if (state.activeStepId === 'profile') {
+    if (el.browserTitle) el.browserTitle.textContent = 'Profile';
+
+    el.browserGrid.innerHTML = tileMarkup({
+      id: family.profileId,
+      label: family.profileLabel || `${family.displayName} Representative Profile`,
+      subtitle: 'One complete profile shown for MVP. Further profile details are refined in consultation.',
+      icon: finish?.icon || finish?.image,
+      selected: true,
+      action: 'profile'
+    });
+  }
+
+  if (state.activeStepId === 'finish') {
+    if (el.browserTitle) el.browserTitle.textContent = 'Stone Finish';
+
+    el.browserGrid.innerHTML = (family.finishes || []).map((finishOption) => (
+      tileMarkup({
+        id: finishOption.id,
+        label: normalizeFinishLabel(finishOption),
+        subtitle: finishOption.note || 'Full pre-rendered mantel preview',
+        icon: finishOption.icon || finishOption.image,
+        selected: finishOption.id === state.finishId,
+        action: 'finish'
+      })
+    )).join('');
+  }
+
+  el.browserGrid.querySelectorAll('[data-action="family"]').forEach((button) => {
+    button.addEventListener('click', () => setFamily(button.dataset.optionId));
+  });
+
+  el.browserGrid.querySelectorAll('[data-action="profile"]').forEach((button) => {
+    button.addEventListener('click', () => setActiveStep('finish'));
+  });
+
+  el.browserGrid.querySelectorAll('[data-action="finish"]').forEach((button) => {
+    button.addEventListener('click', () => setFinish(button.dataset.optionId));
+  });
+}
+
+function renderPane() {
+  const step = activeStep();
+
+  if (el.paneEyebrow) el.paneEyebrow.textContent = step.eyebrow;
+  if (el.paneTitle) el.paneTitle.textContent = step.title;
+  if (el.paneHelper) el.paneHelper.textContent = step.helper;
+}
+
+function renderSummary() {
+  const family = getFamily();
+  const finish = getFinish(family);
+
+  const summary = [
+    ['Family', family?.displayName || '—'],
+    ['Profile', family?.profileLabel || '—'],
+    ['Legs', 'Refined in consultation'],
+    ['Shelf', 'Refined in consultation'],
+    ['Finish', finish ? normalizeFinishLabel(finish) : '—']
+  ];
+
+  document.querySelectorAll('.laval-pane-summary-item').forEach((item, index) => {
+    const [key, value] = summary[index] || ['', '—'];
+    const keyNode = item.querySelector('.laval-pane-summary-key');
+    const valueNode = item.querySelector('.laval-pane-summary-val');
+
+    if (keyNode) keyNode.textContent = key;
+    if (valueNode) valueNode.textContent = value;
+
+    item.classList.toggle('is-empty', value === '—');
+    item.classList.toggle('is-filled', value !== '—');
+  });
+}
+
+function updateDockStepText() {
+  if (!el.dockStepText) return;
+  const step = activeStep();
+  el.dockStepText.textContent = `${step.index} of 03 · ${step.label}`;
+}
+
+function updateContinueButton() {
+  if (!el.continueBtn) return;
+
+  const index = activeStepIndex();
+  const isLast = index >= ACTIVE_STEPS.length - 1;
+
+  el.continueBtn.disabled = false;
+  el.continueBtn.querySelector('span').textContent = isLast ? 'Review' : 'Continue';
+}
+
+function continueToNextStep() {
+  const index = activeStepIndex();
+
+  if (index < ACTIVE_STEPS.length - 1) {
+    setActiveStep(ACTIVE_STEPS[index + 1].id);
+    return;
+  }
+
+  openReview();
+}
+
+function resetConfigurator() {
+  const firstFamily = families()[0];
+  state.activeStepId = 'family';
+  state.familyId = firstFamily?.id || null;
+  state.finishId = firstFamily?.defaultFinish || firstFamily?.finishes?.[0]?.id || null;
+  closeReview();
+  render();
+}
+
+function buildLeadPayload() {
+  const family = getFamily();
+  const finish = getFinish(family);
+
+  return {
+    configuratorMode: 'mvp-family-profile-finish-preview-selector',
+    family: family?.id || null,
+    familyLabel: family?.displayName || null,
+    profile: family?.profileId || null,
+    profileLabel: family?.profileLabel || null,
+    finish: finish?.id || null,
+    finishLabel: finish ? normalizeFinishLabel(finish) : null,
+    deferredControls: DEFERRED_STEPS.map((step) => step.id),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function openReview() {
+  if (!el.reviewSheet) return;
+
+  const family = getFamily();
+  const finish = getFinish(family);
+
+  if (el.reviewSummary) {
+    el.reviewSummary.innerHTML = `
+      <li><span>Family</span><strong>${family?.displayName || '—'}</strong></li>
+      <li><span>Profile</span><strong>${family?.profileLabel || '—'}</strong></li>
+      <li><span>Finish</span><strong>${finish ? normalizeFinishLabel(finish) : '—'}</strong></li>
+      <li><span>Legs / Shelf / Relief / Door</span><strong>Refined in consultation</strong></li>
+    `;
+  }
+
+  el.reviewSheet.hidden = false;
+  el.reviewSheet.setAttribute('aria-hidden', 'false');
+}
+
+function closeReview() {
+  if (!el.reviewSheet) return;
+  el.reviewSheet.hidden = true;
+  el.reviewSheet.setAttribute('aria-hidden', 'true');
+}
+
+function wireEvents() {
+  el.continueBtn?.addEventListener('click', continueToNextStep);
+  el.resetBtn?.removeAttribute('disabled');
+  el.resetBtn?.addEventListener('click', resetConfigurator);
+
+  document.getElementById('laval-review-back')?.addEventListener('click', closeReview);
+
+  el.reviewForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const payload = {
+      ...buildLeadPayload(),
+      contact: {
+        name: document.getElementById('laval-field-name')?.value || '',
+        email: document.getElementById('laval-field-email')?.value || '',
+        phone: document.getElementById('laval-field-phone')?.value || '',
+        message: document.getElementById('laval-field-message')?.value || ''
+      }
+    };
+
+    console.log('[LAVAL lead payload]', payload);
+
+    if (el.reviewConfirm) {
+      el.reviewConfirm.hidden = false;
+      el.reviewConfirm.textContent = 'Inquiry captured locally for MVP review. Production routing will be connected later.';
+    }
+  });
+}
+
+function render() {
+  el.shell?.setAttribute('data-mvp-preview-selector', 'true');
+
+  renderStage();
+  renderStepRail();
+  renderDockTokens();
+  renderOptionTiles();
+  renderPane();
+  renderSummary();
+  updateDockStepText();
+  updateContinueButton();
+}
+
+function init() {
+  resolveElements();
+  wireEvents();
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', init);

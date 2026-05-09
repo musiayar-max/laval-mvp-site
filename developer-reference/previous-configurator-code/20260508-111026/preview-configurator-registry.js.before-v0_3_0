@@ -1,0 +1,115 @@
+export const LAVAL_PREVIEW_CONFIGURATOR_REGISTRY = {
+  version: "0.2.0",
+  mode: "family-profile-finish-preview-selector",
+  enabledControls: ["family", "profile", "finish"],
+  disabledControls: [
+    {
+      id: "legs",
+      label: "Legs",
+      note: "Refined in consultation",
+      icon: "/configurator/assets/disabled-icons/legs-disabled.png"
+    },
+    {
+      id: "shelf",
+      label: "Shelf / Crown",
+      note: "Refined in consultation",
+      icon: "/configurator/assets/disabled-icons/shelf-disabled.png"
+    },
+    {
+      id: "relief",
+      label: "Relief",
+      note: "Optional custom detail",
+      icon: "/configurator/assets/disabled-icons/relief-disabled.png"
+    },
+    {
+      id: "door",
+      label: "Door / Firebox",
+      note: "Confirmed during design review",
+      icon: "/configurator/assets/disabled-icons/door-disabled.png"
+    }
+  ],
+  families: [
+    {
+      id: "soft-sculpted",
+      displayName: "Soft Sculpted",
+      profileId: "soft-sculpted-representative-a",
+      profileLabel: "Soft Sculpted Representative Mantel",
+      description: "A softened architectural stone surround with rounded massing and restrained sculptural movement.",
+      defaultFinish: "warm-limestone",
+      packageRoot: "/configurator/assets/preview-families/soft-sculpted",
+      finishes: [
+        {
+          id: "warm-limestone",
+          label: "Warm Limestone",
+          note: "Current available MVP preview",
+          image: "/configurator/assets/preview-families/soft-sculpted/previews/laval__soft-sculpted__finish__warm-limestone.png",
+          icon: "/configurator/assets/preview-families/soft-sculpted/icons/laval__soft-sculpted__finish__warm-limestone__icon.png"
+        }
+      ]
+    },
+    {
+      id: "french-orantal",
+      displayName: "French Orantal",
+      profileId: "french-orantal-representative-a",
+      profileLabel: "French Orantal Representative Mantel",
+      description: "An ornate French-inspired mantel with carved shell movement, vertical refinement, and classical ornament.",
+      defaultFinish: "soft-white-marble",
+      packageRoot: "/configurator/assets/preview-families/french-orantal",
+      finishes: [
+        {
+          id: "soft-white-marble",
+          label: "Soft White Marble",
+          note: "Quiet white stone direction",
+          image: "/configurator/assets/preview-families/french-orantal/images/laval__french-orantal__finish__soft-white-marble.png",
+          icon: "/configurator/assets/preview-families/french-orantal/icons/laval__french-orantal__finish__soft-white-marble__icon.png"
+        },
+        {
+          id: "dramatic-grey-veined-marble",
+          label: "Dramatic Grey-Veined Marble",
+          note: "Higher movement marble direction",
+          image: "/configurator/assets/preview-families/french-orantal/images/laval__french-orantal__finish__dramatic-grey-veined-marble.png",
+          icon: "/configurator/assets/preview-families/french-orantal/icons/laval__french-orantal__finish__dramatic-grey-veined-marble__icon.png"
+        },
+        {
+          id: "warm-limestone",
+          label: "Warm Limestone",
+          note: "Cream limestone direction",
+          image: "/configurator/assets/preview-families/french-orantal/images/laval__french-orantal__finish__warm-limestone.png",
+          icon: "/configurator/assets/preview-families/french-orantal/icons/laval__french-orantal__finish__warm-limestone__icon.png"
+        }
+      ]
+    },
+    {
+      id: "tailored-classical",
+      displayName: "Tailored Classical",
+      profileId: "tailored-classical-representative-a",
+      profileLabel: "Tailored Classical Representative Mantel",
+      description: "A balanced arched classical mantel with restrained ornament and a black inset for architectural contrast.",
+      defaultFinish: "warm-limestone",
+      packageRoot: "/configurator/assets/preview-families/tailored-classical",
+      finishes: [
+        {
+          id: "warm-limestone",
+          label: "Warm Limestone",
+          note: "Cream limestone direction",
+          image: "/configurator/assets/preview-families/tailored-classical/images/laval__tailored-classical__finish__warm-limestone.png",
+          icon: "/configurator/assets/preview-families/tailored-classical/icons/laval__tailored-classical__finish__warm-limestone__icon.png"
+        },
+        {
+          id: "soft-white-marble",
+          label: "Soft White Marble",
+          note: "Refined light marble direction",
+          image: "/configurator/assets/preview-families/tailored-classical/images/laval__tailored-classical__finish__soft-white-marble.png",
+          icon: "/configurator/assets/preview-families/tailored-classical/icons/laval__tailored-classical__finish__soft-white-marble__icon.png"
+        },
+        {
+          id: "dramatic-grey-veined-marble",
+          label: "Dramatic Grey-Veined Marble",
+          note: "Higher drama marble direction",
+          image: "/configurator/assets/preview-families/tailored-classical/images/laval__tailored-classical__finish__dramatic-grey-veined-marble.png",
+          icon: "/configurator/assets/preview-families/tailored-classical/icons/laval__tailored-classical__finish__dramatic-grey-veined-marble__icon.png"
+        }
+      ]
+    }
+  ]
+};

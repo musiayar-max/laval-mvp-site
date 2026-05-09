@@ -1,0 +1,39 @@
+{
+  "family": "tailored-classical",
+  "version": "0.3.0-preview-selector",
+  "mode": "full-pre-rendered-finish-swap",
+  "stageCanvas": {
+    "width": 2400,
+    "height": 1800,
+    "aspectRatio": "4:3",
+    "format": "png",
+    "alpha": true,
+    "colorSpace": "sRGB"
+  },
+  "iconCanvas": {
+    "width": 1024,
+    "height": 1024,
+    "aspectRatio": "1:1",
+    "format": "png"
+  },
+  "finishes": {
+    "cordova-limestone": {
+      "label": "Cordova Limestone",
+      "image": "images/laval__tailored-classical__finish__cordova-limestone.png",
+      "icon": "icons/laval__tailored-classical__finish__cordova-limestone__icon.png",
+      "note": "Warm cream limestone direction"
+    },
+    "alabama-marble": {
+      "label": "Alabama Marble",
+      "image": "images/laval__tailored-classical__finish__alabama-marble.png",
+      "icon": "icons/laval__tailored-classical__finish__alabama-marble__icon.png",
+      "note": "Soft white Sylacauga marble direction"
+    },
+    "lincoln-calacatta": {
+      "label": "Lincoln Calacatta",
+      "image": "images/laval__tailored-classical__finish__lincoln-calacatta.png",
+      "icon": "icons/laval__tailored-classical__finish__lincoln-calacatta__icon.png",
+      "note": "High-movement white-and-grey marble direction"
+    }
+  }
+}
