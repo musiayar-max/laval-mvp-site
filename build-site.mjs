@@ -52,6 +52,24 @@ const ALWAYS_COPY_DIRS = new Set([
 
 const MAX_ASSET_BYTES = 24 * 1024 * 1024;
 
+const DEPLOY_EXCLUDED_PATHS = [
+  /^configurator\/assets\/mantels\/.+\/stage(?:\/|$)/,
+  /^configurator\/assets\/generated\/true-swap(?:\/|$)/,
+  /^images\/laval-hero-approved-v1\.png$/,
+  /^configurator\/SLOT_SWAP_NOTES\.md$/,
+  /^configurator\/TRUE_SWAP_NOTES\.md$/
+];
+
+function toRepoPath(fullPath) {
+  return path.relative(ROOT, fullPath).split(path.sep).join("/");
+}
+
+function shouldSkipDeployPath(fullPath) {
+  const relPath = toRepoPath(fullPath);
+  return DEPLOY_EXCLUDED_PATHS.some((pattern) => pattern.test(relPath));
+}
+
+
 function removeDir(dirPath) {
   if (fs.existsSync(dirPath)) {
     fs.rmSync(dirPath, { recursive: true, force: true });
@@ -68,6 +86,11 @@ function shouldSkipDir(name) {
 
 function shouldSkipFile(name, fullPath) {
   if (EXCLUDED_FILES.has(name)) return true;
+
+  if (shouldSkipDeployPath(fullPath)) {
+    console.log(`Pruned from deploy output: ${toRepoPath(fullPath)}`);
+    return true;
+  }
 
   const stat = fs.statSync(fullPath);
   if (stat.size > MAX_ASSET_BYTES) {
@@ -94,6 +117,10 @@ function copyDir(srcDir, destDir) {
 
     if (entry.isDirectory()) {
       if (shouldSkipDir(entry.name)) continue;
+      if (shouldSkipDeployPath(srcPath)) {
+        console.log(`Pruned deploy-only directory: ${toRepoPath(srcPath)}`);
+        continue;
+      }
       copyDir(srcPath, destPath);
       continue;
     }
