@@ -68,14 +68,14 @@
       Zone 1 — TopNavCluster
       Quiet upper-left back/location/title cluster on the top governance band.
     -->
-    <nav class="laval-top-nav" aria-label="Workspace breadcrumb">
-      <button class="laval-top-nav-back" type="button" aria-label="Back to workspace">
+    <nav class="laval-top-nav" aria-label="Configurator navigation">
+      <a class="laval-top-nav-back" href="../" aria-label="Return to homepage">
         <svg class="laval-glyph" viewBox="0 0 16 16" aria-hidden="true">
           <path d="M10 3 L5 8 L10 13" fill="none" stroke="currentColor"
                 stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>Workspace</span>
-      </button>
+        <span>Return Home</span>
+      </a>
       <span class="laval-top-nav-divider" aria-hidden="true">·</span>
       <span class="laval-top-nav-title">Mantel Configurator</span>
     </nav>
@@ -114,6 +114,20 @@
                 fill="none" stroke="currentColor" stroke-width="1.25"
                 stroke-linejoin="round"/>
         </svg>
+      </button>
+      <span class="laval-utility-sep" aria-hidden="true"></span>
+      <button
+        class="laval-theme-toggle"
+        id="laval-theme-toggle"
+        type="button"
+        aria-label="Switch to light mode"
+        aria-pressed="false">
+        <svg class="laval-glyph laval-theme-toggle-icon" viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="3.25" fill="none" stroke="currentColor" stroke-width="1.15"/>
+          <path d="M8 1.75 V3.2 M8 12.8 V14.25 M1.75 8 H3.2 M12.8 8 H14.25 M3.6 3.6 L4.65 4.65 M11.35 11.35 L12.4 12.4 M12.4 3.6 L11.35 4.65 M4.65 11.35 L3.6 12.4"
+                fill="none" stroke="currentColor" stroke-width="1.05" stroke-linecap="round"/>
+        </svg>
+        <span class="laval-theme-toggle-text">Light Mode</span>
       </button>
     </div>
 

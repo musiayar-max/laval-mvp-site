@@ -42,6 +42,11 @@ import { COMPONENT_SPRITES } from './data/component-sprites.js';
 // ---------------------------------------------------------------------------
 const LAVAL_DEV_LEAD_LOGGING = true; // Development-only. Disable or replace before production lead routing.
 
+// Public MVP lock rule:
+// These steps remain visible for roadmap/UI continuity, but their option
+// cards are locked so users cannot configure them yet.
+const LAVAL_LOCKED_OPTION_STEPS = new Set(['leg', 'shelf', 'finish']);
+
 // ---------------------------------------------------------------------------
 // State
 // All mutable state lives in this single object. Nothing else holds state.
@@ -61,6 +66,7 @@ const state = {
   },
   editorActiveTab: 'stone-finish',  // refined build
   connectorTimer:  null,            // refined build
+  themeMode:       'dark',           // configurator UI theme, defaults to current dark shell
   reviewActive:    false,           // refined build
   reviewSubmitted: false            // refined build
 };
@@ -87,6 +93,7 @@ function resolveElements() {
   el.editorSlot    = document.getElementById('laval-editor-slot');     // refined build
   el.shell         = document.getElementById('laval-shell');           // refined build
   el.connectorLayer = document.getElementById('laval-connector-layer'); // refined build
+  el.themeToggle   = document.getElementById('laval-theme-toggle');     // light/dark mode toggle
   // refined build
   el.reviewSheet   = document.getElementById('laval-review-sheet');
   el.reviewBack    = document.getElementById('laval-review-back');
@@ -175,6 +182,7 @@ export function renderDockTokens() {
 export function renderOptionTiles(stepId) {
   if (!el.browserGrid) return;
   let options = STEP_OPTIONS[stepId] || [];
+
   // Real-image pass: all downstream options are constrained by selected family.
   if (stepId === 'profile' && state.selections.family) {
     options = getCompatibleProfiles(state.selections.family);
@@ -182,18 +190,26 @@ export function renderOptionTiles(stepId) {
   if ((stepId === 'leg' || stepId === 'shelf' || stepId === 'finish') && state.selections.family) {
     options = getCompatibleOptions(stepId, state.selections.family);
   }
+
   const currentSelection = state.selections[stepId];
+  const isLockedStep = LAVAL_LOCKED_OPTION_STEPS.has(stepId);
 
   el.browserGrid.innerHTML = options.map((opt) => {
     const isSelected = opt.id === currentSelection;
-    return `<li>
+    const lockedCue = isLockedStep
+      ? '<span class="laval-step-orb-tooltip laval-locked-tooltip" aria-hidden="true">Coming Soon...</span>'
+      : '';
+
+    return `<li class="laval-tile-item${isLockedStep ? ' is-locked-item' : ''}">
       <button
-        class="laval-tile${isSelected ? ' is-selected' : ''}"
+        class="laval-tile${isSelected ? ' is-selected' : ''}${isLockedStep ? ' is-locked' : ''}"
         type="button"
         data-step-id="${stepId}"
         data-option-id="${opt.id}"
-        aria-label="${opt.label} — ${opt.subtitle}"
-        aria-pressed="${isSelected}">
+        data-locked="${isLockedStep}"
+        aria-label="${opt.label} — ${opt.subtitle}${isLockedStep ? ' — Coming Soon' : ''}"
+        aria-pressed="${isSelected}"
+        aria-disabled="${isLockedStep}">
         <span class="laval-tile-media" aria-hidden="true">
           ${opt.icon
             ? `<img class="laval-tile-image" src="${opt.icon}" alt="" loading="lazy" decoding="async">`
@@ -204,11 +220,12 @@ export function renderOptionTiles(stepId) {
           <span class="laval-tile-subtitle">${opt.subtitle}</span>
         </span>
         <span class="laval-tile-ring" aria-hidden="true"></span>
+        ${lockedCue}
       </button>
     </li>`;
   }).join('');
 
-  // Update browser title (non-event, safe to do here)
+  // Update browser title.
   if (el.browserTitle) {
     const step = STEPS.find((s) => s.id === stepId);
     if (step) el.browserTitle.textContent = step.label;
@@ -222,6 +239,7 @@ export function renderOptionTiles(stepId) {
 //   sourceEl — the clicked tile or chip DOM element (optional).
 // ---------------------------------------------------------------------------
 export function selectOption(stepId, optionId, sourceEl = null) {
+  if (LAVAL_LOCKED_OPTION_STEPS.has(stepId)) return;
   if (!(stepId in state.selections)) return;
 
   state.selections[stepId] = optionId;
@@ -1297,6 +1315,57 @@ export function hideConnector() {
   el.connectorLayer.innerHTML = '';
 }
 
+
+// ---------------------------------------------------------------------------
+// applyTheme(mode) / toggleTheme()
+// Dark is the default configurator state. Light mode is a mood-board-safe
+// inverse using existing LAVAL stone/taupe/charcoal variables in styles.css.
+// ---------------------------------------------------------------------------
+function applyTheme(mode) {
+  const nextMode = mode === 'light' ? 'light' : 'dark';
+  state.themeMode = nextMode;
+
+  document.body.dataset.lavalTheme = nextMode;
+
+  if (el.shell) {
+    el.shell.dataset.theme = nextMode;
+  }
+
+  if (el.themeToggle) {
+    const isLight = nextMode === 'light';
+    el.themeToggle.setAttribute('aria-pressed', String(isLight));
+    el.themeToggle.setAttribute(
+      'aria-label',
+      isLight ? 'Switch to dark mode' : 'Switch to light mode'
+    );
+
+    const label = el.themeToggle.querySelector('.laval-theme-toggle-text');
+    if (label) label.textContent = isLight ? 'Dark Mode' : 'Light Mode';
+  }
+
+  try {
+    window.localStorage.setItem('laval-configurator-theme', nextMode);
+  } catch (_) {
+    // Storage can fail in private contexts; visual toggle still works.
+  }
+}
+
+function initTheme() {
+  let saved = 'dark';
+  try {
+    saved = window.localStorage.getItem('laval-configurator-theme') || 'dark';
+  } catch (_) {
+    saved = 'dark';
+  }
+
+  applyTheme(saved === 'light' ? 'light' : 'dark');
+}
+
+function toggleTheme() {
+  applyTheme(state.themeMode === 'light' ? 'dark' : 'light');
+}
+
+
 // ---------------------------------------------------------------------------
 // wireGlobalEvents()
 // refined build
@@ -1325,6 +1394,7 @@ function wireGlobalEvents() {
     el.browserGrid.addEventListener('click', (e) => {
       const btn = e.target.closest('.laval-tile');
       if (!btn) return;
+      if (btn.dataset.locked === 'true' || btn.classList.contains('is-locked')) return;
       selectOption(btn.dataset.stepId, btn.dataset.optionId, btn); // refined build
     });
   }
@@ -1344,11 +1414,19 @@ function wireGlobalEvents() {
     });
   }
 
+  // Configurator-only light/dark mode toggle
+  if (el.themeToggle) {
+    el.themeToggle.addEventListener('click', () => {
+      toggleTheme();
+    });
+  }
+
   // Editor slot delegation — passes chip as sourceEl for connector
   if (el.editorSlot) {
     el.editorSlot.addEventListener('click', (e) => {
       const chip = e.target.closest('.laval-finish-chip');
       if (chip) {
+        if (chip.dataset.locked === 'true' || chip.classList.contains('is-locked')) return;
         selectOption(chip.dataset.chipStepId, chip.dataset.chipOptionId, chip); // refined build
         return;
       }
@@ -1462,25 +1540,35 @@ function buildEditorMarkup() {
 export function renderFinishChips() {
   const body = document.getElementById('laval-nested-editor-body');
   if (!body) return;
-  const options   = getCompatibleOptions('finish', state.selections.family) || [];
+
+  const options = getCompatibleOptions('finish', state.selections.family) || [];
   const currentSel = state.selections.finish;
+  const isLockedStep = LAVAL_LOCKED_OPTION_STEPS.has('finish');
+
   body.innerHTML = `<ul class="laval-finish-chip-grid">
     ${options.map((opt) => {
       const isSel = opt.id === currentSel;
-      return `<li>
+      const lockedCue = isLockedStep
+        ? '<span class="laval-step-orb-tooltip laval-locked-tooltip laval-locked-chip-tooltip" aria-hidden="true">Coming Soon...</span>'
+        : '';
+
+      return `<li class="laval-finish-chip-item${isLockedStep ? ' is-locked-item' : ''}">
         <button
-          class="laval-finish-chip${isSel ? ' is-selected' : ''}"
+          class="laval-finish-chip${isSel ? ' is-selected' : ''}${isLockedStep ? ' is-locked' : ''}"
           type="button"
           data-chip-step-id="finish"
           data-chip-option-id="${opt.id}"
-          aria-label="${opt.label}"
-          aria-pressed="${isSel}">
+          data-locked="${isLockedStep}"
+          aria-label="${opt.label}${isLockedStep ? ' — Coming Soon' : ''}"
+          aria-pressed="${isSel}"
+          aria-disabled="${isLockedStep}">
           <span class="laval-finish-chip-media" aria-hidden="true">
             ${opt.icon
               ? `<img class="laval-finish-chip-image" src="${opt.icon}" alt="" loading="lazy" decoding="async">`
               : `<span class="laval-finish-chip-swatch" data-swatch="${opt.swatch}"></span>`}
           </span>
           <span class="laval-finish-chip-label">${opt.label}</span>
+          ${lockedCue}
         </button>
       </li>`;
     }).join('')}
@@ -1537,6 +1625,7 @@ function syncEditorChipState(optionId) {
 // ---------------------------------------------------------------------------
 function init() {
   resolveElements();
+  initTheme();
 
   // Initial render
   renderStepRail();
